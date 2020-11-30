@@ -82,6 +82,41 @@ class ArrivalRepository {
         arrivingAirport = "BRG",
         origin = "SOF",
         scheduledDepartureTime = DateUtil.parseDate("2018-11-23 21:35:00")
+      ),
+      Arrival(
+        _id = "9",
+        scheduledArrivalDate = DateUtil.parseDate("2018-12-21 21:35:0"),
+        carrierName = "EZD",
+        flightNumber = "6067",
+        arrivingAirport = "BRG",
+        origin = "LCA",
+        scheduledDepartureTime = DateUtil.parseDate("2018-11-23 21:35:00")
+      ),
+      Arrival(
+        _id = "10",
+        scheduledArrivalDate = DateUtil.parseDate("2018-12-21 21:35:0"),
+        carrierName = "EZD",
+        flightNumber = "6067",
+        arrivingAirport = "BRG",
+        origin = "ZAG",
+        scheduledDepartureTime = DateUtil.parseDate("2018-11-23 21:35:00")
+      ),
+      Arrival(
+        _id = "11",
+        scheduledArrivalDate = DateUtil.parseDate("2018-12-21 21:35:0"),
+        carrierName = "EZD",
+        flightNumber = "6067",
+        arrivingAirport = "BRG",
+        origin = "LJU",
+        scheduledDepartureTime = DateUtil.parseDate("2018-11-23 21:35:00")
+      ),Arrival(
+        _id = "12",
+        scheduledArrivalDate = DateUtil.parseDate("2018-12-21 21:35:0"),
+        carrierName = "EZD",
+        flightNumber = "6067",
+        arrivingAirport = "BRG",
+        origin = "KIV",
+        scheduledDepartureTime = DateUtil.parseDate("2018-11-23 21:35:00")
       )
     )
 

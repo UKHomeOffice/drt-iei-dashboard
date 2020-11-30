@@ -1,11 +1,13 @@
 import React from 'react';
 import './App.css';
-import ArrivalFlightDataTable from './components/DataTable'
+import CountryTab from './components/CountryTab'
+
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <ArrivalFlightDataTable/>
+         <h2>Welcome to DRT IEI Dashboard</h2>
+          <CountryTab/>
       </header>
     </div>
   );

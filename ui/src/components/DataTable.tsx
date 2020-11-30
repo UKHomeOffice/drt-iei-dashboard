@@ -1,5 +1,5 @@
 import React from 'react';
-import { DataGrid ,ColDef , RowsProp , RowData} from '@material-ui/data-grid';
+import { DataGrid ,ColDef , RowData} from '@material-ui/data-grid';
 import ApiClient from "../services/ApiClient";
 import {AxiosResponse} from "axios";
 
@@ -18,6 +18,9 @@ interface Config {
 }
 
 interface IProps {
+  region: string;
+  country: string;
+  date: string;
 }
 
 interface IState {
@@ -40,6 +43,12 @@ export default class ArrivalFlightDataTable extends React.Component<IProps, ISta
     { field: 'scheduledDepartureTime', headerName: 'Scheduled Departure', width: 200 }
   ]  as ColDef[];
 
+  mockRowData = [
+  {"id":"3","origin":"CLJ","arrivalAirport":"BRC","flightNumber":"6063","carrierName":"EZZ","scheduledArrivalDate":"2018-12-21 21:35:00","scheduledDepartureTime":"2018-11-23 21:35:00"},
+  {"id":"5","origin":"CLJ","arrivalAirport":"BRE","flightNumber":"6065","carrierName":"EZB","scheduledArrivalDate":"2018-12-21 21:35:00","scheduledDepartureTime":"2018-11-23 21:35:00"},
+  {"id":"6","origin":"CLJ","arrivalAirport":"BRF","flightNumber":"6066","carrierName":"EZC","scheduledArrivalDate":"2018-12-21 21:35:00","scheduledDepartureTime":"2018-11-23 21:35:00"},
+  {"id":"7","origin":"CLJ","arrivalAirport":"BRG","flightNumber":"6067","carrierName":"EZD","scheduledArrivalDate":"2018-12-21 21:35:00","scheduledDepartureTime":"2018-11-23 21:35:00"}] as RowData[]
+
   constructor(props: IProps) {
     super(props);
 
@@ -50,7 +59,9 @@ export default class ArrivalFlightDataTable extends React.Component<IProps, ISta
   }
 
   componentDidMount() {
-    let endpoint = this.apiClient.flightsEndPoint("athens","Romania","2018-12-21");
+   // eslint-disable-next-line
+    let endpoint = this.apiClient.flightsEndPoint(this.props.region,this.props.country,this.props.date);
+     // eslint-disable-next-line
     this.apiClient.getFlightsData(endpoint,this.updateFlightsData)
   }
 
@@ -75,12 +86,9 @@ export default class ArrivalFlightDataTable extends React.Component<IProps, ISta
 
   render() {
     return (
-      <header className="App-header">
-        <h1>Welcome to DRT</h1>
-            <div style={{ height: 1000, width: 1100 }}>
-                  <DataGrid rows={this.state.arrivalRows as RowData[]} columns={this.columnsHeaders} pageSize={5} />
-             </div>
-      </header>
+        <div style={{ height: 800, width: 1100 }}>
+              <DataGrid rows={this.state.arrivalRows as RowData[]} columns={this.columnsHeaders} pageSize={5} />
+         </div>
     );
   }
 }
