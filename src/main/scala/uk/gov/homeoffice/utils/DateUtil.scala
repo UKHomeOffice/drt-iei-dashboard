@@ -1,10 +1,10 @@
-package uk.gov.homeoffice
+package uk.gov.homeoffice.utils
 
 import java.text.SimpleDateFormat
 import java.time.ZoneOffset
 import java.util.Date
 
-object Util {
+object DateUtil {
 
   val parseDate: String => Date = date => new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date)
 

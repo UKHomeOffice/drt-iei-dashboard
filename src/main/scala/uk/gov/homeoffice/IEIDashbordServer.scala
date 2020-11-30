@@ -1,13 +1,14 @@
 package uk.gov.homeoffice
 
 import cats.effect.{ConcurrentEffect, ContextShift, Timer}
+import cats.implicits._
 import fs2.Stream
 import org.http4s.client.blaze.BlazeClientBuilder
+import org.http4s.implicits._
 import org.http4s.server.blaze.BlazeServerBuilder
 import org.http4s.server.middleware.Logger
-import uk.gov.homeoffice.api.ArrivalRoutes
+import uk.gov.homeoffice.api.{ArrivalRoutes, PublicRoutes}
 import uk.gov.homeoffice.applicative.ArrivalFlights
-import org.http4s.implicits._
 import uk.gov.homeoffice.repository.ArrivalRepository
 import uk.gov.homeoffice.service.ArrivalService
 
@@ -22,7 +23,8 @@ object IEIDashbordServer {
       arrivalFlightsAlg = ArrivalFlights.impl[F](new ArrivalService(new ArrivalRepository))
 
       httpApp = (
-        ArrivalRoutes.arrivalFlightsRoutes[F](arrivalFlightsAlg)
+        PublicRoutes.dashboardRoutes[F]() <+>
+          ArrivalRoutes.arrivalFlightsRoutes[F](arrivalFlightsAlg)
         ).orNotFound
 
       finalHttpApp = Logger.httpApp(true, true)(httpApp)
@@ -33,4 +35,6 @@ object IEIDashbordServer {
         .serve
     } yield exitCode
   }.drain
+
+
 }

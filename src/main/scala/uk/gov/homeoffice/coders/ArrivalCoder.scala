@@ -5,19 +5,20 @@ import io.circe._
 import io.circe.generic.semiauto._
 import org.http4s.EntityEncoder
 import org.http4s.circe.jsonEncoderOf
-import uk.gov.homeoffice.Util
 import uk.gov.homeoffice.model.{Arrival, Arrivals}
+import uk.gov.homeoffice.utils.DateUtil
 
 object ArrivalCoder {
 
   implicit val arrivalEncode: Encoder[Arrival] = new Encoder[Arrival] {
     final def apply(a: Arrival): Json = Json.obj(
+      ("id",Json.fromString(a._id)),
       ("origin", Json.fromString(a.origin)),
       ("arrivalAirport", Json.fromString(a.arrivingAirport)),
       ("flightNumber", Json.fromString(a.flightNumber)),
       ("carrierName", Json.fromString(a.carrierName)),
-      ("scheduledArrivalDate", Json.fromString(Util.formatDate(a.scheduledArrivalDate))),
-      ("scheduledDepartureTime", Json.fromString(Util.formatDate(a.scheduledDepartureTime)))
+      ("scheduledArrivalDate", Json.fromString(DateUtil.formatDate(a.scheduledArrivalDate))),
+      ("scheduledDepartureTime", Json.fromString(DateUtil.formatDate(a.scheduledDepartureTime)))
     )
   }
 

@@ -2,3 +2,7 @@
 .bsp
 project/target
 target
+ui/node_modules
+ui/build
+ui/.eslintcache
+src/main/resources/ui
