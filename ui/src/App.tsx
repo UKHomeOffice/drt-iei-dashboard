@@ -1,13 +1,13 @@
 import React from 'react';
 import './App.css';
-import CountryTab from './components/CountryTab'
+import DatePicker from './components/DatePicker'
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
          <h2>Welcome to DRT IEI Dashboard</h2>
-          <CountryTab/>
+           <DatePicker/>
       </header>
     </div>
   );
