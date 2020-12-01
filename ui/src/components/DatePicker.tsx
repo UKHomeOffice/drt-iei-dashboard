@@ -8,34 +8,49 @@ import {
   KeyboardDatePicker,
 } from '@material-ui/pickers';
 import CountryTab from './CountryTab';
- // eslint-disable-next-line
 import format from 'date-fns/format';
 
-export default function MaterialUIPickers() {
-  // The first commit of Material-UI
-  const [selectedDate, setSelectedDate] = React.useState<Date | null>(
-    new Date('2018-12-21T01:11:54'),
-  );
+interface IProps {
+}
 
-  const handleDateChange = (date: Date | null) => {
-    setSelectedDate(date);
+interface IState {
+ selectedDate?: Date
+}
+
+export default class MaterialUIPickers extends React.Component<IProps, IState> {
+
+  handleDateChange = (sDate: Date | null) => {
+    let selectedDate = sDate as Date
+    this.setState({...this.state, selectedDate: selectedDate});
   };
 
+  constructor(props: IProps) {
+      super(props);
+     this.state = {
+      selectedDate :  new Date('2018-12-21T01:11:54')
+     };
+    }
 
-  return (
-    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-        <KeyboardDatePicker
-          margin="normal"
-          id="date-picker-dialog"
-          label="Flight departure date"
-          format="yyyy-MM-dd"
-          value={selectedDate}
-          onChange={handleDateChange}
-          KeyboardButtonProps={{
-            'aria-label': 'change date',
-          }}
-        />
-        <CountryTab pickedDate={ format(selectedDate as Date,"yyyy-MM-dd") } />
-    </MuiPickersUtilsProvider>
-  );
+  componentDidMount() {
+    console.log("this.state.selectedDate" + this.state.selectedDate)
+   }
+
+ render() {
+     return (
+         <MuiPickersUtilsProvider utils={DateFnsUtils}>
+             <KeyboardDatePicker
+               margin="normal"
+               id="date-picker-dialog"
+               label="Flight departure date"
+               format="yyyy-MM-dd"
+               value={this.state.selectedDate}
+               onChange={this.handleDateChange}
+               KeyboardButtonProps={{
+                 'aria-label': 'change date',
+               }}
+             />
+             <CountryTab pickedDate={ format(this.state.selectedDate as Date,"yyyy-MM-dd") } />
+         </MuiPickersUtilsProvider>
+       );
+ }
 }
