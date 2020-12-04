@@ -87,7 +87,7 @@ export default class ArrivalFlightDataTable extends React.Component<IProps, ISta
   render() {
     return (
         <div style={{ height: 800, width: 1100 }}>
-              <DataGrid rows={this.state.arrivalRows as RowData[]} columns={this.columnsHeaders} pageSize={5} />
+              <DataGrid rows={this.state.arrivalRows as RowData[]} columns={this.columnsHeaders} pageSize={25} />
          </div>
     );
   }

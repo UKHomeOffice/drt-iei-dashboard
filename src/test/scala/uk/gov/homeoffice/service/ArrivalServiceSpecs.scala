@@ -1,37 +1,43 @@
 package uk.gov.homeoffice.service
 
-import org.specs2.matcher.Scope
-import org.specs2.mutable.Specification
+import org.scalatest.flatspec.AsyncFlatSpec
+import org.scalatest.matchers.must.Matchers
 import uk.gov.homeoffice.model.{Arrival, RequestedFlightDetails}
-import uk.gov.homeoffice.repository.ArrivalRepository
+import uk.gov.homeoffice.repository.ArrivalRepositoryStub
 import uk.gov.homeoffice.utils.DateUtil
 
-class ArrivalServiceSpecs extends Specification {
+class ArrivalServiceSpecs extends AsyncFlatSpec with Matchers {
 
-  trait Context extends Scope {
-    val arrivalRepository = new ArrivalRepository
+  def context = {
+    val arrivalRepository = new ArrivalRepositoryStub
     val arrivalService = new ArrivalService(arrivalRepository)
+    arrivalService
   }
 
-  "Arrival" should {
-    "return arrival flight for the requested details for ATH" in new Context {
-      val requestedDetails = RequestedFlightDetails("Athens", "Greece", "2018-12-21")
 
-      val expectedResult = List(Arrival(
-        _id = "2",
-        scheduledArrivalDate = DateUtil.parseDate("2018-12-21 21:35:0"),
-        carrierName = "EZX",
-        flightNumber = "6062",
-        arrivingAirport = "BRB",
-        origin = "ATH",
-        scheduledDepartureTime = DateUtil.parseDate("2018-11-23 21:35:00")
-      ))
+  "Arrival" should "return arrival flight for the requested details for ATH" in {
 
-      expectedResult mustEqual arrivalService.getFlightsDetail(requestedDetails)
-    }
+    val arrivalService = context
+
+    val requestedDetails = RequestedFlightDetails("Athens", "Greece", "2018-12-21")
+
+    val expectedResult = List(Arrival(
+      _id = "2",
+      scheduledArrivalDate = DateUtil.parseDate("2018-12-21 21:35:0"),
+      carrierName = "EZX",
+      flightNumber = "6062",
+      arrivingAirport = "BRB",
+      origin = "ATH",
+      scheduledDepartureTime = DateUtil.parseDate("2018-11-23 21:35:00")
+    ))
+
+    expectedResult mustEqual arrivalService.getFlightsDetail(requestedDetails)
   }
 
-  "return arrival flight for the requested details for CLJ" in new Context {
+
+  "Arrival" should "return arrival flight for the requested details for CLJ" in {
+    val arrivalService = context
+
     val requestedDetails = RequestedFlightDetails("Athens", "Bulgaria", "2018-12-21")
 
     val expectedResult = List(Arrival(

@@ -1,7 +1,8 @@
 package uk.gov.homeoffice.utils
 
 import java.text.SimpleDateFormat
-import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
+import java.time.{LocalDate, LocalDateTime, ZoneOffset}
 import java.util.Date
 
 object DateUtil {
@@ -17,4 +18,16 @@ object DateUtil {
   val isSameDate: (Date, Date) => Boolean = (date1, date2) =>
     date1.toInstant().atZone(ZoneOffset.UTC).toLocalDate.
       compareTo(date2.toInstant().atZone(ZoneOffset.UTC).toLocalDate) == 0
+
+
+  val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+  val parseLocalDateTime: String => LocalDateTime = dateString => LocalDateTime.parse(dateString, formatter)
+
+  val formatLocalDateTime: LocalDateTime => String = date =>  formatter.format(date)
+
+  val parseLocalDate: String => LocalDate = dateString => LocalDate.parse(dateString, formatter);
+
+  val formatLocalDate: LocalDate => String = date =>  formatter.format(date)
+
 }

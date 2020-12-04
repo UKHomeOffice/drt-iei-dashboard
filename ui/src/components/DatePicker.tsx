@@ -27,7 +27,7 @@ export default class MaterialUIPickers extends React.Component<IProps, IState> {
   constructor(props: IProps) {
       super(props);
      this.state = {
-      selectedDate :  new Date('2018-12-21T01:11:54')
+      selectedDate :  new Date()
      };
     }
 
