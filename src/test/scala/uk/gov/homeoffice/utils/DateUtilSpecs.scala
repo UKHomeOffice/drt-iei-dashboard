@@ -46,10 +46,4 @@ class DateUtilSpecs extends AsyncFlatSpec with Matchers {
     dateString mustEqual "2018-11-23"
   }
 
-  "LocalDateTime format" should "give string of expected format" in {
-    val date1 = DateUtil.parseLocalDateTime("2018-11-23")
-
-//    val dateString = DateUtil.formatLocalDateTime(date1)
-    date1 mustEqual "2018-11-23"
-  }
 }

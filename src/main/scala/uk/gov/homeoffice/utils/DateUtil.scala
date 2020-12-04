@@ -22,9 +22,11 @@ object DateUtil {
 
   val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-  val parseLocalDateTime: String => LocalDateTime = dateString => LocalDateTime.parse(dateString, formatter)
+  val formatterWithTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-  val formatLocalDateTime: LocalDateTime => String = date =>  formatter.format(date)
+  val parseLocalDateTime: String => LocalDateTime = dateString => LocalDateTime.parse(dateString, formatterWithTime)
+
+  val formatLocalDateTime: LocalDateTime => String = date =>  formatterWithTime.format(date)
 
   val parseLocalDate: String => LocalDate = dateString => LocalDate.parse(dateString, formatter);
 

@@ -16,7 +16,7 @@ object ArrivalFlights {
 
   def impl[F[_] : Applicative](arrivalsService: ArrivalService[F]): ArrivalFlights[F] = new ArrivalFlights[F] {
     def flights(n: RequestedFlightDetails): F[Arrivals] = {
-      val a: F[List[ArrivalTableData]] = arrivalsService.getFlightsDetail(n)
+      val a: F[List[(ArrivalTableData, Int)]] = arrivalsService.getFlightsDetail(n)
       arrivalsService.transformArrivals(a).map(Arrivals(_))
     }
   }

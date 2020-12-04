@@ -8,7 +8,7 @@ import skunk.implicits._
 import skunk.{Decoder, Query, Session, ~}
 
 case class ArrivalTableData(code: String,
-                            number : Int,
+                            number: Int,
                             destination: String,
                             origin: String,
                             terminal: String,
@@ -17,20 +17,20 @@ case class ArrivalTableData(code: String,
                             pcp: LocalDateTime
                            )
 
-trait ArrivalsRepositoryI[F[_]] {
+trait ArrivalRepositoryI[F[_]] {
 
   def sessionPool: Resource[F, Session[F]]
 
   def findArrivalsForADate(queryDate: LocalDateTime): F[List[ArrivalTableData]]
 }
 
-class ArrivalsRepository[F[_] : Sync](val sessionPool: Resource[F, Session[F]]) extends ArrivalsRepositoryI[F] {
+class ArrivalRepository[F[_] : Sync](val sessionPool: Resource[F, Session[F]]) extends ArrivalRepositoryI[F] {
 
   val decoder: Decoder[ArrivalTableData] =
     (text ~ int4 ~ text ~ text ~ text ~ text ~ timestamp ~ timestamp).map {
       case code ~ number ~ destination ~ origin ~ terminal ~ status ~ scheduled ~ pcp =>
         ArrivalTableData(
-          code, number ,destination, origin, terminal, status, scheduled, pcp
+          code, number, destination, origin, terminal, status, scheduled, pcp
         )
     }
 

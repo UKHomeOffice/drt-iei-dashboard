@@ -9,7 +9,7 @@ import org.http4s.server.blaze.BlazeServerBuilder
 import org.http4s.server.middleware.Logger
 import uk.gov.homeoffice.api.{ArrivalRoutes, PublicRoutes}
 import uk.gov.homeoffice.applicative.ArrivalFlights
-import uk.gov.homeoffice.repository.ArrivalsRepository
+import uk.gov.homeoffice.repository.ArrivalRepository
 import uk.gov.homeoffice.service.ArrivalService
 
 import scala.concurrent.ExecutionContext.global
@@ -22,7 +22,7 @@ object IEIDashbordServer {
 
       session = SessionResource.session
 
-      arrivalsService = new ArrivalService(new ArrivalsRepository(session))
+      arrivalsService = new ArrivalService(new ArrivalRepository(session))
 
       arrivalFlightsAlg = ArrivalFlights.impl[F](arrivalsService)
 
