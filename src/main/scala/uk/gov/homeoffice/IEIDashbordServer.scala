@@ -15,12 +15,11 @@ import uk.gov.homeoffice.service.ArrivalService
 import scala.concurrent.ExecutionContext.global
 
 object IEIDashbordServer {
-  def stream[F[_] : ConcurrentEffect](implicit T: Timer[F], C: ContextShift[F]): Stream[F, Nothing] = {
+  def stream[F[_] : ConcurrentEffect](cfg: Config)(implicit T: Timer[F], C: ContextShift[F]): Stream[F, Nothing] = {
     for {
       client <- BlazeClientBuilder[F](global).stream
 
-
-      session = SessionResource.session
+      session = SessionResource.session(cfg.database)
 
       arrivalsService = new ArrivalService(new ArrivalRepository(session))
 
@@ -34,7 +33,7 @@ object IEIDashbordServer {
       finalHttpApp = Logger.httpApp(true, true)(httpApp)
 
       exitCode <- BlazeServerBuilder[F](global)
-        .bindHttp(8080, "0.0.0.0")
+        .bindHttp(cfg.api.port.value, "0.0.0.0")
         .withHttpApp(finalHttpApp)
         .serve
     } yield exitCode

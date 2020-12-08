@@ -43,7 +43,9 @@ object Dependencies {
     val circeGeneric = circe("circe-generic")
     val circeParser = circe("circe-parser")
     val circeRefined = circe("circe-refined")
-
+    val cirisCore    = ciris("ciris")
+    val cirisEnum    = ciris("ciris-enumeratum")
+    val cirisRefined = ciris("ciris-refined")
     val http4sDsl = http4s("http4s-dsl")
     val http4sServer = http4s("http4s-blaze-server")
     val http4sClient = http4s("http4s-blaze-client")

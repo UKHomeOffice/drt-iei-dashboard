@@ -19,7 +19,7 @@ export default class ApiClient implements IApiClient {
 
   public getFlightsData(endPoint: string, handleResponse: (r: AxiosResponse) => void) {
     axios
-      .get('http://localhost:8080'+endPoint, this.reqConfig)
+      .get('http://localhost:9001'+endPoint, this.reqConfig)
       .then(response => handleResponse(response))
       .catch(t => this.handleAjaxException(endPoint, t))
   }
