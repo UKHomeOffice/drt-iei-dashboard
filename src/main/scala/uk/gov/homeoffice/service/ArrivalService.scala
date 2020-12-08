@@ -25,7 +25,7 @@ class ArrivalService[F[_] : Sync](arrivalsRepository: ArrivalRepositoryI[F]) {
 
 
   def transformArrivals(arrivalsTableData: F[List[(ArrivalTableData, Int)]]): F[List[Arrival]] = {
-    arrivalsTableData.map(_.map(a => Arrival((a._2 + 1).toString, dateConvert(a._1.scheduled), a._1.code, a._1.number.toString, a._1.destination, a._1.origin, dateConvert(a._1.pcp))))
+    arrivalsTableData.map(_.map(a => Arrival((a._2 + 1).toString, dateConvert(a._1.scheduled), a._1.code, a._1.number.toString, a._1.destination, a._1.origin, a._1.scheduled_departure.map(dateConvert(_)))))
 
   }
 }

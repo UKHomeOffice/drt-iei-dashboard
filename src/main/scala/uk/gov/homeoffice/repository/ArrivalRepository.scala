@@ -14,7 +14,7 @@ case class ArrivalTableData(code: String,
                             terminal: String,
                             status: String,
                             scheduled: LocalDateTime,
-                            pcp: LocalDateTime
+                            scheduled_departure: Option[LocalDateTime]
                            )
 
 trait ArrivalRepositoryI[F[_]] {
@@ -27,16 +27,16 @@ trait ArrivalRepositoryI[F[_]] {
 class ArrivalRepository[F[_] : Sync](val sessionPool: Resource[F, Session[F]]) extends ArrivalRepositoryI[F] {
 
   val decoder: Decoder[ArrivalTableData] =
-    (text ~ int4 ~ text ~ text ~ text ~ text ~ timestamp ~ timestamp).map {
-      case code ~ number ~ destination ~ origin ~ terminal ~ status ~ scheduled ~ pcp =>
+    (text ~ int4 ~ text ~ text ~ text ~ text ~ timestamp ~ timestamp.opt).map {
+      case code ~ number ~ destination ~ origin ~ terminal ~ status ~ scheduled ~ scheduled_departure =>
         ArrivalTableData(
-          code, number, destination, origin, terminal, status, scheduled, pcp
+          code, number, destination, origin, terminal, status, scheduled, scheduled_departure
         )
     }
 
   private def selectArrivalsForADate: Query[LocalDateTime ~ LocalDateTime, ArrivalTableData] =
     sql"""
-        SELECT code , number , destination , origin , terminal , status ,scheduled ,pcp
+        SELECT code , number , destination , origin , terminal , status ,scheduled ,scheduled_departure
         FROM arrival WHERE scheduled > $timestamp and scheduled < $timestamp;
        """.query(decoder)
 

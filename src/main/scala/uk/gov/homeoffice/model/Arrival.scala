@@ -11,4 +11,4 @@ case class Arrival(_id: String,
                    flightNumber: String,
                    arrivingAirport: String,
                    origin: String,
-                   scheduledDepartureTime: Date)
+                   scheduledDepartureTime: Option[Date])

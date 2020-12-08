@@ -29,7 +29,7 @@ class ArrivalServiceSpecs extends AsyncFlatSpec with Matchers with ScalaCheckDri
       flightNumber = "6062",
       arrivingAirport = "BRB",
       origin = "ATH",
-      scheduledDepartureTime = DateUtil.parseDate("2018-11-23 21:35:00")
+      scheduledDepartureTime = Some(DateUtil.parseDate("2018-11-23 21:35:00"))
     ))
 
     val arrivalTableData = arrivalService.getFlightsDetail(requestedDetails)
@@ -52,7 +52,7 @@ class ArrivalServiceSpecs extends AsyncFlatSpec with Matchers with ScalaCheckDri
       flightNumber = "6067",
       arrivingAirport = "BRG",
       origin = "SOF",
-      scheduledDepartureTime = DateUtil.parseDate("2018-11-23 21:35:00")
+      scheduledDepartureTime = Some(DateUtil.parseDate("2018-11-23 21:35:00"))
     ))
 
 

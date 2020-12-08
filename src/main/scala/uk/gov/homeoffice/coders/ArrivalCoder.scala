@@ -18,7 +18,7 @@ object ArrivalCoder {
       ("flightNumber", Json.fromString(a.flightNumber)),
       ("carrierName", Json.fromString(a.carrierName)),
       ("scheduledArrivalDate", Json.fromString(DateUtil.formatDate(a.scheduledArrivalDate))),
-      ("scheduledDepartureTime", Json.fromString(DateUtil.formatDate(a.scheduledDepartureTime)))
+      ("scheduledDepartureTime", Json.fromString(a.scheduledDepartureTime.map(DateUtil.formatDate(_)).getOrElse("")))
     )
   }
 
