@@ -27,8 +27,9 @@ lazy val root = (project in file("."))
       Libraries.scalaTest,
       Libraries.scalaTestPlus,
     ),
+    dockerExposedPorts ++= Seq(9001),
     compile := ((compile in Compile) dependsOn buildReactApp).value
-  )
+  ).enablePlugins(DockerPlugin).enablePlugins(JavaAppPackaging)
 
 scalacOptions ++= Seq(
   "-deprecation",
