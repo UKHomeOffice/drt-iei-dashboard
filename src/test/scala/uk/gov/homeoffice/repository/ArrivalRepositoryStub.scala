@@ -135,5 +135,9 @@ class ArrivalRepositoryStub[F[_] : Sync] extends ArrivalRepositoryI[F] {
 
   override def sessionPool: Resource[F, Session[F]] = ???
 
-  override def findArrivalsForADate(queryDate: LocalDateTime): F[List[ArrivalTableData]] = arrivalMap.pure[F]
+  override def findArrivalsForADate(queryDate: LocalDateTime): F[List[ArrivalTableData]] = {
+    arrivalMap.filter(a => a.scheduled.toLocalDate == queryDate.toLocalDate).pure[F]
+  }
+
+
 }
