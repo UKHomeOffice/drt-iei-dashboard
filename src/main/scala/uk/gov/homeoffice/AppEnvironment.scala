@@ -20,12 +20,12 @@ object AppEnvironment {
   }
 
   val databaseConfig: ConfigValue[PostgreSQLConfig] = (
-      env("PG_DATABASE_HOST").as[String].default("localhost"),
-      env("PG_DATABASE_PORT").as[Int].default(5432),
-      env("PG_DATABASE_USERNAME").as[String].default("drt"),
-      env("PG_DATABASE_PASSWORD").as[String].default(""),
-      env("PG_DATABASE").as[String].default("aggregated"),
-      env("PG_DATABASE_SESSION_POOL_MAX").as[Int].default(10)
+      env("AGGDB_HOST").as[String].default("localhost"),
+      env("AGGDB_PORT").as[Int].default(5432),
+      env("AGGDB_USER").as[String].default("drt"),
+      env("AGGDB_PASSWORD").as[String].default(""),
+      env("AGGDB_DATABASE").as[String].default("aggregated"),
+      env("AGGDB_SESSION_POOL_MAX").as[Int].default(10)
     ).parMapN(PostgreSQLConfig)
 
 
