@@ -1,6 +1,6 @@
 # drt-iei-dashboard
 
-Following is technical stack used in the project... 
+Following is technical stack used in the project ... 
 
 > API - HTTP4s 
 
