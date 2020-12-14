@@ -27,7 +27,7 @@ object IEIDashbordServer {
 
       httpApp = (
         PublicRoutes.dashboardRoutes[F]() <+>
-          ArrivalRoutes.arrivalFlightsRoutes[F](arrivalFlightsAlg)
+          ArrivalRoutes.arrivalFlightsRoutes[F](arrivalFlightsAlg,cfg.api.permissions)
         ).orNotFound
 
       finalHttpApp = Logger.httpApp(true, true)(httpApp)
