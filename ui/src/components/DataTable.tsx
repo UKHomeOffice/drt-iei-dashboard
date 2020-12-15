@@ -22,13 +22,13 @@ interface IState {
 export default class ArrivalFlightDataTable extends React.Component<IProps, IState> {
 
   columnsHeaders = [
-    { field: 'id',headerName: "Id", width:100},
+    { field: 'id',headerName: "Id", width:50},
     { field: 'arrivalAirport', headerName: 'Arrival Airport',width: 150},
     { field: 'carrierName', headerName: 'Carrier Name', width: 150 },
     { field: 'flightNumber', headerName: 'Carrier Code', width: 150 },
     { field: 'origin', headerName : "Departure Airport" , width : 150},
-    { field: 'scheduledArrivalDate', headerName: 'Scheduled Arrival', width: 200 },
-    { field: 'scheduledDepartureTime', headerName: 'Scheduled Departure', width: 200 }
+    { field: 'scheduledArrivalDate', headerName: 'Scheduled Arrival (UTC)', width: 200 },
+    { field: 'scheduledDepartureTime', headerName: 'Scheduled Departure (UTC+2)', width: 250 }
   ]  as ColDef[];
 
   constructor(props: IProps) {
