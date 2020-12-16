@@ -14,7 +14,7 @@ import scala.concurrent.ExecutionContext
 import scala.util.{Failure, Success, Try}
 
 object PublicRoutes {
-  val logger = LoggerFactory.getLogger("uk.gov.homeoffice.api.drt.PublicRoutes")
+  val logger = LoggerFactory.getLogger(getClass.getName)
 
   val dbExecutionContext = ExecutionContext.global // replace with your DB specific EC.
 
