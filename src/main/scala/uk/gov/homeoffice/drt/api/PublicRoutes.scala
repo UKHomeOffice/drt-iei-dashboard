@@ -42,15 +42,15 @@ object PublicRoutes {
 
       case request@GET -> Root / "static" / "css" / path =>
         StaticFile.fromResource(s"ui/static/css/$path", blocker, Some(request))
+          .getOrElseF(NotFound())
 
-          .getOrElseF(NotFound()) // In case the file doesn't exist
       case request@GET -> Root / "static" / "js" / path =>
         StaticFile.fromResource(s"ui/static/js/$path", blocker, Some(request))
-          .getOrElseF(NotFound()) // In case the file doesn't exist
+          .getOrElseF(NotFound())
 
       case request@GET -> Root / "images" / path =>
         StaticFile.fromResource(s"ui/images/$path", blocker, Some(request))
-          .getOrElseF(NotFound()) // In case the file doesn't exist
+          .getOrElseF(NotFound())
 
     }
   }

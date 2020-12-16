@@ -7,10 +7,10 @@ import uk.gov.homeoffice.drt.{ResourceObject, model}
 import uk.gov.homeoffice.drt.model.{Arrival, DepartureAirport, RequestedFlightDetails}
 import uk.gov.homeoffice.drt.repository.{ArrivalRepositoryI, ArrivalTableData}
 import uk.gov.homeoffice.drt.utils.DateUtil._
-import ResourceObject._
+import ResourceObject.{getClass, _}
 class ArrivalService[F[_] : Sync](arrivalsRepository: ArrivalRepositoryI[F]) {
 
-  private val logger = LoggerFactory.getLogger("uk.gov.homeoffice.drt.service.ArrivalService")
+  private val logger = LoggerFactory.getLogger(getClass.getName)
 
   def getFlightsDetail(requestedDetails: RequestedFlightDetails) = {
     val requestedDate = parseLocalDate(requestedDetails.date).atStartOfDay()

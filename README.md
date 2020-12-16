@@ -6,4 +6,4 @@ Following is technical stack used in the project ...
 
 > Postgres - Skunk 
 
-> Frontend - reactjs typescript
+> Frontend - reactjs typescript materialUI

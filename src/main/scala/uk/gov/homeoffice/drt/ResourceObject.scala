@@ -13,7 +13,7 @@ import scala.io.Source
 
 object ResourceObject {
 
-  private val logger = LoggerFactory.getLogger("uk.gov.homeoffice.drt.Resource")
+  private val logger = LoggerFactory.getLogger(getClass.getName)
 
   def session[F[_] : Concurrent : ContextShift](postgreSQLConfig: PostgreSQLConfig): Resource[F, Session[F]] =
     Session.single[F](
