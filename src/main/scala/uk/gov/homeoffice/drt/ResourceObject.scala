@@ -26,8 +26,8 @@ object ResourceObject {
 
   var airlines: Airlines = Airlines(List.empty)
 
-  def updateAirLines[F[_] : Sync : Concurrent : ContextShift](airlineService: AirlineService[F]) = {
-    airlineService.getAirlineData.map(jsonString =>
+  def updateAirLines[F[_] : Sync : Concurrent : ContextShift](airlineConfig: AirlineConfig, airlineService: AirlineService[F]) = {
+    airlineService.getAirlineData(airlineConfig).map(jsonString =>
       AirlineDecoder.airlineJsonDecoder(jsonString) match {
         case Right(a: Airlines) => airlines = a
         case Left(e) => logger.error(s"unable to get airline details")

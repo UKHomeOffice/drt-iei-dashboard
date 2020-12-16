@@ -7,6 +7,7 @@ import cats.implicits._
 import org.http4s.dsl.Http4sDsl
 import org.http4s.{HttpRoutes, Response, StaticFile, Status}
 import org.slf4j.LoggerFactory
+import uk.gov.homeoffice.drt.AirlineConfig
 import uk.gov.homeoffice.drt.service.AirlineService
 
 import scala.concurrent.ExecutionContext
@@ -55,7 +56,7 @@ object PublicRoutes {
   }
 
 
-  def airlineRoutes[F[_] : Sync : ContextShift](H: AirlineService[F]): HttpRoutes[F] = {
+  def airlineRoutes[F[_] : Sync : ContextShift](airlineConfig: AirlineConfig, H: AirlineService[F]): HttpRoutes[F] = {
     val dsl = new Http4sDsl[F] {}
     import dsl._
     import org.http4s.circe.CirceEntityEncoder._
@@ -63,7 +64,7 @@ object PublicRoutes {
     HttpRoutes.of[F] {
       case GET -> Root / "airline" / "carrier" =>
         Try {
-          Ok(H.getAirlineData)
+          Ok(H.getAirlineData(airlineConfig))
         } match {
           case Success(r) => r
           case Failure(e) =>

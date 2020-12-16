@@ -21,6 +21,17 @@ object AppEnvironment {
     )
   }
 
+  val airlineConfig: ConfigValue[AirlineConfig] = (
+    env("CIRIUM_API_ENDPOINT").as[String].default("https://api.flightstats.com/flex/airlines/rest/v1/json/all"),
+    env("CIRIUM_API_APPID").as[String].default(""),
+    env("CIRIUM_API_APPKEY").as[String].default("")).parMapN { (endpoint, appId, appKey) =>
+    AirlineConfig(
+      endpoint = endpoint,
+      appId = appId,
+      appKey = appKey
+    )
+  }
+
   val databaseConfig: ConfigValue[PostgreSQLConfig] = (
     env("AGGDB_HOST").as[String].default("localhost"),
     env("AGGDB_PORT").as[Int].default(5432),
@@ -33,20 +44,23 @@ object AppEnvironment {
 
   val config: ConfigValue[Config] = (
     apiConfig,
-    databaseConfig
-  ).parMapN { (api, database) =>
+    databaseConfig,
+    airlineConfig
+  ).parMapN { (api, database, airline) =>
     Config(
       appName = "IEI-Dashboard",
       api = api,
-      database = database
+      database = database,
+      airline = airline
     )
   }
 
 }
 
+final case class AirlineConfig(endpoint: String, appId: String, appKey: String)
 
 final case class ApiConfig(port: UserPortNumber, env: Option[String], permissions: List[String])
 
-final case class Config(appName: NonEmptyString, api: ApiConfig, database: PostgreSQLConfig)
+final case class Config(appName: NonEmptyString, api: ApiConfig, database: PostgreSQLConfig, airline: AirlineConfig)
 
 final case class PostgreSQLConfig(host: String, port: Int, user: String, password: String, database: String, max: Int)

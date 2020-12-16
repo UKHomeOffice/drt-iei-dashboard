@@ -23,8 +23,7 @@ object IEIDashboardServer {
 
       clientResource = BlazeClientBuilder[F](global).resource
       airlineService = new AirlineService(clientResource)
-
-//      _ = ResourceObject.updateAirLines(airlineService)
+//      _ = ResourceObject.updateAirLines(cfg.airline,airlineService)
       _ = ResourceObject.populateAirlineData
 
       arrivalsService = new ArrivalService(new ArrivalRepository(session))
@@ -33,7 +32,7 @@ object IEIDashboardServer {
 
       httpApp = (
         PublicRoutes.dashboardRoutes[F]() <+>
-          PublicRoutes.airlineRoutes[F](airlineService) <+>
+          PublicRoutes.airlineRoutes[F](cfg.airline,airlineService) <+>
           ArrivalRoutes.arrivalFlightsRoutes[F](arrivalFlightsAlg, cfg.api.permissions)
         ).orNotFound
 
