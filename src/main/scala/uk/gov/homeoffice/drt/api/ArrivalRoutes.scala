@@ -8,11 +8,10 @@ import org.http4s.dsl.Http4sDsl
 import org.http4s.util.CaseInsensitiveString
 import org.http4s.{HttpRoutes, Response, Status}
 import org.slf4j.LoggerFactory
-import uk.gov.homeoffice.drt.ResourceObject.getClass
 import uk.gov.homeoffice.drt.applicative.ArrivalFlights
+import uk.gov.homeoffice.drt.coders.ArrivalCoder._
 import uk.gov.homeoffice.drt.model.RequestedFlightDetails
 import uk.gov.homeoffice.drt.utils.DateUtil
-import uk.gov.homeoffice.drt.coders.ArrivalCoder._
 
 import scala.util.{Failure, Success, Try}
 

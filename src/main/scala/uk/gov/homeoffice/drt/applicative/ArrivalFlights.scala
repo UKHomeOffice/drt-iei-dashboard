@@ -2,8 +2,7 @@ package uk.gov.homeoffice.drt.applicative
 
 import cats.Applicative
 import cats.syntax.all._
-import uk.gov.homeoffice.drt.model.{Arrivals, RequestedFlightDetails}
-import uk.gov.homeoffice.drt.repository.ArrivalTableData
+import uk.gov.homeoffice.drt.model.{ArrivalTableDataIndex, Arrivals, RequestedFlightDetails}
 import uk.gov.homeoffice.drt.service.ArrivalService
 
 
@@ -16,7 +15,7 @@ object ArrivalFlights {
 
   def impl[F[_] : Applicative](arrivalsService: ArrivalService[F]): ArrivalFlights[F] = new ArrivalFlights[F] {
     def flights(n: RequestedFlightDetails): F[Arrivals] = {
-      val a: F[List[(ArrivalTableData, Int)]] = arrivalsService.getFlightsDetail(n)
+      val a: F[List[ArrivalTableDataIndex]] = arrivalsService.getFlightsDetail(n)
       arrivalsService.transformArrivals(a).map(Arrivals(_))
     }
   }

@@ -4,7 +4,7 @@ import cats.effect.{IO, Sync}
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
-import uk.gov.homeoffice.drt.ResourceObject
+import uk.gov.homeoffice.drt.AppResource
 import uk.gov.homeoffice.drt.model.{Arrival, RequestedFlightDetails}
 import uk.gov.homeoffice.drt.repository.ArrivalRepositoryStub
 import uk.gov.homeoffice.drt.utils.DateUtil
@@ -13,7 +13,7 @@ class ArrivalServiceSpecs extends AsyncFlatSpec with Matchers with ScalaCheckDri
 
   def context = {
     val arrivalService = Sync[IO].delay(new ArrivalService[IO](new ArrivalRepositoryStub)).unsafeRunSync()
-    ResourceObject.populateAirlineData
+    AppResource.populateAirlineData
     arrivalService
   }
 

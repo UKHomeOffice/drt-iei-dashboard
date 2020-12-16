@@ -11,7 +11,7 @@ import uk.gov.homeoffice.drt.service.AirlineService
 
 import scala.io.Source
 
-object ResourceObject {
+object AppResource {
 
   private val logger = LoggerFactory.getLogger(getClass.getName)
 
@@ -30,7 +30,7 @@ object ResourceObject {
     airlineService.getAirlineData(airlineConfig).map(jsonString =>
       AirlineDecoder.airlineJsonDecoder(jsonString) match {
         case Right(a: Airlines) => airlines = a
-        case Left(e) => logger.error(s"unable to get airline details")
+        case Left(e) => logger.error(s"unable to get airline details ${e.getMessage}")
       }
     )
   }

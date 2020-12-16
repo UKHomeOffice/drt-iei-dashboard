@@ -19,12 +19,12 @@ object IEIDashboardServer {
     for {
       _ <- BlazeClientBuilder[F](global).stream
 
-      session = ResourceObject.session(cfg.database)
+      session = AppResource.session(cfg.database)
 
       clientResource = BlazeClientBuilder[F](global).resource
       airlineService = new AirlineService(clientResource)
-//      _ = ResourceObject.updateAirLines(cfg.airline,airlineService)
-      _ = ResourceObject.populateAirlineData
+
+      _ = AppResource.populateAirlineData
 
       arrivalsService = new ArrivalService(new ArrivalRepository(session))
 

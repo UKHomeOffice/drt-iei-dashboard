@@ -10,13 +10,10 @@ import org.slf4j.LoggerFactory
 import uk.gov.homeoffice.drt.AirlineConfig
 import uk.gov.homeoffice.drt.service.AirlineService
 
-import scala.concurrent.ExecutionContext
 import scala.util.{Failure, Success, Try}
 
 object PublicRoutes {
   val logger = LoggerFactory.getLogger(getClass.getName)
-
-  val dbExecutionContext = ExecutionContext.global // replace with your DB specific EC.
 
   val blockingPool = Executors.newFixedThreadPool(4)
   val blocker = Blocker.liftExecutorService(blockingPool)
