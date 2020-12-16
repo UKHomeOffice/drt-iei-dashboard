@@ -1,4 +1,4 @@
-package uk.gov.homeoffice.drt.drt.model
+package uk.gov.homeoffice.drt.model
 
 import java.util.Date
 

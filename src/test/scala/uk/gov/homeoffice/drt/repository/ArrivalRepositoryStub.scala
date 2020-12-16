@@ -5,8 +5,8 @@ import java.time.LocalDateTime
 import cats.effect.{Resource, Sync}
 import cats.implicits._
 import skunk.Session
-import uk.gov.homeoffice.drt.drt.repository.{ArrivalRepositoryI, ArrivalTableData}
-import uk.gov.homeoffice.drt.drt.utils.DateUtil
+import uk.gov.homeoffice.drt.ResourceObject.{getCarrierNameByFS, getCarrierNameByICAO}
+import uk.gov.homeoffice.drt.utils.DateUtil
 
 class ArrivalRepositoryStub[F[_] : Sync] extends ArrivalRepositoryI[F] {
 
@@ -14,7 +14,7 @@ class ArrivalRepositoryStub[F[_] : Sync] extends ArrivalRepositoryI[F] {
     List(
       ArrivalTableData(
         scheduled = DateUtil.parseLocalDateTime("2018-11-23 21:35:00"),
-        code = "EZY",
+        code = "BA6061",
         number = 6061,
         destination = "BRA",
         origin = "BRS",
@@ -24,7 +24,7 @@ class ArrivalRepositoryStub[F[_] : Sync] extends ArrivalRepositoryI[F] {
       ),
       ArrivalTableData(
         scheduled = DateUtil.parseLocalDateTime("2018-12-21 21:35:00"),
-        code = "EZX",
+        code = "EZX6062",
         number = 6062,
         destination = "BRB",
         origin = "ATH",
@@ -34,7 +34,7 @@ class ArrivalRepositoryStub[F[_] : Sync] extends ArrivalRepositoryI[F] {
       ),
       ArrivalTableData(
         scheduled = DateUtil.parseLocalDateTime("2018-12-21 21:35:00"),
-        code = "EZZ",
+        code = "EZZ6063",
         number = 6063,
         destination = "BRC",
         origin = "CLJ",
@@ -44,7 +44,7 @@ class ArrivalRepositoryStub[F[_] : Sync] extends ArrivalRepositoryI[F] {
       ),
       ArrivalTableData(
         scheduled = DateUtil.parseLocalDateTime("2019-12-21 21:35:00"),
-        code = "EZA",
+        code = "EZA6064",
         number = 6064,
         destination = "BRD",
         origin = "CLJ",
@@ -54,7 +54,7 @@ class ArrivalRepositoryStub[F[_] : Sync] extends ArrivalRepositoryI[F] {
       ),
       ArrivalTableData(
         scheduled = DateUtil.parseLocalDateTime("2018-12-21 21:35:00"),
-        code = "EZB",
+        code = "EZB6065",
         number = 6065,
         destination = "BRE",
         origin = "CLJ",
@@ -64,7 +64,7 @@ class ArrivalRepositoryStub[F[_] : Sync] extends ArrivalRepositoryI[F] {
       ),
       ArrivalTableData(
         scheduled = DateUtil.parseLocalDateTime("2018-12-21 21:35:00"),
-        code = "EZC",
+        code = "EZC6066",
         number = 6066,
         destination = "BRF",
         origin = "CLJ",
@@ -74,7 +74,7 @@ class ArrivalRepositoryStub[F[_] : Sync] extends ArrivalRepositoryI[F] {
       ),
       ArrivalTableData(
         scheduled = DateUtil.parseLocalDateTime("2018-12-21 21:35:00"),
-        code = "EZD",
+        code = "BA6067",
         number = 6067,
         destination = "BRG",
         origin = "CLJ",
@@ -84,7 +84,7 @@ class ArrivalRepositoryStub[F[_] : Sync] extends ArrivalRepositoryI[F] {
       ),
       ArrivalTableData(
         scheduled = DateUtil.parseLocalDateTime("2018-12-21 21:35:00"),
-        code = "EZD",
+        code = "BA6067",
         number = 6067,
         destination = "BRG",
         origin = "SOF",
@@ -94,7 +94,7 @@ class ArrivalRepositoryStub[F[_] : Sync] extends ArrivalRepositoryI[F] {
       ),
       ArrivalTableData(
         scheduled = DateUtil.parseLocalDateTime("2018-12-21 21:35:00"),
-        code = "EZD",
+        code = "BA6067",
         number = 6067,
         destination = "BRG",
         origin = "LCA",
@@ -104,7 +104,7 @@ class ArrivalRepositoryStub[F[_] : Sync] extends ArrivalRepositoryI[F] {
       ),
       ArrivalTableData(
         scheduled = DateUtil.parseLocalDateTime("2018-12-21 21:35:00"),
-        code = "EZD",
+        code = "BA6067",
         number = 6067,
         destination = "BRG",
         origin = "ZAG",
@@ -113,7 +113,7 @@ class ArrivalRepositoryStub[F[_] : Sync] extends ArrivalRepositoryI[F] {
         terminal = "T1",
       ),
       ArrivalTableData(
-        code = "EZD",
+        code = "BA6067",
         number = 6067,
         destination = "BRG",
         origin = "LJU",
@@ -122,7 +122,7 @@ class ArrivalRepositoryStub[F[_] : Sync] extends ArrivalRepositoryI[F] {
         scheduled = DateUtil.parseLocalDateTime("2018-12-21 21:35:00"),
         scheduled_departure = Some(DateUtil.parseLocalDateTime("2018-11-23 21:35:00"))
       ), ArrivalTableData(
-        code = "EZD",
+        code = "BA6067",
         number = 6067,
         origin = "KIV",
         destination = "BRG",

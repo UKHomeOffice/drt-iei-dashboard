@@ -1,4 +1,4 @@
-package uk.gov.homeoffice.drt.drt.repository
+package uk.gov.homeoffice.drt.repository
 
 import java.time.LocalDateTime
 

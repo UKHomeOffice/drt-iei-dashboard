@@ -1,16 +1,19 @@
-package uk.gov.homeoffice.drt.drt.api
+package uk.gov.homeoffice.drt.api
 
 import java.util.concurrent.Executors
 
 import cats.effect._
+import cats.implicits._
 import org.http4s.dsl.Http4sDsl
-import org.http4s.{HttpRoutes, StaticFile}
+import org.http4s.{HttpRoutes, Response, StaticFile, Status}
 import org.slf4j.LoggerFactory
+import uk.gov.homeoffice.drt.service.AirlineService
 
 import scala.concurrent.ExecutionContext
+import scala.util.{Failure, Success, Try}
 
 object PublicRoutes {
-  val logger = LoggerFactory.getLogger("uk.gov.homeoffice.api.PublicRoutes")
+  val logger = LoggerFactory.getLogger("uk.gov.homeoffice.api.drt.PublicRoutes")
 
   val dbExecutionContext = ExecutionContext.global // replace with your DB specific EC.
 
@@ -48,6 +51,27 @@ object PublicRoutes {
         StaticFile.fromResource(s"ui/images/$path", blocker, Some(request))
           .getOrElseF(NotFound()) // In case the file doesn't exist
 
+    }
+  }
+
+
+  def airlineRoutes[F[_] : Sync : ContextShift](H: AirlineService[F]): HttpRoutes[F] = {
+    val dsl = new Http4sDsl[F] {}
+    import dsl._
+    import org.http4s.circe.CirceEntityEncoder._
+
+    HttpRoutes.of[F] {
+      case GET -> Root / "airline" / "carrier" =>
+        Try {
+          Ok(H.getAirlineData)
+        } match {
+          case Success(r) => r
+          case Failure(e) =>
+            logger.error(s"Error while request", e)
+            Response[F](Status.BadRequest)
+              .withEntity(s"Bad Request : ${e.getMessage}")
+              .pure[F]
+        }
     }
   }
 

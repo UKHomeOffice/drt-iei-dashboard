@@ -2,7 +2,6 @@ package uk.gov.homeoffice.drt.utils
 
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.must.Matchers
-import uk.gov.homeoffice.drt.drt.utils.FileUtil
 
 class FileUtilSpecs extends AsyncFlatSpec with Matchers {
 

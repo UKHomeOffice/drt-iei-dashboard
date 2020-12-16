@@ -2,7 +2,6 @@ package uk.gov.homeoffice.drt.model
 
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.must.Matchers
-import uk.gov.homeoffice.drt.drt.model.DepartureAirport
 
 class DepartureAirportSpecs extends AsyncFlatSpec with Matchers {
 

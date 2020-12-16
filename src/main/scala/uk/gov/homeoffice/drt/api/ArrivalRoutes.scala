@@ -1,4 +1,4 @@
-package uk.gov.homeoffice.drt.drt.api
+package uk.gov.homeoffice.drt.api
 
 import java.util.Date
 
@@ -8,15 +8,15 @@ import org.http4s.dsl.Http4sDsl
 import org.http4s.util.CaseInsensitiveString
 import org.http4s.{HttpRoutes, Response, Status}
 import org.slf4j.LoggerFactory
-import uk.gov.homeoffice.drt.drt.applicative.ArrivalFlights
-import uk.gov.homeoffice.drt.drt.model.RequestedFlightDetails
-import uk.gov.homeoffice.drt.drt.utils.DateUtil
-import uk.gov.homeoffice.drt.drt.coders.ArrivalCoder._
+import uk.gov.homeoffice.drt.applicative.ArrivalFlights
+import uk.gov.homeoffice.drt.model.RequestedFlightDetails
+import uk.gov.homeoffice.drt.utils.DateUtil
+import uk.gov.homeoffice.drt.coders.ArrivalCoder._
 import scala.util.{Failure, Success, Try}
 
 object ArrivalRoutes {
 
-  private final val logger = LoggerFactory.getLogger("uk.gov.homeoffice.api.ArrivalRoutes");
+  private final val logger = LoggerFactory.getLogger("uk.gov.homeoffice.api.drt.ArrivalRoutes");
 
   def arrivalFlightsRoutes[F[_] : Sync](H: ArrivalFlights[F], permissions: List[String]): HttpRoutes[F] = {
     val dsl = new Http4sDsl[F] {}

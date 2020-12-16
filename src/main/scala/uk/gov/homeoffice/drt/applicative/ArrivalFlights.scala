@@ -1,10 +1,10 @@
-package uk.gov.homeoffice.drt.drt.applicative
+package uk.gov.homeoffice.drt.applicative
 
 import cats.Applicative
 import cats.syntax.all._
-import uk.gov.homeoffice.drt.drt.model.{Arrivals, RequestedFlightDetails}
-import uk.gov.homeoffice.drt.drt.repository.ArrivalTableData
-import uk.gov.homeoffice.drt.drt.service.ArrivalService
+import uk.gov.homeoffice.drt.model.{Arrivals, RequestedFlightDetails}
+import uk.gov.homeoffice.drt.repository.ArrivalTableData
+import uk.gov.homeoffice.drt.service.ArrivalService
 
 
 trait ArrivalFlights[F[_]] {

@@ -1,4 +1,4 @@
-package uk.gov.homeoffice.drt.drt.model
+package uk.gov.homeoffice.drt.model
 
 case class DepartureAirport(country: String, airportCode: String, airportName: String)
 

@@ -2,14 +2,13 @@ package uk.gov.homeoffice.drt.api
 
 import cats.effect.IO
 import cats.implicits.{catsSyntaxEq => _}
-import org.http4s.implicits._
 import org.http4s._
+import org.http4s.implicits._
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.must.Matchers
-import uk.gov.homeoffice.drt.drt.api.ArrivalRoutes
-import uk.gov.homeoffice.drt.drt.applicative.ArrivalFlights
-import uk.gov.homeoffice.drt.drt.service.ArrivalService
+import uk.gov.homeoffice.drt.applicative.ArrivalFlights
 import uk.gov.homeoffice.drt.repository.ArrivalRepositoryStub
+import uk.gov.homeoffice.drt.service.ArrivalService
 
 class ArrivalRoutesSpecs extends AsyncFlatSpec with Matchers {
 
@@ -18,7 +17,7 @@ class ArrivalRoutesSpecs extends AsyncFlatSpec with Matchers {
 
     arrivalFlightsResponse.status mustEqual Status.Ok
     arrivalFlightsResponse.as[String].unsafeRunSync() mustEqual
-      """{"data":[{"id":"1","origin":"SOF","arrivalAirport":"BRG","flightNumber":"6067","carrierName":"EZD","scheduledArrivalDate":"2018-12-21 21:35:00","scheduledDepartureTime":"2018-11-23 19:35:00"}]}"""
+      """{"data":[{"id":"1","origin":"SOF","arrivalAirport":"BRG","flightNumber":"BA6067","carrierName":"British Airways","scheduledArrivalDate":"2018-12-21 21:35:00","scheduledDepartureTime":"2018-11-23 19:35:00"}]}"""
   }
 
   "ArrivalRoutes" should "return empty arrival flights for default" in {

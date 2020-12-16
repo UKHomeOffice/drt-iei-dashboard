@@ -1,12 +1,12 @@
-package uk.gov.homeoffice.drt.drt.coders
+package uk.gov.homeoffice.drt.coders
 
 import cats.Applicative
 import io.circe._
 import io.circe.generic.semiauto._
 import org.http4s.EntityEncoder
 import org.http4s.circe.jsonEncoderOf
-import uk.gov.homeoffice.drt.drt.model.{Arrival, Arrivals}
-import uk.gov.homeoffice.drt.drt.utils.DateUtil
+import uk.gov.homeoffice.drt.model.{Arrival, Arrivals}
+import uk.gov.homeoffice.drt.utils.DateUtil
 
 object ArrivalCoder {
 

@@ -1,4 +1,4 @@
-package uk.gov.homeoffice.drt.drt
+package uk.gov.homeoffice.drt
 
 import cats.effect.{ConcurrentEffect, ContextShift, Timer}
 import cats.implicits._
@@ -7,19 +7,25 @@ import org.http4s.client.blaze.BlazeClientBuilder
 import org.http4s.implicits._
 import org.http4s.server.blaze.BlazeServerBuilder
 import org.http4s.server.middleware.Logger
-import uk.gov.homeoffice.drt.drt.api.{ArrivalRoutes, PublicRoutes}
-import uk.gov.homeoffice.drt.drt.applicative.ArrivalFlights
-import uk.gov.homeoffice.drt.drt.repository.ArrivalRepository
-import uk.gov.homeoffice.drt.drt.service.ArrivalService
+import uk.gov.homeoffice.drt.api.{ArrivalRoutes, PublicRoutes}
+import uk.gov.homeoffice.drt.applicative.ArrivalFlights
+import uk.gov.homeoffice.drt.repository.ArrivalRepository
+import uk.gov.homeoffice.drt.service.{AirlineService, ArrivalService}
 
 import scala.concurrent.ExecutionContext.global
 
-object IEIDashbordServer {
+object IEIDashboardServer {
   def stream[F[_] : ConcurrentEffect](cfg: Config)(implicit T: Timer[F], C: ContextShift[F]): Stream[F, Nothing] = {
     for {
-      client <- BlazeClientBuilder[F](global).stream
+      _ <- BlazeClientBuilder[F](global).stream
 
-      session = SessionResource.session(cfg.database)
+      session = ResourceObject.session(cfg.database)
+
+      clientResource = BlazeClientBuilder[F](global).resource
+      airlineService = new AirlineService(clientResource)
+
+//      _ = ResourceObject.updateAirLines(airlineService)
+      _ = ResourceObject.populateAirlineData
 
       arrivalsService = new ArrivalService(new ArrivalRepository(session))
 
@@ -27,6 +33,7 @@ object IEIDashbordServer {
 
       httpApp = (
         PublicRoutes.dashboardRoutes[F]() <+>
+          PublicRoutes.airlineRoutes[F](airlineService) <+>
           ArrivalRoutes.arrivalFlightsRoutes[F](arrivalFlightsAlg, cfg.api.permissions)
         ).orNotFound
 

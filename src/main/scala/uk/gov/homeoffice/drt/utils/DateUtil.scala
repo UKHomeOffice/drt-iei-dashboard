@@ -1,4 +1,4 @@
-package uk.gov.homeoffice.drt.drt.utils
+package uk.gov.homeoffice.drt.utils
 
 import java.text.SimpleDateFormat
 import java.time.format.DateTimeFormatter

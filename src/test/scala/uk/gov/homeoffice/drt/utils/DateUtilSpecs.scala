@@ -2,11 +2,10 @@ package uk.gov.homeoffice.drt.utils
 
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.must.Matchers
-import uk.gov.homeoffice.drt.drt.utils.DateUtil
 
 class DateUtilSpecs extends AsyncFlatSpec with Matchers {
 
-  import uk.gov.homeoffice.drt.drt.utils.DateUtil._
+  import DateUtil._
 
 
   "Compare date check" should "be true for same date and different time" in {

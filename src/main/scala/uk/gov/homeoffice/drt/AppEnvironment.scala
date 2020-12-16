@@ -1,4 +1,4 @@
-package uk.gov.homeoffice.drt.drt
+package uk.gov.homeoffice.drt
 
 import cats.implicits._
 import ciris.refined._

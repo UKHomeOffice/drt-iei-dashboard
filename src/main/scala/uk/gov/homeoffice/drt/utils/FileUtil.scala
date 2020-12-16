@@ -1,4 +1,4 @@
-package uk.gov.homeoffice.drt.drt.utils
+package uk.gov.homeoffice.drt.utils
 
 import scala.io.Source
 

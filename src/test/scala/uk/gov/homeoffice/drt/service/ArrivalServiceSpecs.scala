@@ -4,15 +4,16 @@ import cats.effect.{IO, Sync}
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
-import uk.gov.homeoffice.drt.drt.model.{Arrival, RequestedFlightDetails}
-import uk.gov.homeoffice.drt.drt.service.ArrivalService
-import uk.gov.homeoffice.drt.drt.utils.DateUtil
+import uk.gov.homeoffice.drt.ResourceObject
+import uk.gov.homeoffice.drt.model.{Arrival, RequestedFlightDetails}
 import uk.gov.homeoffice.drt.repository.ArrivalRepositoryStub
+import uk.gov.homeoffice.drt.utils.DateUtil
 
 class ArrivalServiceSpecs extends AsyncFlatSpec with Matchers with ScalaCheckDrivenPropertyChecks {
 
   def context = {
     val arrivalService = Sync[IO].delay(new ArrivalService[IO](new ArrivalRepositoryStub)).unsafeRunSync()
+    ResourceObject.populateAirlineData
     arrivalService
   }
 
@@ -26,8 +27,8 @@ class ArrivalServiceSpecs extends AsyncFlatSpec with Matchers with ScalaCheckDri
     val expectedResult = List(Arrival(
       _id = "1",
       scheduledArrivalDate = DateUtil.parseDate("2018-12-21 21:35:0"),
-      carrierName = "EZX",
-      flightNumber = "6062",
+      carrierName = "Eaglexpress Air",
+      flightNumber = "EZX6062",
       arrivingAirport = "BRB",
       origin = "ATH",
       scheduledDepartureTime = Some(DateUtil.parseDate("2018-11-23 19:35:00"))
@@ -49,8 +50,8 @@ class ArrivalServiceSpecs extends AsyncFlatSpec with Matchers with ScalaCheckDri
     val expectedResult = List(Arrival(
       _id = "1",
       scheduledArrivalDate = DateUtil.parseDate("2018-12-21 21:35:0"),
-      carrierName = "EZD",
-      flightNumber = "6067",
+      carrierName = "British Airways",
+      flightNumber = "BA6067",
       arrivingAirport = "BRG",
       origin = "SOF",
       scheduledDepartureTime = Some(DateUtil.parseDate("2018-11-23 19:35:00"))
