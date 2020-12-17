@@ -26,8 +26,8 @@ object ArrivalRoutes {
       case req@GET -> Root / "flights" / region :? params =>
         Try {
           val xAuthRoles: List[String] = req.headers.get(CaseInsensitiveString("X-Auth-Roles")).map(_.value.split(",").toList).getOrElse(List.empty)
-          val isAppropriatePermissionExists: Boolean = xAuthRoles.exists(p => permissions.contains(p))
-          if (isAppropriatePermissionExists) {
+          val requiredPermissions: Boolean = xAuthRoles.exists(p => permissions.contains(p))
+          if (requiredPermissions) {
             val country = params.getOrElse("country", List("Greece")).head
             val date = params.getOrElse("date", List(`yyyy-MM-dd_format_toString`(new Date()))).head
             for {
