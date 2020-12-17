@@ -7,7 +7,7 @@ class DepartureAirportSpecs extends AsyncFlatSpec with Matchers {
 
 
   "Departure Airport code" should "give list of all airport for Greece" in {
-    val greeceList = DepartureAirport.getAthensCountryAirport("Greece")
+    val greeceList = DepartureAirport.athensDeparturePortsForCountry("Greece")
     val expectedAirports = Seq(DepartureAirport("Greece", "ATH", "Athens"),
       DepartureAirport("Greece", "SKG", "Thessaloniki"),
       DepartureAirport("Greece", "KLX", "Kalamata"),
@@ -31,14 +31,14 @@ class DepartureAirportSpecs extends AsyncFlatSpec with Matchers {
   }
 
   "Departure Airport code" should "give list of all airport for Cyprus" in {
-    val greeceList = DepartureAirport.getAthensCountryAirport("Cyprus")
+    val greeceList = DepartureAirport.athensDeparturePortsForCountry("Cyprus")
     val expectedAirports = Seq(DepartureAirport("Cyprus", "LCA", "Larnaca"),
       DepartureAirport("Cyprus", "PFO", "Paphos"))
     greeceList mustEqual expectedAirports
   }
 
   "Departure Airport code" should "give list of all airport for Croatia" in {
-    val greeceList = DepartureAirport.getAthensCountryAirport("Croatia")
+    val greeceList = DepartureAirport.athensDeparturePortsForCountry("Croatia")
     val expectedAirports = Seq(DepartureAirport("Croatia", "ZAD", "Zadar"),
       DepartureAirport("Croatia", "SPU", "Split"),
       DepartureAirport("Croatia", "DBV", "Dubrovnik"),
@@ -49,13 +49,13 @@ class DepartureAirportSpecs extends AsyncFlatSpec with Matchers {
   }
 
   "Departure Airport code" should "give list of all airport for Slovenia" in {
-    val greeceList = DepartureAirport.getAthensCountryAirport("Slovenia")
+    val greeceList = DepartureAirport.athensDeparturePortsForCountry("Slovenia")
     val expectedAirports = Seq(DepartureAirport("Slovenia", "LJU", "Ljubljana"))
     greeceList mustEqual expectedAirports
   }
 
   "Departure Airport code" should "give list of all airport for Bulgaria" in {
-    val greeceList = DepartureAirport.getAthensCountryAirport("Bulgaria")
+    val greeceList = DepartureAirport.athensDeparturePortsForCountry("Bulgaria")
     val expectedAirports = Seq(
       DepartureAirport("Bulgaria", "VAR", "Varna"),
       DepartureAirport("Bulgaria", "BOJ", "Bourgas"),
@@ -66,7 +66,7 @@ class DepartureAirportSpecs extends AsyncFlatSpec with Matchers {
   }
 
   "Departure Airport code" should "give list of all airport for Romania" in {
-    val greeceList = DepartureAirport.getAthensCountryAirport("Romania")
+    val greeceList = DepartureAirport.athensDeparturePortsForCountry("Romania")
     val expectedAirports = Seq(
       DepartureAirport("Romania", "OTP", "Otopeni"),
       DepartureAirport("Romania", "BBU", "Baneasa"),
@@ -86,7 +86,7 @@ class DepartureAirportSpecs extends AsyncFlatSpec with Matchers {
   }
 
   "Departure Airport code" should "give list of all airport for Moldova" in {
-    val greeceList = DepartureAirport.getAthensCountryAirport("Moldova")
+    val greeceList = DepartureAirport.athensDeparturePortsForCountry("Moldova")
     val expectedAirports = Seq(
       DepartureAirport("Moldova", "KIV", "Chisinau")
 

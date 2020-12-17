@@ -2,6 +2,8 @@
 
 Following is technical stack used in the project ... 
 
+> Scala
+
 > API - HTTP4s 
 
 > Postgres - Skunk 

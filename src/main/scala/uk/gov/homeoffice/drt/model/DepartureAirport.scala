@@ -4,7 +4,7 @@ case class DepartureAirport(country: String, airportCode: String, airportName: S
 
 object DepartureAirport {
 
-  val athensCountryAirportList = List(
+  val athensDeparturePorts = List(
     DepartureAirport("Greece", "ATH", "Athens"),
     DepartureAirport("Greece", "SKG", "Thessaloniki"),
     DepartureAirport("Greece", "KLX", "Kalamata"),
@@ -53,8 +53,8 @@ object DepartureAirport {
     DepartureAirport("Moldova", "KIV", "Chisinau"))
 
 
-  def getAthensCountryAirport(country: String) = {
-    athensCountryAirportList.filter(_.country == country)
+  def athensDeparturePortsForCountry(country: String) = {
+    athensDeparturePorts.filter(_.country == country)
   }
 
 }

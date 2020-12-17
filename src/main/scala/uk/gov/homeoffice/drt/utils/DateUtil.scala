@@ -7,33 +7,33 @@ import java.util.Date
 
 object DateUtil {
 
-  val parseDate: String => Date = date => new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date)
+  val `yyyy-MM-dd HH:mm:ss_parse_toDate`: String => Date = date => new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date)
 
-  val formatDate: Date => String = date => new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date)
+  val `yyyy-MM-dd HH:mm:ss_format_toString`: Date => String = date => new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date)
 
-  val formatRequestDate: Date => String = date => new SimpleDateFormat("yyyy-MM-dd").format(date)
+  val `yyyy-MM-dd_format_toString`: Date => String = date => new SimpleDateFormat("yyyy-MM-dd").format(date)
 
-  val parseRequestDate: String => Date = date => new SimpleDateFormat("yyyy-MM-dd").parse(date)
+  val `yyyy-MM-dd_parse_toDate`: String => Date = date => new SimpleDateFormat("yyyy-MM-dd").parse(date)
 
-  val isSameDate: (Date, Date) => Boolean = (date1, date2) =>
+  val areEqual: (Date, Date) => Boolean = (date1, date2) =>
     date1.toInstant().atZone(ZoneOffset.UTC).toLocalDate.
       compareTo(date2.toInstant().atZone(ZoneOffset.UTC).toLocalDate) == 0
 
 
-  val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+  val `yyyy-MM-dd_LocalDateFormatter` = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-  val formatterWithTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+  val `yyyy-MM-dd HH:mm:ss_LocalDateFormatterWithTime` = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-  val parseLocalDateTime: String => LocalDateTime = dateString => LocalDateTime.parse(dateString, formatterWithTime)
+  val `yyyy-MM-dd HH:mm:ss_parse_toLocalDateTime`: String => LocalDateTime = dateString => LocalDateTime.parse(dateString, `yyyy-MM-dd HH:mm:ss_LocalDateFormatterWithTime`)
 
-  val formatLocalDateTime: LocalDateTime => String = date => formatterWithTime.format(date)
+  val `yyyy-MM-dd HH:mm:ss_formatLocalDateTime_toString`: LocalDateTime => String = date => `yyyy-MM-dd HH:mm:ss_LocalDateFormatterWithTime`.format(date)
 
-  val parseLocalDate: String => LocalDate = dateString => LocalDate.parse(dateString, formatter);
+  val `yyyy-MM-dd_parse_toLocalDate`: String => LocalDate = dateString => LocalDate.parse(dateString, `yyyy-MM-dd_LocalDateFormatter`);
 
-  val formatLocalDate: LocalDate => String = date => formatter.format(date)
+  val `yyyy-MM-dd_formatLocalDate_toString`: LocalDate => String = date => `yyyy-MM-dd_LocalDateFormatter`.format(date)
 
-  val dateDefaultTimeZoneConvert: LocalDateTime => Date = localDate => Date.from(localDate.atZone(ZoneId.systemDefault()).toInstant())
+  val UTCTimeZoneConvertDate: LocalDateTime => Date = localDate => Date.from(localDate.atZone(ZoneId.of("UTC")).toInstant())
 
-  val dateAthensTimeZoneConvert: LocalDateTime => Date = localDate => Date.from(localDate.atZone(ZoneId.of("UTC+2")).toInstant())
+  val `UTC+2TimeZoneConvertDate`: LocalDateTime => Date = localDate => Date.from(localDate.atZone(ZoneId.of("UTC+2")).toInstant())
 
 }

@@ -10,10 +10,11 @@ import org.http4s.{HttpRoutes, Response, Status}
 import org.slf4j.LoggerFactory
 import uk.gov.homeoffice.drt.applicative.ArrivalFlights
 import uk.gov.homeoffice.drt.coders.ArrivalCoder._
-import uk.gov.homeoffice.drt.model.RequestedFlightDetails
+import uk.gov.homeoffice.drt.model.FlightsRequest
 import uk.gov.homeoffice.drt.utils.DateUtil
 
 import scala.util.{Failure, Success, Try}
+import DateUtil.`yyyy-MM-dd_format_toString`
 
 object ArrivalRoutes {
 
@@ -30,9 +31,9 @@ object ArrivalRoutes {
           isAppropriatePermissionExists match {
             case true =>
               val country = params.getOrElse("country", List("Greece")).head
-              val date = params.getOrElse("date", List(DateUtil.formatRequestDate(new Date()))).head
+              val date = params.getOrElse("date", List(`yyyy-MM-dd_format_toString`(new Date()))).head
               for {
-                arrivals <- H.flights(RequestedFlightDetails(region, country, date))
+                arrivals <- H.flights(FlightsRequest(region, country, date))
                 resp <- Ok(arrivals)
               } yield resp
 
