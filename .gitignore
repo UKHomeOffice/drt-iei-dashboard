@@ -1,0 +1,9 @@
+.idea
+.bsp
+project/target
+target
+ui/node_modules
+ui/build
+ui/.eslintcache
+ui/.yarn-error.log
+src/main/resources/ui
