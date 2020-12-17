@@ -11,10 +11,9 @@ import org.slf4j.LoggerFactory
 import uk.gov.homeoffice.drt.applicative.ArrivalFlights
 import uk.gov.homeoffice.drt.coders.ArrivalCoder._
 import uk.gov.homeoffice.drt.model.FlightsRequest
-import uk.gov.homeoffice.drt.utils.DateUtil
+import uk.gov.homeoffice.drt.utils.DateUtil.`yyyy-MM-dd_format_toString`
 
 import scala.util.{Failure, Success, Try}
-import DateUtil.`yyyy-MM-dd_format_toString`
 
 object ArrivalRoutes {
 
@@ -28,16 +27,15 @@ object ArrivalRoutes {
         Try {
           val xAuthRoles: List[String] = req.headers.get(CaseInsensitiveString("X-Auth-Roles")).map(_.value.split(",").toList).getOrElse(List.empty)
           val isAppropriatePermissionExists: Boolean = xAuthRoles.exists(p => permissions.contains(p))
-          isAppropriatePermissionExists match {
-            case true =>
-              val country = params.getOrElse("country", List("Greece")).head
-              val date = params.getOrElse("date", List(`yyyy-MM-dd_format_toString`(new Date()))).head
-              for {
-                arrivals <- H.flights(FlightsRequest(region, country, date))
-                resp <- Ok(arrivals)
-              } yield resp
-
-            case false => Response[F](Status.Forbidden)
+          if (isAppropriatePermissionExists) {
+            val country = params.getOrElse("country", List("Greece")).head
+            val date = params.getOrElse("date", List(`yyyy-MM-dd_format_toString`(new Date()))).head
+            for {
+              arrivals <- H.flights(FlightsRequest(region, country, date))
+              resp <- Ok(arrivals)
+            } yield resp
+          } else {
+            Response[F](Status.Forbidden)
               .withEntity(s"You need appropriate permissions to view the page")
               .pure[F]
           }

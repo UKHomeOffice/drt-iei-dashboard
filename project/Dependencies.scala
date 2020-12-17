@@ -27,6 +27,7 @@ object Dependencies {
     val scalaCheck = "1.15.1"
     val scalaTest = "3.2.3"
     val scalaTestPlus = "3.2.2.0"
+    val logstashLogbackEncoder = "6.5"
   }
 
   object Libraries {
@@ -56,7 +57,7 @@ object Dependencies {
 
     // Runtime
     val logback = "ch.qos.logback" % "logback-classic" % Versions.logback
-
+    val logstashLogbackEncoder = "net.logstash.logback" % "logstash-logback-encoder" % Versions.logstashLogbackEncoder
     // Test
     val scalaCheck = "org.scalacheck" %% "scalacheck" % Versions.scalaCheck
     val scalaTest = "org.scalatest" %% "scalatest" % Versions.scalaTest
