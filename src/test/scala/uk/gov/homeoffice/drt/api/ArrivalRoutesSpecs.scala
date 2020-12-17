@@ -13,7 +13,7 @@ import uk.gov.homeoffice.drt.service.ArrivalService
 class ArrivalRoutesSpecs extends AsyncFlatSpec with Matchers {
 
   "ArrivalRoutes" should "return arrival flights for Romania" in {
-    val arrivalFlightsResponse = retArrivalFlights(Request[IO](Method.GET, uri"/flights/athens?country=Bulgaria&date=2018-12-21", headers = Headers.of(Header("X-Auth-Roles", "faq-view"))))
+    val arrivalFlightsResponse = retArrivalFlights(Request[IO](Method.GET, uri"/flights/athens?country=Bulgaria&date=2018-12-21", headers = Headers.of(Header("X-Auth-Roles", "iei-dashboard:view"))))
 
     arrivalFlightsResponse.status mustEqual Status.Ok
     arrivalFlightsResponse.as[String].unsafeRunSync() mustEqual
@@ -21,7 +21,7 @@ class ArrivalRoutesSpecs extends AsyncFlatSpec with Matchers {
   }
 
   "ArrivalRoutes" should "return empty arrival flights for default" in {
-    val arrivalFlightsResponse = retArrivalFlights(Request[IO](Method.GET, uri"/flights/athens", headers = Headers.of(Header("X-Auth-Roles", "faq-view"))))
+    val arrivalFlightsResponse = retArrivalFlights(Request[IO](Method.GET, uri"/flights/athens", headers = Headers.of(Header("X-Auth-Roles", "iei-dashboard:view"))))
     arrivalFlightsResponse.status mustEqual Status.Ok
     arrivalFlightsResponse.as[String].unsafeRunSync() mustEqual """{"data":[]}"""
   }
@@ -30,13 +30,13 @@ class ArrivalRoutesSpecs extends AsyncFlatSpec with Matchers {
   "ArrivalRoutes" should "return Error with appropriate permission" in {
     val arrivalFlightsResponse = retArrivalFlights(Request[IO](Method.GET, uri"/flights/athens"))
     arrivalFlightsResponse.status mustEqual Status.Forbidden
-    arrivalFlightsResponse.as[String].unsafeRunSync() mustEqual """You need appropriate permissions to view the page"""
+    arrivalFlightsResponse.as[String].unsafeRunSync() mustEqual """You need appropriate permissions to view the page."""
   }
 
 
   private[this] def retArrivalFlights(getHW: Request[IO]): Response[IO] = {
     val arrivalFlights = ArrivalFlights.impl[IO](new ArrivalService(new ArrivalRepositoryStub))
-    ArrivalRoutes.arrivalFlightsRoutes(arrivalFlights, List("test-view", "faq-view")).orNotFound(getHW).unsafeRunSync()
+    ArrivalRoutes.arrivalFlightsRoutes(arrivalFlights, List("test-view", "iei-dashboard:view")).orNotFound(getHW).unsafeRunSync()
   }
 
 }
