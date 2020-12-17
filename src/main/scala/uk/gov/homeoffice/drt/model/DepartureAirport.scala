@@ -1,7 +1,5 @@
 package uk.gov.homeoffice.drt.model
 
-case class DepartureAirport(country: Country, airportCode: String, airportName: String)
-
 case class Port(code: String, name: String)
 
 sealed trait Country

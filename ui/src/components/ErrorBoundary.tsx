@@ -12,12 +12,12 @@ interface State {
 class ErrorBoundary extends Component<Props, State> {
 
   constructor(props: Props) {
-      super(props);
-        this.state = {
-          hasError: false,
-          errorMessage: ''
-        };
-    }
+    super(props);
+      this.state = {
+        hasError: false,
+        errorMessage: ''
+    };
+  }
 
 
   public static getDerivedStateFromError(error: Error): State {
@@ -26,9 +26,9 @@ class ErrorBoundary extends Component<Props, State> {
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-  this.setState({hasError: true});
-  this.setState({errorMessage: error.message});
-  console.error("Uncaught error:.......", error, errorInfo);
+    this.setState({hasError: true});
+    this.setState({errorMessage: error.message});
+    console.error("error : ", error, errorInfo);
   }
 
   public render() {
@@ -36,7 +36,7 @@ class ErrorBoundary extends Component<Props, State> {
       if(this.state.errorMessage.includes('status code 403'))
         return <p>There is error while serving your request please check you got correct permissions to access the Dashboard.</p>
       else
-       return <p>There is error while serving your request please check with system administrator. </p>
+       return <p>Sorry, DRT IEI is having some issues right now. Please try again later or contact support</p>
     }
     return  this.props.children;
   }

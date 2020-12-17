@@ -12,7 +12,7 @@ object AppEnvironment {
 
   def apiConfig: ConfigValue[ApiConfig] = (
     env("API_PORT").or(prop("api.port")).as[UserPortNumber].option,
-    env("API_PERMISSIONS").as[String].default("faq:view"),
+    env("API_PERMISSIONS").as[String].default("iei-dashboard:view"),
     env("APP_ENV").as[String].option).parMapN { (port, permissions, env) =>
     ApiConfig(
       port = port getOrElse 9001,

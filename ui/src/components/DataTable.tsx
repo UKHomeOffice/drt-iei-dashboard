@@ -14,7 +14,6 @@ interface IProps {
 
 interface IState {
   arrivalRows?: RowData[]
-  arrivalsData?: ArrivalsData
   hasError: boolean;
   errorMessage: string;
 }
@@ -63,7 +62,6 @@ export default class ArrivalFlightDataTable extends React.Component<IProps, ISta
       let arrivalsData = response.data as ArrivalsData;
       let arrivalRows = arrivalsData.data as RowData[]
 
-      this.setState({...this.state, arrivalsData: arrivalsData});
       this.setState({...this.state, arrivalRows: arrivalRows});
   }
 
