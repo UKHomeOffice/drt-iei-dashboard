@@ -1,4 +1,6 @@
 <configuration>
+    <conversionRule conversionWord="stack" converterClass="net.logstash.logback.stacktrace.ShortenedThrowableConverter" />
+
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
             <providers>
@@ -11,7 +13,8 @@
                         "logger": "%logger",
                         "thread": "%thread",
                         "message": "%message",
-                        "traceId": "%mdc{traceId}"
+                        "traceId": "%mdc{traceId}",
+                        "stackTrace": "%stack"
                         }
                     </pattern>
                 </pattern>
@@ -21,4 +24,10 @@
     <root level="INFO">
         <appender-ref ref="STDOUT"/>
     </root>
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+    </root>
+    <logger level="WARN" name="org.http4s.server.middleware.Logger">
+        <appender-ref ref="STDOUT"/>
+    </logger>
 </configuration>

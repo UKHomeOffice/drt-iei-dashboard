@@ -35,8 +35,9 @@ object ArrivalRoutes {
               resp <- Ok(arrivals)
             } yield resp
           } else {
+            logger.warn(s"User logged in does not have valid permission to view the page.")
             Response[F](Status.Forbidden)
-              .withEntity(s"You need appropriate permissions to view the page")
+              .withEntity(s"You need appropriate permissions to view the page.")
               .pure[F]
           }
         } match {
