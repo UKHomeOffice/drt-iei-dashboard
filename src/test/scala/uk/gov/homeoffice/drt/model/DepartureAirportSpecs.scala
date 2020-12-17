@@ -5,94 +5,91 @@ import org.scalatest.matchers.must.Matchers
 
 class DepartureAirportSpecs extends AsyncFlatSpec with Matchers {
 
-
   "Departure Airport code" should "give list of all airport for Greece" in {
     val greeceList = DepartureAirport.athensDeparturePortsForCountry("Greece")
-    val expectedAirports = Seq(DepartureAirport("Greece", "ATH", "Athens"),
-      DepartureAirport("Greece", "SKG", "Thessaloniki"),
-      DepartureAirport("Greece", "KLX", "Kalamata"),
-      DepartureAirport("Greece", "KVA", "Kavala"),
-      DepartureAirport("Greece", "VOL", "Volos"),
-      DepartureAirport("Greece", "PVK", "Preveza"),
-      DepartureAirport("Greece", "HER", "Heraklion"),
-      DepartureAirport("Greece", "CHQ", "Chania"),
-      DepartureAirport("Greece", "ZTH", "Zakynthos"),
-      DepartureAirport("Greece", "RHO", "Rhodes"),
-      DepartureAirport("Greece", "CFU", "Kerkyra"),
-      DepartureAirport("Greece", "KGS", "Kos"),
-      DepartureAirport("Greece", "JSI", "Skiathos"),
-      DepartureAirport("Greece", "JMK", "Mykonos"),
-      DepartureAirport("Greece", "JTR", "Santorini"),
-      DepartureAirport("Greece", "EFL", "Kefalonia"),
-      DepartureAirport("Greece", "LXS", "Limnos"),
-      DepartureAirport("Greece", "MJT", "Mytilini"),
-      DepartureAirport("Greece", "SMI", "Samos"))
+    val expectedAirports = List(
+      Port("ATH", "Athens"),
+      Port("SKG", "Thessaloniki"),
+      Port("KLX", "Kalamata"),
+      Port("KVA", "Kavala"),
+      Port("VOL", "Volos"),
+      Port("PVK", "Preveza"),
+      Port("HER", "Heraklion"),
+      Port("CHQ", "Chania"),
+      Port("ZTH", "Zakynthos"),
+      Port("RHO", "Rhodes"),
+      Port("CFU", "Kerkyra"),
+      Port("KGS", "Kos"),
+      Port("JSI", "Skiathos"),
+      Port("JMK", "Mykonos"),
+      Port("JTR", "Santorini"),
+      Port("EFL", "Kefalonia")
+    )
     greeceList mustEqual expectedAirports
   }
 
   "Departure Airport code" should "give list of all airport for Cyprus" in {
     val greeceList = DepartureAirport.athensDeparturePortsForCountry("Cyprus")
-    val expectedAirports = Seq(DepartureAirport("Cyprus", "LCA", "Larnaca"),
-      DepartureAirport("Cyprus", "PFO", "Paphos"))
+    val expectedAirports = List(
+      Port("LCA", "Larnaca"),
+      Port("PFO", "Paphos")
+    )
     greeceList mustEqual expectedAirports
   }
 
   "Departure Airport code" should "give list of all airport for Croatia" in {
     val greeceList = DepartureAirport.athensDeparturePortsForCountry("Croatia")
-    val expectedAirports = Seq(DepartureAirport("Croatia", "ZAD", "Zadar"),
-      DepartureAirport("Croatia", "SPU", "Split"),
-      DepartureAirport("Croatia", "DBV", "Dubrovnik"),
-      DepartureAirport("Croatia", "ZAG", "Zagreb"),
-      DepartureAirport("Croatia", "PUY", "Pula"),
-      DepartureAirport("Croatia", "OSI", "Osijek"))
+    val expectedAirports = List(
+      Port("ZAD", "Zadar"),
+      Port("SPU", "Split"),
+      Port("DBV", "Dubrovnik"),
+      Port("ZAG", "Zagreb"),
+      Port("PUY", "Pula"),
+      Port("OSI", "Osijek"))
     greeceList mustEqual expectedAirports
   }
 
   "Departure Airport code" should "give list of all airport for Slovenia" in {
     val greeceList = DepartureAirport.athensDeparturePortsForCountry("Slovenia")
-    val expectedAirports = Seq(DepartureAirport("Slovenia", "LJU", "Ljubljana"))
+    val expectedAirports = List(Port("LJU", "Ljubljana"))
     greeceList mustEqual expectedAirports
   }
 
   "Departure Airport code" should "give list of all airport for Bulgaria" in {
     val greeceList = DepartureAirport.athensDeparturePortsForCountry("Bulgaria")
-    val expectedAirports = Seq(
-      DepartureAirport("Bulgaria", "VAR", "Varna"),
-      DepartureAirport("Bulgaria", "BOJ", "Bourgas"),
-      DepartureAirport("Bulgaria", "PDV", "Plovdiv"),
-      DepartureAirport("Bulgaria", "SOF", "Sofia")
-    )
+    val expectedAirports = List(
+      Port("VAR", "Varna"),
+      Port("BOJ", "Bourgas"),
+      Port("PDV", "Plovdiv"),
+      Port("SOF", "Sofia"))
     greeceList mustEqual expectedAirports
   }
 
   "Departure Airport code" should "give list of all airport for Romania" in {
     val greeceList = DepartureAirport.athensDeparturePortsForCountry("Romania")
-    val expectedAirports = Seq(
-      DepartureAirport("Romania", "OTP", "Otopeni"),
-      DepartureAirport("Romania", "BBU", "Baneasa"),
-      DepartureAirport("Romania", "CLJ", "Cluj-Napoca"),
-      DepartureAirport("Romania", "SBZ", "Sibiu"),
-      DepartureAirport("Romania", "TSR", "Timisoara"),
-      DepartureAirport("Romania", "BCM", "Bacău"),
-      DepartureAirport("Romania", "CND", "Constanta"),
-      DepartureAirport("Romania", "CRA", "Craiova"),
-      DepartureAirport("Romania", "IAS", "Iași"),
-      DepartureAirport("Romania", "OMR", "Oradea"),
-      DepartureAirport("Romania", "SCV", "Suceava"),
-      DepartureAirport("Romania", "TGM", "Tirgu Mures"),
-      DepartureAirport("Romania", "SUJ", "Satu-Mare")
+    val expectedAirports = List(
+      Port("OTP", "Otopeni"),
+      Port("BBU", "Baneasa"),
+      Port("CLJ", "Cluj-Napoca"),
+      Port("SBZ", "Sibiu"),
+      Port("TSR", "Timisoara"),
+      Port("BCM", "Bacău"),
+      Port("CND", "Constanta"),
+      Port("CRA", "Craiova")
     )
     greeceList mustEqual expectedAirports
   }
 
   "Departure Airport code" should "give list of all airport for Moldova" in {
     val greeceList = DepartureAirport.athensDeparturePortsForCountry("Moldova")
-    val expectedAirports = Seq(
-      DepartureAirport("Moldova", "KIV", "Chisinau")
-
-    )
+    val expectedAirports = List(Port("KIV", "Chisinau"))
     greeceList mustEqual expectedAirports
   }
-
-
 }
+
+
+
+
+
+
+

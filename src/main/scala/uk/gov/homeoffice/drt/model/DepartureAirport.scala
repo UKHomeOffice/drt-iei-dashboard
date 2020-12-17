@@ -1,60 +1,94 @@
 package uk.gov.homeoffice.drt.model
 
-case class DepartureAirport(country: String, airportCode: String, airportName: String)
+case class DepartureAirport(country: Country, airportCode: String, airportName: String)
+
+case class Port(code: String, name: String)
+
+sealed trait Country
+
+case object Greece extends Country {
+  val portList = List(
+    Port("ATH", "Athens"),
+    Port("SKG", "Thessaloniki"),
+    Port("KLX", "Kalamata"),
+    Port("KVA", "Kavala"),
+    Port("VOL", "Volos"),
+    Port("PVK", "Preveza"),
+    Port("HER", "Heraklion"),
+    Port("CHQ", "Chania"),
+    Port("ZTH", "Zakynthos"),
+    Port("RHO", "Rhodes"),
+    Port("CFU", "Kerkyra"),
+    Port("KGS", "Kos"),
+    Port("JSI", "Skiathos"),
+    Port("JMK", "Mykonos"),
+    Port("JTR", "Santorini"),
+    Port("EFL", "Kefalonia")
+  )
+}
+
+case object Cyprus extends Country {
+  val portList = List(
+    Port("LCA", "Larnaca"),
+    Port("PFO", "Paphos")
+  )
+}
+
+case object Croatia extends Country {
+  val portList = List(
+    Port("ZAD", "Zadar"),
+    Port("SPU", "Split"),
+    Port("DBV", "Dubrovnik"),
+    Port("ZAG", "Zagreb"),
+    Port("PUY", "Pula"),
+    Port("OSI", "Osijek"))
+}
+
+
+case object Slovenia extends Country {
+  val portList = List(Port("LJU", "Ljubljana"))
+}
+
+
+case object Bulgaria extends Country {
+  val portList = List(
+    Port("VAR", "Varna"),
+    Port("BOJ", "Bourgas"),
+    Port("PDV", "Plovdiv"),
+    Port("SOF", "Sofia"))
+}
+
+case object Romania extends Country {
+  val portList = List(
+    Port("OTP", "Otopeni"),
+    Port("BBU", "Baneasa"),
+    Port("CLJ", "Cluj-Napoca"),
+    Port("SBZ", "Sibiu"),
+    Port("TSR", "Timisoara"),
+    Port("BCM", "Bacău"),
+    Port("CND", "Constanta"),
+    Port("CRA", "Craiova")
+  )
+}
+
+case object Moldova extends Country {
+  val portList = List(Port("KIV", "Chisinau"))
+}
 
 object DepartureAirport {
+  def athensDeparturePortsForCountry(country: String): List[Port] = {
+    country.toLowerCase match {
+      case "greece" => Greece.portList
+      case "cyprus" => Cyprus.portList
+      case "croatia" => Croatia.portList
+      case "slovenia" => Slovenia.portList
+      case "bulgaria" => Bulgaria.portList
+      case "romania" => Romania.portList
+      case "moldova" => Moldova.portList
+      case _ => List.empty
+    }
 
-  val athensDeparturePorts = List(
-    DepartureAirport("Greece", "ATH", "Athens"),
-    DepartureAirport("Greece", "SKG", "Thessaloniki"),
-    DepartureAirport("Greece", "KLX", "Kalamata"),
-    DepartureAirport("Greece", "KVA", "Kavala"),
-    DepartureAirport("Greece", "VOL", "Volos"),
-    DepartureAirport("Greece", "PVK", "Preveza"),
-    DepartureAirport("Greece", "HER", "Heraklion"),
-    DepartureAirport("Greece", "CHQ", "Chania"),
-    DepartureAirport("Greece", "ZTH", "Zakynthos"),
-    DepartureAirport("Greece", "RHO", "Rhodes"),
-    DepartureAirport("Greece", "CFU", "Kerkyra"),
-    DepartureAirport("Greece", "KGS", "Kos"),
-    DepartureAirport("Greece", "JSI", "Skiathos"),
-    DepartureAirport("Greece", "JMK", "Mykonos"),
-    DepartureAirport("Greece", "JTR", "Santorini"),
-    DepartureAirport("Greece", "EFL", "Kefalonia"),
-    DepartureAirport("Greece", "LXS", "Limnos"),
-    DepartureAirport("Greece", "MJT", "Mytilini"),
-    DepartureAirport("Greece", "SMI", "Samos"),
-    DepartureAirport("Cyprus", "LCA", "Larnaca"),
-    DepartureAirport("Cyprus", "PFO", "Paphos"),
-    DepartureAirport("Croatia", "ZAD", "Zadar"),
-    DepartureAirport("Croatia", "SPU", "Split"),
-    DepartureAirport("Croatia", "DBV", "Dubrovnik"),
-    DepartureAirport("Croatia", "ZAG", "Zagreb"),
-    DepartureAirport("Croatia", "PUY", "Pula"),
-    DepartureAirport("Croatia", "OSI", "Osijek"),
-    DepartureAirport("Slovenia", "LJU", "Ljubljana"),
-    DepartureAirport("Bulgaria", "VAR", "Varna"),
-    DepartureAirport("Bulgaria", "BOJ", "Bourgas"),
-    DepartureAirport("Bulgaria", "PDV", "Plovdiv"),
-    DepartureAirport("Bulgaria", "SOF", "Sofia"),
-    DepartureAirport("Romania", "OTP", "Otopeni"),
-    DepartureAirport("Romania", "BBU", "Baneasa"),
-    DepartureAirport("Romania", "CLJ", "Cluj-Napoca"),
-    DepartureAirport("Romania", "SBZ", "Sibiu"),
-    DepartureAirport("Romania", "TSR", "Timisoara"),
-    DepartureAirport("Romania", "BCM", "Bacău"),
-    DepartureAirport("Romania", "CND", "Constanta"),
-    DepartureAirport("Romania", "CRA", "Craiova"),
-    DepartureAirport("Romania", "IAS", "Iași"),
-    DepartureAirport("Romania", "OMR", "Oradea"),
-    DepartureAirport("Romania", "SCV", "Suceava"),
-    DepartureAirport("Romania", "TGM", "Tirgu Mures"),
-    DepartureAirport("Romania", "SUJ", "Satu-Mare"),
-    DepartureAirport("Moldova", "KIV", "Chisinau"))
-
-
-  def athensDeparturePortsForCountry(country: String) = {
-    athensDeparturePorts.filter(_.country == country)
   }
+
 
 }

@@ -5,7 +5,6 @@ import java.time.LocalDateTime
 import cats.effect.{Resource, Sync}
 import cats.implicits._
 import skunk.Session
-import uk.gov.homeoffice.drt.AppResource.{getCarrierNameByFS, getCarrierNameByICAO}
 import uk.gov.homeoffice.drt.utils.DateUtil
 
 class ArrivalRepositoryStub[F[_] : Sync] extends ArrivalRepositoryI[F] {

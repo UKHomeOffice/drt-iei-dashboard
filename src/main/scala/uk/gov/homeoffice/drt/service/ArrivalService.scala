@@ -15,8 +15,8 @@ class ArrivalService[F[_] : Sync](arrivalsRepository: ArrivalRepositoryI[F]) {
 
   def getFlightsDetail(requestedDetails: FlightsRequest) = {
     val requestedDate = `yyyy-MM-dd_parse_toLocalDate`(requestedDetails.date).atStartOfDay()
-    val athensCountryAirport = DepartureAirport.athensDeparturePortsForCountry(requestedDetails.country)
-    arrivalsRepository.findArrivalsForADate(requestedDate).map(_.filter(athensCountryAirport.map(_.airportCode) contains _.origin).zipWithIndex).map(_.map(a => ArrivalTableDataIndex(a._1, a._2)))
+    val portList = DepartureAirport.athensDeparturePortsForCountry(requestedDetails.country)
+    arrivalsRepository.findArrivalsForADate(requestedDate).map(_.filter(portList.map(_.code) contains _.origin).zipWithIndex).map(_.map(a => ArrivalTableDataIndex(a._1, a._2)))
 
   }
 
