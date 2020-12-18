@@ -1,11 +1,11 @@
 import React from 'react';
-import { makeStyles, Theme } from '@material-ui/core/styles';
+import {makeStyles, Theme} from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import ArrivalFlightDataTable from './DataTable'
+import FlightsTable from './FlightsTable'
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -14,7 +14,7 @@ interface TabPanelProps {
 }
 
 function TabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
+  const {children, value, index, ...other} = props;
 
   return (
     <div
@@ -44,19 +44,19 @@ const useStyles = makeStyles((theme: Theme) => ({
   root: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
-    width:1100
+    width: 1100
   },
 }));
 
 interface SimpleTabProps {
-  pickedDate : string;
+  pickedDate: string;
 }
 
-export default function SimpleTabs(props:SimpleTabProps) {
+export default function SimpleTabs(props: SimpleTabProps) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
-  const { pickedDate } = props;
+  const {pickedDate} = props;
 
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
@@ -77,25 +77,25 @@ export default function SimpleTabs(props:SimpleTabProps) {
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
-       <ArrivalFlightDataTable region = "athens" country = "Greece" date = {pickedDate} />
+        <FlightsTable region="athens" country="Greece" date={pickedDate}/>
       </TabPanel>
       <TabPanel value={value} index={1}>
-       <ArrivalFlightDataTable region = "athens" country = "Cyprus" date = {pickedDate}/>
+        <FlightsTable region="athens" country="Cyprus" date={pickedDate}/>
       </TabPanel>
       <TabPanel value={value} index={2}>
-       <ArrivalFlightDataTable region = "athens" country = "Croatia" date = {pickedDate}/>
+        <FlightsTable region="athens" country="Croatia" date={pickedDate}/>
       </TabPanel>
       <TabPanel value={value} index={3}>
-       <ArrivalFlightDataTable region = "athens" country = "Slovenia" date = {pickedDate}/>
+        <FlightsTable region="athens" country="Slovenia" date={pickedDate}/>
       </TabPanel>
       <TabPanel value={value} index={4}>
-       <ArrivalFlightDataTable region = "athens" country = "Bulgaria" date = {pickedDate}/>
+        <FlightsTable region="athens" country="Bulgaria" date={pickedDate}/>
       </TabPanel>
       <TabPanel value={value} index={5}>
-       <ArrivalFlightDataTable region = "athens" country = "Romania" date = {pickedDate}/>
+        <FlightsTable region="athens" country="Romania" date={pickedDate}/>
       </TabPanel>
       <TabPanel value={value} index={6}>
-       <ArrivalFlightDataTable region = "athens" country = "Moldova" date = {pickedDate}/>
+        <FlightsTable region="athens" country="Moldova" date={pickedDate}/>
       </TabPanel>
     </div>
   );
