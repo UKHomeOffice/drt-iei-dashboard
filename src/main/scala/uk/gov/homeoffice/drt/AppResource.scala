@@ -35,9 +35,9 @@ object AppResource {
     )
   }
 
-  def getCarrierNameByFS(fs: String) = airlines.airlines.find(_.fs == fs)
+  def getCarrierNameByIData(iata: String) = airlines.airlines.find( a => a.active & a.iata.getOrElse("") == iata)
 
-  def getCarrierNameByICAO(icao: String) = airlines.airlines.find(_.icao.getOrElse("") == icao)
+  def getCarrierNameByICAO(icao: String) = airlines.airlines.find(a => a.active & a.icao.getOrElse("") == icao)
 
 
   def populateAirlineData = {

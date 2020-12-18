@@ -1,10 +1,11 @@
 package uk.gov.homeoffice.drt.coders
 
 import io.circe
+import io.circe._
+import io.circe.parser._
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.must.Matchers
 import uk.gov.homeoffice.drt.model.{Airline, Airlines}
-import io.circe._, io.circe.parser._
 
 class AirlineDecoderSpecs extends AsyncFlatSpec with Matchers {
   val airlinesJsonString =
@@ -48,11 +49,11 @@ class AirlineDecoderSpecs extends AsyncFlatSpec with Matchers {
 
     airlines mustEqual Right(
       Airlines(List(
-        Airline("02", "Oceanic", None, false),
-        Airline("03", "Bellview Airlines", None, false),
-        Airline("07", "OzJet", None, false),
-        Airline("0A", "Amber Air", Some("GNT"), false),
-        Airline("0B", "Blue Air", Some("BLA"), true))))
+        Airline("02", "Oceanic", None, None, false),
+        Airline("03", "Bellview Airlines", None, None, false),
+        Airline("07", "OzJet", None, None, false),
+        Airline("0A", "Amber Air", Some("GNT"), None, false),
+        Airline("0B", "Blue Air", Some("BLA"), Some("0B"), true))))
 
   }
 
@@ -61,11 +62,11 @@ class AirlineDecoderSpecs extends AsyncFlatSpec with Matchers {
 
     airlines mustEqual Right(
       Airlines(List(
-        Airline("02", "Oceanic", None, false),
-        Airline("03", "Bellview Airlines", None, false),
-        Airline("07", "OzJet", None, false),
-        Airline("0A", "Amber Air", Some("GNT"), false),
-        Airline("0B", "Blue Air", Some("BLA"), true))))
+        Airline("02", "Oceanic", None, None, false),
+        Airline("03", "Bellview Airlines", None, None, false),
+        Airline("07", "OzJet", None, None, false),
+        Airline("0A", "Amber Air", Some("GNT"), None, false),
+        Airline("0B", "Blue Air", Some("BLA"), Some("0B"), true))))
 
   }
 }
