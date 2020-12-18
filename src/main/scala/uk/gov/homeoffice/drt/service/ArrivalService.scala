@@ -34,9 +34,8 @@ class ArrivalService[F[_] : Sync](arrivalsRepository: ArrivalRepositoryI[F]) {
   }
 
   def carrierName(code: String, number: String): String = {
-    val stripNumber = number.stripPrefix("00")
-    val fsCode = code.stripSuffix(stripNumber).stripSuffix("0")
-    getCarrierNameByFS(fsCode).map(_.name).getOrElse(getCarrierNameByICAO(fsCode).map(_.name).getOrElse(""))
+    val iataCode = code.stripSuffix(number).split('0').headOption.getOrElse("")
+    getCarrierNameByIData(iataCode).map(_.name).getOrElse(getCarrierNameByICAO(iataCode).map(_.name).getOrElse(""))
   }
 
 }
