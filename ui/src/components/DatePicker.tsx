@@ -11,7 +11,7 @@ interface IProps {
 }
 
 interface IState {
- selectedDate?: Date
+  selectedDate?: Date
 }
 
 export default class MaterialUIPickers extends React.Component<IProps, IState> {
@@ -22,32 +22,32 @@ export default class MaterialUIPickers extends React.Component<IProps, IState> {
   };
 
   constructor(props: IProps) {
-      super(props);
-     this.state = {
-      selectedDate :  new Date()
-     };
-    }
+    super(props);
+    this.state = {
+      selectedDate: new Date()
+    };
+  }
 
   componentDidMount() {
     console.log("this.state.selectedDate" + this.state.selectedDate)
-   }
+  }
 
- render() {
-     return (
-         <MuiPickersUtilsProvider utils={DateFnsUtils}>
-             <KeyboardDatePicker
-               margin="normal"
-               id="date-picker-dialog"
-               label="Flight departure date"
-               format="yyyy-MM-dd"
-               value={this.state.selectedDate}
-               onChange={this.handleDateChange}
-               KeyboardButtonProps={{
-                 'aria-label': 'change date',
-               }}
-             />
-             <CountryTab pickedDate={ format(this.state.selectedDate as Date,"yyyy-MM-dd") } />
-         </MuiPickersUtilsProvider>
-       );
- }
+  render() {
+    return (
+      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+        <KeyboardDatePicker
+          margin="normal"
+          id="date-picker-dialog"
+          label="Flight departure date"
+          format="yyyy-MM-dd"
+          value={this.state.selectedDate}
+          onChange={this.handleDateChange}
+          KeyboardButtonProps={{
+            'aria-label': 'change date',
+          }}
+        />
+        <CountryTab pickedDate={format(this.state.selectedDate as Date, "yyyy-MM-dd")}/>
+      </MuiPickersUtilsProvider>
+    );
+  }
 }

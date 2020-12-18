@@ -36,7 +36,7 @@ object AppEnvironment {
     env("AGGDB_HOST").as[String].default("localhost"),
     env("AGGDB_PORT").as[Int].default(5432),
     env("AGGDB_USER").as[String].default("drt"),
-    env("AGGDB_PASSWORD").as[String].default(""),
+    env("AGGDB_PASSWORD").as[String].default("drt"),
     env("AGGDB_DATABASE").as[String].default("aggregated"),
     env("AGGDB_SESSION_POOL_MAX").as[Int].default(10)
   ).parMapN(PostgreSQLConfig)
