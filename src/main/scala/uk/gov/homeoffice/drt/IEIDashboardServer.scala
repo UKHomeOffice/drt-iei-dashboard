@@ -9,8 +9,8 @@ import org.http4s.server.blaze.BlazeServerBuilder
 import org.http4s.server.middleware.Logger
 import uk.gov.homeoffice.drt.api.{ArrivalRoutes, PublicRoutes}
 import uk.gov.homeoffice.drt.applicative.ArrivalFlights
-import uk.gov.homeoffice.drt.repository.ArrivalRepository
-import uk.gov.homeoffice.drt.service.{AirlineService, ArrivalService}
+import uk.gov.homeoffice.drt.repository.{ArrivalRepository, CiriumScheduledRepository}
+import uk.gov.homeoffice.drt.service.{AirlineService, ArrivalService, CiriumService}
 
 import scala.concurrent.ExecutionContext.global
 
@@ -28,11 +28,14 @@ object IEIDashboardServer {
 
       arrivalsService = new ArrivalService(new ArrivalRepository(session))
 
-      arrivalFlightsAlg = ArrivalFlights.impl[F](arrivalsService)
+
+      httpClient = AppResource.mkHttpClient(cfg.httpClient)
+      ciriumService = new CiriumService(new CiriumScheduledRepository(session), cfg.ciriumApp,httpClient)
+      arrivalFlightsAlg = ArrivalFlights.impl[F](arrivalsService, ciriumService)
 
       httpApp = (
         PublicRoutes.dashboardRoutes[F]() <+>
-          PublicRoutes.airlineRoutes[F](cfg.airline,airlineService) <+>
+          PublicRoutes.airlineRoutes[F](cfg.airline, airlineService) <+>
           ArrivalRoutes.arrivalFlightsRoutes[F](arrivalFlightsAlg, cfg.api.permissions)
         ).orNotFound
 

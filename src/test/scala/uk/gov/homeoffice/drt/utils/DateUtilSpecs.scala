@@ -1,5 +1,8 @@
 package uk.gov.homeoffice.drt.utils
 
+import java.time.Month
+
+import cats.NotNull
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.must.Matchers
 
@@ -45,4 +48,13 @@ class DateUtilSpecs extends AsyncFlatSpec with Matchers {
     dateString mustEqual "2018-11-23"
   }
 
+  "Cirium Date format" should "parse string to Date" in {
+    val date = DateUtil.`yyyy-MM-ddTHH:mm:ss.SSSZ_parse_toLocalDateTime`("2019-07-15T09:10:00.000Z")
+    date.getYear mustEqual 2019
+    date.getMonth mustEqual Month.JULY
+    date.getDayOfMonth mustEqual 15
+    date.getHour mustEqual 9
+    date.getMinute mustEqual 10
+    date.getSecond mustEqual 0
+  }
 }

@@ -1,14 +1,17 @@
 package uk.gov.homeoffice.drt
 
-import cats.effect.{Concurrent, ContextShift, Resource, Sync}
+import cats.effect.{Concurrent, ConcurrentEffect, ContextShift, Resource, Sync}
 import cats.syntax.all._
 import natchez.Trace.Implicits.noop
+import org.http4s.client.Client
+import org.http4s.client.blaze.BlazeClientBuilder
 import org.slf4j.LoggerFactory
 import skunk.Session
 import uk.gov.homeoffice.drt.coders.AirlineDecoder
 import uk.gov.homeoffice.drt.model.Airlines
 import uk.gov.homeoffice.drt.service.AirlineService
 
+import scala.concurrent.ExecutionContext
 import scala.io.Source
 
 object AppResource {
@@ -35,7 +38,7 @@ object AppResource {
     )
   }
 
-  def getCarrierNameByIData(iata: String) = airlines.airlines.find( a => a.active & a.iata.getOrElse("") == iata)
+  def getCarrierNameByIData(iata: String) = airlines.airlines.find(a => a.active & a.iata.getOrElse("") == iata)
 
   def getCarrierNameByICAO(icao: String) = airlines.airlines.find(a => a.active & a.icao.getOrElse("") == icao)
 
@@ -46,5 +49,11 @@ object AppResource {
       case Left(e) => logger.error(s"unable to get airline details ${e.getMessage}")
     }
   }
+
+  def mkHttpClient[F[_] : ConcurrentEffect : ContextShift](c: HttpClientConfig): Resource[F, Client[F]] =
+    BlazeClientBuilder[F](ExecutionContext.global)
+      .withConnectTimeout(c.connectTimeout)
+      .withRequestTimeout(c.requestTimeout)
+      .resource
 
 }
