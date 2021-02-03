@@ -65,17 +65,15 @@ class ArrivalServiceSpecs extends AsyncFlatSpec with Matchers with ScalaCheckDri
   }
 
   "Arrival" should "give carrierName 'Ryanair' for flightNumber 'FR0012'" in {
-    val arrivalService: ArrivalService[IO] = context
 
-    val a = arrivalService.carrierName("FR0012","12")
+    val a = AppResource.carrierName("FR0012","12")
 
     a mustEqual "Ryanair"
   }
 
   "Arrival" should "give carrierName 'Blue Air' for flightNumber '0B1531'" in {
-    val arrivalService: ArrivalService[IO] = context
 
-    val a = arrivalService.carrierName("0B1531","1531")
+    val a = AppResource.carrierName("0B1531","1531")
 
     a mustEqual "Blue Air"
 

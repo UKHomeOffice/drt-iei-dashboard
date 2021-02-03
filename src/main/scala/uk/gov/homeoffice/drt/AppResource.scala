@@ -1,6 +1,6 @@
 package uk.gov.homeoffice.drt
 
-import cats.effect.{Concurrent, ConcurrentEffect, ContextShift, Resource, Sync}
+import cats.effect.{Bracket, Concurrent, ConcurrentEffect, ContextShift, Resource, Sync}
 import cats.syntax.all._
 import natchez.Trace.Implicits.noop
 import org.http4s.client.Client
@@ -29,7 +29,7 @@ object AppResource {
 
   var airlines: Airlines = Airlines(List.empty)
 
-  def updateAirLines[F[_] : Sync : Concurrent : ContextShift](airlineConfig: AirlineConfig, airlineService: AirlineService[F]) = {
+  def updateAirLines[F[_] : Sync](airlineConfig: AirlineConfig, airlineService: AirlineService[F]) = {
     airlineService.getAirlineData(airlineConfig).map(jsonString =>
       AirlineDecoder.airlineJsonDecoder(jsonString) match {
         case Right(a: Airlines) => airlines = a
@@ -55,5 +55,16 @@ object AppResource {
       .withConnectTimeout(c.connectTimeout)
       .withRequestTimeout(c.requestTimeout)
       .resource
+
+  def carrierName(code: String, number: String): String = {
+    val iataCode = code.stripSuffix(number).stripSuffix("0").stripSuffix("0")
+    getCarrierNameByIData(iataCode).map(_.name).getOrElse(getCarrierNameByICAO(iataCode).map(_.name).getOrElse(""))
+  }
+
+
+  def carrierCode(code: String, number: String): String = {
+    code.stripSuffix(number).stripSuffix("0").stripSuffix("0")
+  }
+
 
 }

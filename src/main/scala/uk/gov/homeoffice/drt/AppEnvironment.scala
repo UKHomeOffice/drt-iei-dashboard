@@ -51,25 +51,18 @@ object AppEnvironment {
   }
 
 
-  val ciriumAppConfig: ConfigValue[CiriumAppConfig] = (
-    env("CIRIUM_APP_ENDPOINT").as[String].default("localhost:8080"),
-    env("CIRIUM_APP_API").as[String].default("flightScheduled"),
-  ).parMapN(CiriumAppConfig)
-
   val config: ConfigValue[Config] = (
     apiConfig,
     databaseConfig,
     airlineConfig,
-    httpClientConfig,
-    ciriumAppConfig,
-  ).parMapN { (api, database, airline, httpClient, ciriumApp) =>
+    httpClientConfig
+  ).parMapN { (api, database, airline, httpClient) =>
     Config(
       appName = "IEI-Dashboard",
       api = api,
       database = database,
       airline = airline,
-      httpClient = httpClient,
-      ciriumApp = ciriumApp
+      httpClient = httpClient
     )
   }
 
@@ -82,7 +75,7 @@ final case class AirlineConfig(endpoint: String, appId: String, appKey: String)
 
 final case class ApiConfig(port: UserPortNumber, env: Option[String], permissions: List[String])
 
-final case class Config(appName: NonEmptyString, api: ApiConfig, database: PostgreSQLConfig, airline: AirlineConfig, httpClient: HttpClientConfig, ciriumApp: CiriumAppConfig)
+final case class Config(appName: NonEmptyString, api: ApiConfig, database: PostgreSQLConfig, airline: AirlineConfig, httpClient: HttpClientConfig)
 
 final case class PostgreSQLConfig(host: String, port: Int, user: String, password: String, database: String, max: Int)
 
