@@ -2,7 +2,9 @@ package uk.gov.homeoffice.drt.model
 
 case class Port(code: String, name: String)
 
-sealed trait Country
+sealed trait Country {
+  def portList : Seq[Port]
+}
 
 case object Greece extends Country {
   val portList = List(
@@ -88,5 +90,8 @@ object DepartureAirport {
 
   }
 
+  def athenRegionsPortList = List(
+    Greece,Cyprus,Croatia,Slovenia,Bulgaria,Romania,Moldova
+  )
 
 }

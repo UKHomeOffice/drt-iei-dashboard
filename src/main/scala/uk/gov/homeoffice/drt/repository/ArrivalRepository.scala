@@ -6,6 +6,7 @@ import cats.effect.{Resource, Sync}
 import skunk.codec.all._
 import skunk.implicits._
 import skunk.{Decoder, Query, Session, ~}
+import uk.gov.homeoffice.drt.model.DepartureAirport
 
 case class ArrivalTableData(code: String,
                             number: Int,
@@ -22,6 +23,8 @@ trait ArrivalRepositoryI[F[_]] {
   def sessionPool: Resource[F, Session[F]]
 
   def findArrivalsForADate(queryDate: LocalDateTime): F[List[ArrivalTableData]]
+
+  def getArrivalsForOriginAndDate(): Seq[Unit]
 }
 
 class ArrivalRepository[F[_] : Sync](val sessionPool: Resource[F, Session[F]]) extends ArrivalRepositoryI[F] {
@@ -46,5 +49,13 @@ class ArrivalRepository[F[_] : Sync](val sessionPool: Resource[F, Session[F]]) e
         ps.stream(queryDate ~ queryDate.plusDays(1), 1024).compile.toList
       }
     }
+
+
+  def getArrivalsForOriginAndDate(): Seq[Unit] = {
+    DepartureAirport.athenRegionsPortList.flatMap { country =>
+      country.portList.map(println(_))
+    }
+  }
+
 
 }

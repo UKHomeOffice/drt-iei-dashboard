@@ -33,5 +33,8 @@ class ArrivalService[F[_] : Sync](arrivalsRepository: ArrivalRepositoryI[F]) {
         a.arrivalsTableData.scheduled_departure.map(`UTC+2TimeZoneConvertDate`(_)))))
   }
 
+  def updateScheduledDeparture = {
+    arrivalsRepository.getArrivalsForOriginAndDate()
+  }.pure[F]
 
 }

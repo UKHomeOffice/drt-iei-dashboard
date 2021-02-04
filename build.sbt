@@ -24,6 +24,7 @@ lazy val root = (project in file("."))
       Libraries.logstashLogbackEncoder % Runtime,
       Libraries.skunkCore,
       Libraries.skunkCirce,
+      Libraries.fs2CronCore,
       Libraries.scalaCheck,
       Libraries.scalaTest,
       Libraries.scalaTestPlus,

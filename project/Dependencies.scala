@@ -28,6 +28,8 @@ object Dependencies {
     val scalaTest = "3.2.3"
     val scalaTestPlus = "3.2.2.0"
     val logstashLogbackEncoder = "6.5"
+    val fs2CronCore = "0.2.2"
+    
   }
 
   object Libraries {
@@ -54,6 +56,8 @@ object Dependencies {
 
     val skunkCore = "org.tpolecat" %% "skunk-core" % Versions.skunk
     val skunkCirce = "org.tpolecat" %% "skunk-circe" % Versions.skunk
+    
+    val fs2CronCore = "eu.timepit" %% "fs2-cron-core" % Versions.fs2CronCore
 
     // Runtime
     val logback = "ch.qos.logback" % "logback-classic" % Versions.logback
