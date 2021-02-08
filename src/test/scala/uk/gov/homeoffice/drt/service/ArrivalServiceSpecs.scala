@@ -6,13 +6,13 @@ import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 import uk.gov.homeoffice.drt.AppResource
 import uk.gov.homeoffice.drt.model.{Arrival, FlightsRequest}
-import uk.gov.homeoffice.drt.repository.ArrivalRepositoryStub
+import uk.gov.homeoffice.drt.repository.{ArrivalRepositoryStub, DepartureRepositoryStub}
 import uk.gov.homeoffice.drt.utils.DateUtil
 
 class ArrivalServiceSpecs extends AsyncFlatSpec with Matchers with ScalaCheckDrivenPropertyChecks {
 
   def context = {
-    val arrivalService = Sync[IO].delay(new ArrivalService[IO](new ArrivalRepositoryStub)).unsafeRunSync()
+    val arrivalService = Sync[IO].delay(new ArrivalService[IO](new ArrivalRepositoryStub,new DepartureRepositoryStub)).unsafeRunSync()
     AppResource.populateAirlineData
     arrivalService
   }

@@ -139,5 +139,5 @@ class ArrivalRepositoryStub[F[_] : Sync] extends ArrivalRepositoryI[F] {
     arrivalMap.filter(a => a.scheduled.toLocalDate == queryDate.toLocalDate).pure[F]
   }
 
-
+  override def getArrivalsForOriginAndDate(origin: String): F[List[ArrivalTableData]] = ???
 }

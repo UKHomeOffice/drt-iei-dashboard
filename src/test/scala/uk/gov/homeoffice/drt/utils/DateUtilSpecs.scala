@@ -49,7 +49,7 @@ class DateUtilSpecs extends AsyncFlatSpec with Matchers {
   }
 
   "Cirium Date format" should "parse string to Date" in {
-    val date = DateUtil.`yyyy-MM-ddTHH:mm:ss.SSSZ_parse_toLocalDateTime`("2019-07-15T09:10:00.000Z")
+    val date = DateUtil.`yyyy-MM-ddTHH:mm:ss.SSSZ_parse_toLocalDateTime`("2019-07-15T09:10:00.000")
     date.getYear mustEqual 2019
     date.getMonth mustEqual Month.JULY
     date.getDayOfMonth mustEqual 15
