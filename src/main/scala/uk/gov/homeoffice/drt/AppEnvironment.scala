@@ -52,7 +52,7 @@ object AppEnvironment {
 
   val cronJobConfig: ConfigValue[CronJobConfig] = (
     env("CIRIUM_SCHEDULES_ENDPOINT").as[String].default("https://api.flightstats.com/flex/schedules/rest/v1/json/flight/"),
-    env("CRON_SCHEDULER_TIMER").as[String].default("0 */2 * ? * *")
+    env("CRON_SCHEDULER_TIMER").as[String].default("0 0 */3 ? * *")
   ).parMapN { (endpoint, scheduler) =>
     CronJobConfig(endpoint, scheduler)
   }
