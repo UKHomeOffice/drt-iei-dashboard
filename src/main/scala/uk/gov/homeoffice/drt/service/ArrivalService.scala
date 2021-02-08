@@ -7,10 +7,10 @@ import skunk.data.Completion
 import uk.gov.homeoffice.drt.AppResource._
 import uk.gov.homeoffice.drt.model
 import uk.gov.homeoffice.drt.model.{Arrival, ArrivalTableDataIndex, DepartureAirport, FlightsRequest}
-import uk.gov.homeoffice.drt.repository.{ArrivalRepositoryI, ArrivalScheduledData, ArrivalTableData}
+import uk.gov.homeoffice.drt.repository.{ArrivalRepositoryI, ArrivalTableData, DepartureRepositoryI, DepartureTableData}
 import uk.gov.homeoffice.drt.utils.DateUtil._
 
-class ArrivalService[F[_] : Sync](arrivalsRepository: ArrivalRepositoryI[F]) {
+class ArrivalService[F[_] : Sync](arrivalsRepository: ArrivalRepositoryI[F],departureRepository: DepartureRepositoryI[F]) {
 
   private val logger = LoggerFactory.getLogger(getClass.getName)
 
@@ -42,9 +42,10 @@ class ArrivalService[F[_] : Sync](arrivalsRepository: ArrivalRepositoryI[F]) {
     country.portList.map(_.code.toString)
   }
 
-  def insertUpdateArrivalTableData(arrivalTableDataF: F[List[ArrivalTableData]]) = {
-    val insertArrivalTableDataF: F[List[ArrivalScheduledData]] = arrivalTableDataF.flatMap(_.traverse(arrivalsRepository.ignoreScheduledDepartureIfExist(_))).map(_.flatten)
-    insertArrivalTableDataF.map(arrivalsRepository.insertArrivalScheduledData(_)).flatten
+
+  def insertUpdateDepartureTableData(arrivalTableDataF: F[List[ArrivalTableData]]) = {
+    val insertDepartureTableDataF: F[List[DepartureTableData]] = arrivalTableDataF.flatMap(_.traverse(departureRepository.ignoreScheduledDepartureIfExist(_))).map(_.flatten)
+    insertDepartureTableDataF.map(departureRepository.insertDepartureData(_)).flatten
   }
 
 }

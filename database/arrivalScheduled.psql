@@ -1,4 +1,4 @@
-CREATE TABLE public.arrivalScheduled(
+CREATE TABLE public.departure(
   code text NOT NULL,
   number integer NOT NULL,
   destination text NOT NULL,
@@ -10,9 +10,9 @@ CREATE TABLE public.arrivalScheduled(
   PRIMARY KEY (number, destination, terminal, scheduled)
 );
 
-CREATE INDEX arrivalScheduledCode ON public.arrivalScheduled (code);
-CREATE INDEX arrivalScheduledNumber ON public.arrivalScheduled (number);
-CREATE INDEX arrivalScheduledOrigin ON public.arrivalScheduled (origin);
-CREATE INDEX arrivalScheduledterminal ON public.arrivalScheduled (terminal);
-CREATE INDEX arrivalScheduledIndex ON public.arrivalScheduled (scheduled ASC);
-CREATE INDEX arrivalScheduled_departure ON public.arrivalScheduled (scheduled_departure ASC);
+CREATE INDEX departureCode ON public.departure (code);
+CREATE INDEX departureNumber ON public.departure (number);
+CREATE INDEX departureOrigin ON public.departure (origin);
+CREATE INDEX departureterminal ON public.departure (terminal);
+CREATE INDEX departureIndex ON public.departure (scheduled ASC);
+CREATE INDEX departure_scheduled ON public.departure (scheduled_departure ASC);
