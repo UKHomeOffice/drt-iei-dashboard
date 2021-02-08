@@ -50,32 +50,39 @@ object AppEnvironment {
     HttpClientConfig(connectTimeout seconds, requestTimeout seconds)
   }
 
+  val cronJobConfig: ConfigValue[CronJobConfig] = (
+    env("CIRIUM_SCHEDULES_ENDPOINT").as[String].default("https://api.flightstats.com/flex/schedules/rest/v1/json/flight/"),
+    env("CRON_SCHEDULER_TIMER").as[String].default("0 */2 * ? * *")
+  ).parMapN { (endpoint, scheduler) =>
+    CronJobConfig(endpoint, scheduler)
+  }
 
   val config: ConfigValue[Config] = (
     apiConfig,
     databaseConfig,
     airlineConfig,
-    httpClientConfig
-  ).parMapN { (api, database, airline, httpClient) =>
+    httpClientConfig,
+    cronJobConfig
+  ).parMapN { (api, database, airline, httpClient, cronjob) =>
     Config(
       appName = "IEI-Dashboard",
       api = api,
       database = database,
       airline = airline,
-      httpClient = httpClient
+      httpClient = httpClient,
+      cronJob = cronjob
     )
   }
 
 }
 
-
-final case class CiriumAppConfig(endPoint: String, api: String)
+final case class CronJobConfig(ciriumSchedulesEndpoint: String, scheduler: String)
 
 final case class AirlineConfig(endpoint: String, appId: String, appKey: String)
 
 final case class ApiConfig(port: UserPortNumber, env: Option[String], permissions: List[String])
 
-final case class Config(appName: NonEmptyString, api: ApiConfig, database: PostgreSQLConfig, airline: AirlineConfig, httpClient: HttpClientConfig)
+final case class Config(appName: NonEmptyString, api: ApiConfig, database: PostgreSQLConfig, airline: AirlineConfig, httpClient: HttpClientConfig, cronJob: CronJobConfig)
 
 final case class PostgreSQLConfig(host: String, port: Int, user: String, password: String, database: String, max: Int)
 

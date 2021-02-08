@@ -9,7 +9,7 @@ import org.http4s.server.blaze.BlazeServerBuilder
 import org.http4s.server.middleware.Logger
 import uk.gov.homeoffice.drt.api.{ArrivalRoutes, PublicRoutes}
 import uk.gov.homeoffice.drt.applicative.ArrivalFlights
-import uk.gov.homeoffice.drt.repository.{ArrivalRepository, CiriumScheduledRepository, DepartureRepository}
+import uk.gov.homeoffice.drt.repository.{ArrivalRepository, DepartureRepository}
 import uk.gov.homeoffice.drt.service.{AirlineService, ArrivalService, CiriumService}
 
 import scala.concurrent.ExecutionContext.global
@@ -25,11 +25,11 @@ object IEIDashboardServer {
 
       _ = AppResource.populateAirlineData
 
-      arrivalsService = new ArrivalService(new ArrivalRepository(session),new DepartureRepository(session))
+      arrivalsService = new ArrivalService(new ArrivalRepository(session), new DepartureRepository(session))
 
       airlineService = new AirlineService(clientResource)
 
-      ciriumService = new CiriumService(new CiriumScheduledRepository(session), cfg.airline, clientResource)
+      ciriumService = new CiriumService(cfg.airline, clientResource, cfg.cronJob.ciriumSchedulesEndpoint)
 
       arrivalFlightsAlg = ArrivalFlights.impl[F](arrivalsService, ciriumService)
 

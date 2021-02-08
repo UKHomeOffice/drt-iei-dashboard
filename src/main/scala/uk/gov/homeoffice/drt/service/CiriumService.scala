@@ -11,7 +11,7 @@ import org.http4s.client.Client
 import org.http4s.client.dsl.Http4sClientDsl
 import org.http4s.{Status, Uri}
 import org.slf4j.LoggerFactory
-import uk.gov.homeoffice.drt.repository.{ArrivalTableData, CiriumScheduledRepositoryI}
+import uk.gov.homeoffice.drt.repository.ArrivalTableData
 import uk.gov.homeoffice.drt.utils.DateUtil
 import uk.gov.homeoffice.drt.{AirlineConfig, AppResource}
 
@@ -34,7 +34,7 @@ case class CiriumScheduledFlightRequest(flightCode: String,
 
 case class CiriumScheduledResponseError(cause: String) extends NoStackTrace
 
-class CiriumService[F[_] : Sync](ciriumScheduledRepository: CiriumScheduledRepositoryI[F], airlineConfig: AirlineConfig, clientResource: Resource[F, Client[F]]) extends Http4sClientDsl[F] {
+class CiriumService[F[_] : Sync](airlineConfig: AirlineConfig, clientResource: Resource[F, Client[F]], schedulerEndpoint: String) extends Http4sClientDsl[F] {
 
   private val logger = LoggerFactory.getLogger(getClass.getName)
   //implicit val logger = Slf4jLogger.getLogger[F]
@@ -46,7 +46,7 @@ class CiriumService[F[_] : Sync](ciriumScheduledRepository: CiriumScheduledRepos
 
 
   def process(arrivalTableData: ArrivalTableData): F[CiriumScheduledResponse] = clientResource.use { client =>
-    Uri.fromString(s"https://api.flightstats.com/flex/schedules/rest/v1/json/flight/${urlParams(arrivalTableData)}?appId=${airlineConfig.appId}&appKey=${airlineConfig.appKey}").liftTo[F].flatMap { uri =>
+    Uri.fromString(s"$schedulerEndpoint${urlParams(arrivalTableData)}?appId=${airlineConfig.appId}&appKey=${airlineConfig.appKey}").liftTo[F].flatMap { uri =>
       GET(uri).flatMap { req =>
         client.run(req).use { r =>
           if (r.status == Status.Ok || r.status == Status.Conflict) {
