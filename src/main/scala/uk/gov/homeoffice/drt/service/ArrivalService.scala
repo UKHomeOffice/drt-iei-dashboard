@@ -1,11 +1,12 @@
 package uk.gov.homeoffice.drt.service
 
 import cats.effect.Sync
+import cats.kernel.Semigroup
 import cats.syntax.all._
 import org.slf4j.LoggerFactory
 import uk.gov.homeoffice.drt.AppResource._
 import uk.gov.homeoffice.drt.model
-import uk.gov.homeoffice.drt.model.{Arrival, ArrivalTableDataIndex, DepartureAirport, FlightsRequest}
+import uk.gov.homeoffice.drt.model._
 import uk.gov.homeoffice.drt.repository.{ArrivalRepositoryI, ArrivalTableData, DepartureRepositoryI, DepartureTableData}
 import uk.gov.homeoffice.drt.utils.DateUtil._
 
@@ -13,22 +14,25 @@ class ArrivalService[F[_] : Sync](arrivalsRepository: ArrivalRepositoryI[F], dep
 
   private val logger = LoggerFactory.getLogger(getClass.getName)
 
-  def getFlightsDetail(requestedDetails: FlightsRequest) = {
+  def getFlightsDetail(requestedDetails: FlightsRequest): F[List[ArrivalTableDataIndex]] = {
     val requestedDate = `yyyy-MM-dd_parse_toLocalDate`(requestedDetails.date).atStartOfDay()
-    val portList = DepartureAirport.athensDeparturePortsForCountry(requestedDetails.country)
+    val portList: List[Port] = DepartureAirport.athensDeparturePortsForCountry(requestedDetails.country)
 
-    val arrivalTableDataList: F[List[ArrivalTableData]] = arrivalsRepository.findArrivalsForADate(requestedDate).flatMap(_.traverse { arrivalTableData =>
-      if (arrivalTableData.scheduled_departure.isEmpty) {
-        val depData: F[Option[DepartureTableData]] = departureRepository.selectScheduleDepartureTableWithOutDeparture(arrivalTableData).map(_.headOption)
-        depData.map { d =>
-          if (d.nonEmpty)
-            arrivalTableData.copy(scheduled_departure = Option(d.head.scheduled_departure))
-          else arrivalTableData
-        }
-      } else arrivalTableData.pure[F]
+    val arrivalFlights = arrivalsRepository.findArrivalsForADate(requestedDate).map(_.filter(a => portList.map(_.code) contains a.origin))
+    val arrivalFlightsWithScheduledDeparture: F[List[ArrivalTableData]] = arrivalFlights.map(_.filterNot(_.scheduled_departure.isEmpty))
+    val arrivalFlightsWithoutScheduledDeparture: F[List[ArrivalTableData]] = arrivalFlights.map(_.filter(_.scheduled_departure.isEmpty))
+
+    val amendArrivalFlightsData: F[List[ArrivalTableData]] = arrivalFlightsWithoutScheduledDeparture.flatMap(_.traverse { arrivalTableData =>
+      departureRepository.selectScheduleDepartureTableWithOutDeparture(arrivalTableData).map(_.headOption).map { d =>
+        if (d.nonEmpty)
+          arrivalTableData.copy(scheduled_departure = Option(d.head.scheduled_departure))
+        else arrivalTableData
+      }
     })
 
-    arrivalTableDataList.map(_.filter(portList.map(_.code) contains _.origin).zipWithIndex).map(_.map(a => ArrivalTableDataIndex(a._1, a._2)))
+    val combined: F[List[ArrivalTableData]] = arrivalFlightsWithScheduledDeparture.map(a => amendArrivalFlightsData.map(b => Semigroup[List[ArrivalTableData]].combine(a, b))).flatten
+    combined.map(_.zipWithIndex.map(a => ArrivalTableDataIndex(a._1, a._2)))
+
   }
 
   def transformArrivals(arrivalsTableData: F[List[ArrivalTableDataIndex]]): F[List[Arrival]] = {

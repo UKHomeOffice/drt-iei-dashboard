@@ -52,7 +52,7 @@ class DepartureRepository[F[_] : Sync](val sessionPool: Resource[F, Session[F]])
   val selectScheduleDepartureWithOutDeparture: Query[Int ~ String ~ String ~ String ~ LocalDateTime, DepartureTableData] =
     sql"""
         SELECT code , number , destination , origin , terminal , status ,scheduled ,scheduled_departure
-        FROM departure WHERE number = $int4 and destination = $varchar and origin =$varchar and terminal = $varchar and scheduled = $timestamp
+        FROM departure WHERE scheduled_departure is not NULL and number = $int4 and destination = $varchar and origin =$varchar and terminal = $varchar and scheduled = $timestamp
        """.query(decoderDepartureData)
 
 
