@@ -7,3 +7,4 @@ ui/build
 ui/.eslintcache
 ui/.yarn-error.log
 src/main/resources/ui
+*.log

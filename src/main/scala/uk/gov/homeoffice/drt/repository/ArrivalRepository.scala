@@ -3,12 +3,12 @@ package uk.gov.homeoffice.drt.repository
 import java.time.{LocalDate, LocalDateTime}
 
 import cats.effect.{Resource, Sync}
+import cats.syntax.all._
+import org.slf4j.LoggerFactory
 import skunk._
 import skunk.codec.all._
 import skunk.data.Completion
 import skunk.implicits._
-import cats.syntax.all._
-import org.slf4j.LoggerFactory
 
 case class ArrivalTableData(code: String,
                             number: Int,
@@ -38,9 +38,9 @@ trait ArrivalRepositoryI[F[_]] {
 
   def getArrivalsForOriginAndDate(origin: String): F[List[ArrivalTableData]]
 
-  def insertArrivalScheduledData(ps: List[ArrivalScheduledData]): F[Completion]
+  def insertArrivalScheduledData(ps: List[ArrivalScheduledData]): F[List[Completion]]
 
-  def ignoreScheduledDepartureIfExist(arrivalTableData: ArrivalTableData):F[Option[ArrivalScheduledData]]
+  def ignoreScheduledDepartureIfExist(arrivalTableData: ArrivalTableData): F[Option[ArrivalScheduledData]]
 }
 
 class ArrivalRepository[F[_] : Sync](val sessionPool: Resource[F, Session[F]]) extends ArrivalRepositoryI[F] {
@@ -102,33 +102,37 @@ class ArrivalRepository[F[_] : Sync](val sessionPool: Resource[F, Session[F]]) e
     }
   }
 
-  def ignoreScheduledDepartureIfExist(arrivalTableData: ArrivalTableData):F[Option[ArrivalScheduledData]] = {
-     val a: F[List[ArrivalScheduledData]] =  sessionPool.use { session =>
-        session.prepare(selectScheduleArrival).use { ps =>
-          val a = ps.stream(arrivalTableData.number ~ arrivalTableData.destination ~ arrivalTableData.origin ~ arrivalTableData.terminal ~ arrivalTableData.scheduled ~ arrivalTableData.scheduled_departure.get, 1024)
-          a.compile.toList
-        }
+  def ignoreScheduledDepartureIfExist(arrivalTableData: ArrivalTableData): F[Option[ArrivalScheduledData]] = {
+    val a: F[List[ArrivalScheduledData]] = sessionPool.use { session =>
+      session.prepare(selectScheduleArrival).use { ps =>
+        val a = ps.stream(arrivalTableData.number ~ arrivalTableData.destination ~ arrivalTableData.origin ~ arrivalTableData.terminal ~ arrivalTableData.scheduled ~ arrivalTableData.scheduled_departure.get, 1024)
+        a.compile.toList
       }
+    }
 
     val insertArrivalScheduledData: F[Option[ArrivalScheduledData]] = a.map { b =>
-      if(b.nonEmpty) {
+      if (b.nonEmpty) {
+        logger.info(s"$arrivalTableData already exists in ArrivalTableData")
         None
-      } else{
-        Some(ArrivalScheduledData(arrivalTableData.code,arrivalTableData.number,arrivalTableData.destination,arrivalTableData.origin,arrivalTableData.terminal,arrivalTableData.status,arrivalTableData.scheduled,arrivalTableData.scheduled_departure.get))
+      } else {
+        Some(ArrivalScheduledData(arrivalTableData.code, arrivalTableData.number, arrivalTableData.destination, arrivalTableData.origin, arrivalTableData.terminal, arrivalTableData.status, arrivalTableData.scheduled, arrivalTableData.scheduled_departure.get))
       }
     }
 
     insertArrivalScheduledData
   }
 
-  private def insertCommandArrivalScheduledData(ps: List[ArrivalScheduledData]): Command[ps.type] = {
-    val enc = (text ~ int4 ~ text ~ text ~ text ~ text ~ timestamp ~ timestamp).gcontramap[ArrivalScheduledData].values.list(ps)
-    sql"INSERT INTO arrivalScheduled VALUES $enc".command
+  private def insertCommandArrivalScheduledData(p: ArrivalScheduledData): Command[ArrivalScheduledData] = {
+    sql"INSERT INTO arrivalScheduled VALUES ($text , $int4 ,$text , $text , $text , $text , $timestamp , $timestamp)".command.gcontramap[ArrivalScheduledData]
   }
 
-  def insertArrivalScheduledData(ps: List[ArrivalScheduledData]): F[Completion] =
-
-    sessionPool.use { session =>
-      session.prepare(insertCommandArrivalScheduledData(ps)).use(_.execute(ps))
+  def insertArrivalScheduledData(ps: List[ArrivalScheduledData]): F[List[Completion]] =
+    ps.traverse { p =>
+      sessionPool.use { session =>
+        session.prepare(insertCommandArrivalScheduledData(p)).use(_.execute(p)).handleError {
+          case e => logger.warn(s"Error while inserting $p ${e.getMessage}", e)
+            Completion.Insert(0)
+        }
+      }
     }
 }
