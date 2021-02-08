@@ -66,6 +66,7 @@ object Dependencies {
     val scalaCheck = "org.scalacheck" %% "scalacheck" % Versions.scalaCheck
     val scalaTest = "org.scalatest" %% "scalatest" % Versions.scalaTest
     val scalaTestPlus = "org.scalatestplus" %% "scalacheck-1-14" % Versions.scalaTestPlus
+    val log4cats = "io.chrisdavenport" %% "log4cats-slf4j" % Versions.log4cats
   }
 
 }

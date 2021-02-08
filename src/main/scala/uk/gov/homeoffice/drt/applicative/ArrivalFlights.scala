@@ -17,11 +17,11 @@ object ArrivalFlights {
   def impl[F[_] : Applicative](arrivalsService: ArrivalService[F], ciriumService: CiriumService[F]): ArrivalFlights[F] = new ArrivalFlights[F] {
     def flights(n: FlightsRequest)(implicit monad: Monad[F]): F[Arrivals] = {
       val arrivalFlights: F[List[ArrivalTableDataIndex]] = arrivalsService.getFlightsDetail(n)
-      val arrivalFlightsWithScheduledDeparture = arrivalFlights.map(_.filter(_.arrivalsTableData.scheduled_departure.isDefined))
-      val arrivalFlightsWithoutScheduledDeparture = arrivalFlights.map(_.filterNot(_.arrivalsTableData.scheduled_departure.isDefined))
-      val amendedArrivalFlightsWithoutScheduledDeparture: F[List[ArrivalTableDataIndex]] = ciriumService.appendScheduledDeparture(arrivalFlightsWithoutScheduledDeparture)
-      val combined = arrivalFlightsWithScheduledDeparture.map(a => amendedArrivalFlightsWithoutScheduledDeparture.map(b => Semigroup[List[ArrivalTableDataIndex]].combine(a, b))).flatten
-      arrivalsService.transformArrivals(combined).map(Arrivals(_))
+//      val arrivalFlightsWithScheduledDeparture = arrivalFlights.map(_.filter(_.arrivalsTableData.scheduled_departure.isDefined))
+//      val arrivalFlightsWithoutScheduledDeparture = arrivalFlights.map(_.filterNot(_.arrivalsTableData.scheduled_departure.isDefined))
+//      val amendedArrivalFlightsWithoutScheduledDeparture: F[List[ArrivalTableDataIndex]] = ciriumService.appendScheduledDeparture(arrivalFlightsWithoutScheduledDeparture)
+//      val combined = arrivalFlightsWithScheduledDeparture.map(a => amendedArrivalFlightsWithoutScheduledDeparture.map(b => Semigroup[List[ArrivalTableDataIndex]].combine(a, b))).flatten
+      arrivalsService.transformArrivals(arrivalFlights).map(Arrivals(_))
     }
   }
 

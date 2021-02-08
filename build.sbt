@@ -22,6 +22,7 @@ lazy val root = (project in file("."))
       Libraries.http4sCirce,
       Libraries.logback % Runtime,
       Libraries.logstashLogbackEncoder % Runtime,
+      Libraries.log4cats,
       Libraries.skunkCore,
       Libraries.skunkCirce,
       Libraries.fs2CronCore,

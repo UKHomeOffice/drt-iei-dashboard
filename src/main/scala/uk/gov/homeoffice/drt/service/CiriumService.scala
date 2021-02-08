@@ -11,8 +11,7 @@ import org.http4s.client.Client
 import org.http4s.client.dsl.Http4sClientDsl
 import org.http4s.{Status, Uri}
 import org.slf4j.LoggerFactory
-import uk.gov.homeoffice.drt.model.ArrivalTableDataIndex
-import uk.gov.homeoffice.drt.repository.CiriumScheduledRepositoryI
+import uk.gov.homeoffice.drt.repository.{ArrivalTableData, CiriumScheduledRepositoryI}
 import uk.gov.homeoffice.drt.utils.DateUtil
 import uk.gov.homeoffice.drt.{AirlineConfig, AppResource}
 
@@ -38,7 +37,7 @@ case class CiriumScheduledResponseError(cause: String) extends NoStackTrace
 class CiriumService[F[_] : Sync](ciriumScheduledRepository: CiriumScheduledRepositoryI[F], airlineConfig: AirlineConfig, clientResource: Resource[F, Client[F]]) extends Http4sClientDsl[F] {
 
   private val logger = LoggerFactory.getLogger(getClass.getName)
-
+  //implicit val logger = Slf4jLogger.getLogger[F]
 
   implicit lazy val ciriumScheduledFlightsDecoder: Decoder[CiriumScheduledFlights] = deriveDecoder[CiriumScheduledFlights]
   implicit lazy val ciriumScheduledResponseDecoder: Decoder[CiriumScheduledResponse] = deriveDecoder[CiriumScheduledResponse]
@@ -46,59 +45,62 @@ class CiriumService[F[_] : Sync](ciriumScheduledRepository: CiriumScheduledRepos
   implicit lazy val CiriumScheduledFlightRequestEncoder: Encoder[CiriumScheduledFlightRequest] = deriveEncoder[CiriumScheduledFlightRequest]
 
 
-  def process(arrivalTableDataIndex: ArrivalTableDataIndex): F[CiriumScheduledResponse] = clientResource.use { client =>
-    Uri.fromString(s"https://api.flightstats.com/flex/schedules/rest/v1/json/flight/${urlParams(arrivalTableDataIndex)}?appId=${airlineConfig.appId}&appKey=${airlineConfig.appKey}").liftTo[F].flatMap { uri =>
+  def process(arrivalTableData: ArrivalTableData): F[CiriumScheduledResponse] = clientResource.use { client =>
+    Uri.fromString(s"https://api.flightstats.com/flex/schedules/rest/v1/json/flight/${urlParams(arrivalTableData)}?appId=${airlineConfig.appId}&appKey=${airlineConfig.appKey}").liftTo[F].flatMap { uri =>
       GET(uri).flatMap { req =>
         client.run(req).use { r =>
           if (r.status == Status.Ok || r.status == Status.Conflict) {
-            val res = r.asJsonDecode[CiriumScheduledResponse]
-            logger.info(s"Response from cirium api for flight ${urlParams(arrivalTableDataIndex)} is ${r.status.reason}")
-            res
-          } else
-            logger.info(s"Response from cirium api for flight ${urlParams(arrivalTableDataIndex)} is ${r.status.reason}")
-          CiriumScheduledResponseError(
-            Option(r.status.reason).getOrElse("unknown")
-          ).raiseError[F, CiriumScheduledResponse]
+            logger.info(s"Response from cirium api for flight $uri is ${r.status.reason} ${r.body}")
+            r.asJsonDecode[CiriumScheduledResponse]
+          } else {
+            logger.info(s"Response from cirium api for flight ${r.body} ${urlParams(arrivalTableData)} is ${r.status.reason}")
+            CiriumScheduledResponseError(
+              Option(r.status.reason).getOrElse("unknown")
+            ).raiseError[F, CiriumScheduledResponse]
+          }
         }
       }
     }
   }
 
 
-  def appendScheduledDeparture(arrivalDataIndexes: F[List[ArrivalTableDataIndex]]): F[List[ArrivalTableDataIndex]] = {
-    arrivalDataIndexes.map(_.traverse { arrivalDataIndex =>
-      process(arrivalDataIndex).map { sd =>
-        val arrivalsTableData = arrivalDataIndex.arrivalsTableData
+  def appendScheduledDeparture(arrivalTableDatas: F[List[ArrivalTableData]]): F[List[ArrivalTableData]] = {
+    val amendArrivalTableDatas = arrivalTableDatas.map(_.traverse { arrivalsTableData =>
+      process(arrivalsTableData).map { sd =>
         sd.scheduledFlights.headOption match {
-          case Some(a) => ArrivalTableDataIndex(arrivalsTableData.copy(scheduled_departure = Option(DateUtil.`yyyy-MM-ddTHH:mm:ss.SSSZ_parse_toLocalDateTime`(a.departureTime))), arrivalDataIndex.index)
-          case None => arrivalDataIndex
+          case Some(a) =>
+            logger.info(s"Success departure time $a")
+            arrivalsTableData.copy(scheduled_departure = Option(DateUtil.`yyyy-MM-ddTHH:mm:ss.SSSZ_parse_toLocalDateTime`(a.departureTime)))
+          case None => arrivalsTableData
         }
       }.handleError {
         case e: CiriumScheduledResponseError =>
-          logger.warn(s"Exception while calling cirium api $e")
-          arrivalDataIndex
-        case e => logger.warn(s"Error while calling cirium api $e")
-          arrivalDataIndex
+          logger.warn(s"Exception while calling cirium api ${e.getCause} ${e.getMessage}")
+          arrivalsTableData
+        case e => logger.warn(s"Error while calling cirium api ${e.getCause}  ${e.getMessage}")
+          arrivalsTableData
       }
-    }
-    ).flatten
+    }).flatten
+    val scheduledDepartureFound: F[List[ArrivalTableData]] = amendArrivalTableDatas.map(_.filter(_.scheduled_departure.isDefined))
+    logger.info(s"scheduledDepartureFound....${scheduledDepartureFound.map(_.size)}")
+    scheduledDepartureFound
   }
 
-  def makeRequestJson(arrivalTableDataIndex: ArrivalTableDataIndex) = CiriumScheduledFlightRequest(arrivalTableDataIndex.arrivalsTableData.code,
-    arrivalTableDataIndex.arrivalsTableData.number,
-    arrivalTableDataIndex.arrivalsTableData.scheduled.getYear,
-    arrivalTableDataIndex.arrivalsTableData.scheduled.getMonth.getValue,
-    arrivalTableDataIndex.arrivalsTableData.scheduled.getDayOfMonth).asJson
+  def makeRequestJson(arrivalsTableData: ArrivalTableData) = CiriumScheduledFlightRequest(arrivalsTableData.code,
+    arrivalsTableData.number,
+    arrivalsTableData.scheduled.getYear,
+    arrivalsTableData.scheduled.getMonth.getValue,
+    arrivalsTableData.scheduled.getDayOfMonth).asJson
 
 
-  def urlParams(arrivalTableDataIndex: ArrivalTableDataIndex) = {
-    val carrierCode = AppResource.carrierCode(arrivalTableDataIndex.arrivalsTableData.code, arrivalTableDataIndex.arrivalsTableData.number.toString)
+  def urlParams(arrivalsTableData: ArrivalTableData) = {
+    val carrierCode = AppResource.carrierCode(arrivalsTableData.code, arrivalsTableData.number.toString)
     s"$carrierCode/" +
-      s"${arrivalTableDataIndex.arrivalsTableData.number}" +
+      s"${arrivalsTableData.number}" +
       s"/departing/" +
-      s"${arrivalTableDataIndex.arrivalsTableData.scheduled.getYear}" +
-      s"/${arrivalTableDataIndex.arrivalsTableData.scheduled.getMonth.getValue}/" +
-      s"${arrivalTableDataIndex.arrivalsTableData.scheduled.getDayOfMonth}"
+      s"${arrivalsTableData.scheduled.getYear}" +
+      s"/${arrivalsTableData.scheduled.getMonth.getValue}/" +
+      s"${arrivalsTableData.scheduled.getDayOfMonth}"
   }
 
 

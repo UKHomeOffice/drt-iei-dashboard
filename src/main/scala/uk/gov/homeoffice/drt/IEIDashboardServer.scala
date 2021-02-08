@@ -21,13 +21,13 @@ object IEIDashboardServer {
 
       session = AppResource.session(cfg.database)
 
-      clientResource = BlazeClientBuilder[F](global).resource
-
-      airlineService = new AirlineService(clientResource)
+      clientResource = AppResource.mkHttpClient(cfg.httpClient)
 
       _ = AppResource.populateAirlineData
 
       arrivalsService = new ArrivalService(new ArrivalRepository(session))
+
+      airlineService = new AirlineService(clientResource)
 
       ciriumService = new CiriumService(new CiriumScheduledRepository(session), cfg.airline, clientResource)
 
