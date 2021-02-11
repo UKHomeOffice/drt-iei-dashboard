@@ -6,7 +6,7 @@ CREATE TABLE public.departure(
   terminal text NOT NULL,
   status text NOT NULL,
   scheduled timestamp NOT NULL,
-  scheduled_departure timestamp,
+  scheduled_departure timestamp NOT NULL,
   PRIMARY KEY (number, destination, terminal, scheduled)
 );
 

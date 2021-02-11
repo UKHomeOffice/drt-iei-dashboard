@@ -6,7 +6,7 @@ import eu.timepit.fs2cron.awakeEveryCron
 import fs2.Stream
 import org.slf4j.LoggerFactory
 import uk.gov.homeoffice.drt.repository.{ArrivalRepository, ArrivalTableData, DepartureRepository}
-import uk.gov.homeoffice.drt.service.{ArrivalService, CiriumService}
+import uk.gov.homeoffice.drt.service.{FlightScheduledService, CiriumService}
 import uk.gov.homeoffice.drt.{AppResource, Config}
 
 object CronScheduler {
@@ -18,14 +18,14 @@ object CronScheduler {
     val session = AppResource.session(cfg.database)
     val clientResource = AppResource.mkHttpClient(cfg.httpClient)
 
-    val arrivalsService: ArrivalService[F] = new ArrivalService(new ArrivalRepository(session), new DepartureRepository(session))
+    val arrivalsService: FlightScheduledService[F] = new FlightScheduledService(new ArrivalRepository(session), new DepartureRepository(session))
 
     val ciriumService = new CiriumService(cfg.airline, clientResource, cfg.cronJob.ciriumSchedulesEndpoint)
 
     awakeEveryCron(cronSchedulerConfig) >> Stream.eval {
       val arrivalTableDatas: F[List[ArrivalTableData]] = arrivalsService.getScheduledDeparture
       val amendArrivalTableDatas: F[List[ArrivalTableData]] = ciriumService.appendScheduledDeparture(arrivalTableDatas)
-      arrivalsService.insertUpdateDepartureTableData(amendArrivalTableDatas)
+      arrivalsService.insertDepartureTableData(amendArrivalTableDatas)
     }
   }
 

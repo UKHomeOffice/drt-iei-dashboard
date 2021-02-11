@@ -37,7 +37,6 @@ case class CiriumScheduledResponseError(cause: String) extends NoStackTrace
 class CiriumService[F[_] : Sync](airlineConfig: AirlineConfig, clientResource: Resource[F, Client[F]], schedulerEndpoint: String) extends Http4sClientDsl[F] {
 
   private val logger = LoggerFactory.getLogger(getClass.getName)
-  //implicit val logger = Slf4jLogger.getLogger[F]
 
   implicit lazy val ciriumScheduledFlightsDecoder: Decoder[CiriumScheduledFlights] = deriveDecoder[CiriumScheduledFlights]
   implicit lazy val ciriumScheduledResponseDecoder: Decoder[CiriumScheduledResponse] = deriveDecoder[CiriumScheduledResponse]
@@ -50,10 +49,10 @@ class CiriumService[F[_] : Sync](airlineConfig: AirlineConfig, clientResource: R
       GET(uri).flatMap { req =>
         client.run(req).use { r =>
           if (r.status == Status.Ok || r.status == Status.Conflict) {
-            logger.info(s"Response from cirium api for flight $uri is ${r.status.reason} ${r.body}")
+            logger.info(s"Response from cirium api for flight is ${r.status.reason}")
             r.asJsonDecode[CiriumScheduledResponse]
           } else {
-            logger.info(s"Response from cirium api for flight ${r.body} ${urlParams(arrivalTableData)} is ${r.status.reason}")
+            logger.warn(s"Response from cirium api for flight is ${r.status.reason}")
             CiriumScheduledResponseError(
               Option(r.status.reason).getOrElse("unknown")
             ).raiseError[F, CiriumScheduledResponse]
@@ -69,7 +68,6 @@ class CiriumService[F[_] : Sync](airlineConfig: AirlineConfig, clientResource: R
       process(arrivalsTableData).map { sd =>
         sd.scheduledFlights.headOption match {
           case Some(a) =>
-            logger.info(s"Success departure time $a")
             arrivalsTableData.copy(scheduled_departure = Option(DateUtil.`yyyy-MM-ddTHH:mm:ss.SSSZ_parse_toLocalDateTime`(a.departureTime)))
           case None => arrivalsTableData
         }
@@ -77,13 +75,11 @@ class CiriumService[F[_] : Sync](airlineConfig: AirlineConfig, clientResource: R
         case e: CiriumScheduledResponseError =>
           logger.warn(s"Exception while calling cirium api ${e.getCause} ${e.getMessage}")
           arrivalsTableData
-        case e => logger.warn(s"Error while calling cirium api ${e.getCause}  ${e.getMessage}")
+        case e => logger.warn(s"Error while calling cirium api ${e.getCause} ${e.getMessage}")
           arrivalsTableData
       }
     }).flatten
-    val scheduledDepartureFound: F[List[ArrivalTableData]] = amendArrivalTableDatas.map(_.filter(_.scheduled_departure.isDefined))
-    logger.info(s"scheduledDepartureFound....${scheduledDepartureFound.map(_.size)}")
-    scheduledDepartureFound
+    amendArrivalTableDatas.map(_.filter(_.scheduled_departure.isDefined))
   }
 
   def makeRequestJson(arrivalsTableData: ArrivalTableData) = CiriumScheduledFlightRequest(arrivalsTableData.code,

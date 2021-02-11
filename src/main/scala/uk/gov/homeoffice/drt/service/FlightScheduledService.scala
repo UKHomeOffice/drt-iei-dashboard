@@ -10,14 +10,13 @@ import uk.gov.homeoffice.drt.model._
 import uk.gov.homeoffice.drt.repository.{ArrivalRepositoryI, ArrivalTableData, DepartureRepositoryI, DepartureTableData}
 import uk.gov.homeoffice.drt.utils.DateUtil._
 
-class ArrivalService[F[_] : Sync](arrivalsRepository: ArrivalRepositoryI[F], departureRepository: DepartureRepositoryI[F]) {
+class FlightScheduledService[F[_] : Sync](arrivalsRepository: ArrivalRepositoryI[F], departureRepository: DepartureRepositoryI[F]) {
 
   private val logger = LoggerFactory.getLogger(getClass.getName)
 
   def getFlightsDetail(requestedDetails: FlightsRequest): F[List[ArrivalTableDataIndex]] = {
     val requestedDate = `yyyy-MM-dd_parse_toLocalDate`(requestedDetails.date).atStartOfDay()
     val portList: List[Port] = DepartureAirport.athensDeparturePortsForCountry(requestedDetails.country)
-
     val arrivalFlights = arrivalsRepository.findArrivalsForADate(requestedDate).map(_.filter(a => portList.map(_.code) contains a.origin))
     val arrivalFlightsWithScheduledDeparture: F[List[ArrivalTableData]] = arrivalFlights.map(_.filterNot(_.scheduled_departure.isEmpty))
     val arrivalFlightsWithoutScheduledDeparture: F[List[ArrivalTableData]] = arrivalFlights.map(_.filter(_.scheduled_departure.isEmpty))
@@ -58,7 +57,7 @@ class ArrivalService[F[_] : Sync](arrivalsRepository: ArrivalRepositoryI[F], dep
   }
 
 
-  def insertUpdateDepartureTableData(arrivalTableDataF: F[List[ArrivalTableData]]) = {
+  def insertDepartureTableData(arrivalTableDataF: F[List[ArrivalTableData]]) = {
     val insertDepartureTableDataF: F[List[DepartureTableData]] = arrivalTableDataF.flatMap(_.traverse(departureRepository.ignoreScheduledDepartureIfExist(_))).map(_.flatten)
     insertDepartureTableDataF.map(departureRepository.insertDepartureData(_)).flatten
   }

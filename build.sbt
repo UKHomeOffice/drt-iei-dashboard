@@ -29,6 +29,7 @@ lazy val root = (project in file("."))
       Libraries.scalaCheck,
       Libraries.scalaTest,
       Libraries.scalaTestPlus,
+      Libraries.scalaTestMockito
     ),
     dockerExposedPorts ++= Seq(9001),
     compile := ((compile in Compile) dependsOn buildReactApp).value

@@ -11,7 +11,7 @@ import org.http4s.server.middleware.{AutoSlash, CORS, Logger, Timeout}
 import uk.gov.homeoffice.drt.api.{ArrivalRoutes, PublicRoutes}
 import uk.gov.homeoffice.drt.applicative.ArrivalFlights
 import uk.gov.homeoffice.drt.repository.{ArrivalRepository, DepartureRepository}
-import uk.gov.homeoffice.drt.service.{AirlineService, ArrivalService, CiriumService}
+import uk.gov.homeoffice.drt.service.{AirlineService, FlightScheduledService, CiriumService}
 
 import scala.concurrent.ExecutionContext.global
 import scala.concurrent.duration._
@@ -38,7 +38,7 @@ object IEIDashboardServer {
 
       _ = AppResource.populateAirlineData
 
-      arrivalsService = new ArrivalService(new ArrivalRepository(session), new DepartureRepository(session))
+      arrivalsService = new FlightScheduledService(new ArrivalRepository(session), new DepartureRepository(session))
 
       airlineService = new AirlineService(clientResource)
 

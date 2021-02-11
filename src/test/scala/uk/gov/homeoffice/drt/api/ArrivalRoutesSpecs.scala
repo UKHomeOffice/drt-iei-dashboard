@@ -8,7 +8,7 @@ import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.must.Matchers
 import uk.gov.homeoffice.drt.applicative.ArrivalFlights
 import uk.gov.homeoffice.drt.repository.{ArrivalRepositoryStub, DepartureRepositoryI, DepartureRepositoryStub}
-import uk.gov.homeoffice.drt.service.{ArrivalService, CiriumService}
+import uk.gov.homeoffice.drt.service.{FlightScheduledService, CiriumService}
 import uk.gov.homeoffice.drt.{AirlineConfig, AppResource, BaseSpec, HttpClientConfig}
 
 import scala.concurrent.duration._
@@ -38,7 +38,7 @@ class ArrivalRoutesSpecs extends AsyncFlatSpec with BaseSpec with Matchers {
 
 
   private[this] def retArrivalFlights(getHW: Request[IO]): Response[IO] = {
-    val arrivalFlights = ArrivalFlights.impl[IO](new ArrivalService(new ArrivalRepositoryStub,new DepartureRepositoryStub), new CiriumService(AirlineConfig("http://localhost:8080", "", ""), AppResource.mkHttpClient(HttpClientConfig(2 seconds, 2 seconds)),""))
+    val arrivalFlights = ArrivalFlights.impl[IO](new FlightScheduledService(new ArrivalRepositoryStub,new DepartureRepositoryStub), new CiriumService(AirlineConfig("http://localhost:8080", "", ""), AppResource.mkHttpClient(HttpClientConfig(2 seconds, 2 seconds)),""))
     ArrivalRoutes.arrivalFlightsRoutes(arrivalFlights, List("test-view", "iei-dashboard:view")).orNotFound(getHW).unsafeRunSync()
   }
 
