@@ -4,10 +4,10 @@ import cats.effect.Sync
 import cats.kernel.Semigroup
 import cats.syntax.all._
 import org.slf4j.LoggerFactory
-import uk.gov.homeoffice.drt.AppResource._
 import uk.gov.homeoffice.drt.model
 import uk.gov.homeoffice.drt.model._
 import uk.gov.homeoffice.drt.repository.{ArrivalRepositoryI, ArrivalTableData, DepartureRepositoryI, DepartureTableData}
+import uk.gov.homeoffice.drt.utils.AirlineUtil
 import uk.gov.homeoffice.drt.utils.DateUtil._
 
 class FlightScheduledService[F[_] : Sync](arrivalsRepository: ArrivalRepositoryI[F], departureRepository: DepartureRepositoryI[F]) {
@@ -45,6 +45,12 @@ class FlightScheduledService[F[_] : Sync](arrivalsRepository: ArrivalRepositoryI
         a.arrivalsTableData.origin,
         a.arrivalsTableData.scheduled_departure.map(`UTC+2TimeZoneConvertDate`(_)))))
   }
+
+  def carrierName(code: String, number: String): String = {
+    val iataCode = code.stripSuffix(number).stripSuffix("0").stripSuffix("0")
+    AirlineUtil.getCarrierNameByIData(iataCode).map(_.name).getOrElse(AirlineUtil.getCarrierNameByICAO(iataCode).map(_.name).getOrElse(""))
+  }
+
 
   def getScheduledDeparture: F[List[ArrivalTableData]] = {
     athenPortsCodes.traverse { originPort =>

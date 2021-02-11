@@ -4,16 +4,15 @@ import cats.effect.{IO, Sync}
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
-import uk.gov.homeoffice.drt.AppResource
 import uk.gov.homeoffice.drt.model.{Arrival, FlightsRequest}
 import uk.gov.homeoffice.drt.repository.{ArrivalRepositoryStub, DepartureRepositoryStub}
-import uk.gov.homeoffice.drt.utils.DateUtil
+import uk.gov.homeoffice.drt.utils.{AirlineUtil, DateUtil}
 
 class FlightScheduledServiceSpecs extends AsyncFlatSpec with Matchers with ScalaCheckDrivenPropertyChecks {
 
   def context = {
     val flightScheduledService = Sync[IO].delay(new FlightScheduledService[IO](new ArrivalRepositoryStub, new DepartureRepositoryStub[IO])).unsafeRunSync()
-    AppResource.populateAirlineData
+    AirlineUtil.populateAirlineData
     flightScheduledService
   }
 
@@ -107,15 +106,16 @@ class FlightScheduledServiceSpecs extends AsyncFlatSpec with Matchers with Scala
 
 
   "Arrival" should "give carrierName 'Ryanair' for flightNumber 'FR0012'" in {
+    val arrivalService: FlightScheduledService[IO] = context
 
-    val a = AppResource.carrierName("FR0012", "12")
+    val a = arrivalService.carrierName("FR0012", "12")
 
     a mustEqual "Ryanair"
   }
 
   "Arrival" should "give carrierName 'Blue Air' for flightNumber '0B1531'" in {
-
-    val a = AppResource.carrierName("0B1531", "1531")
+    val arrivalService: FlightScheduledService[IO] = context
+    val a = arrivalService.carrierName("0B1531", "1531")
 
     a mustEqual "Blue Air"
 

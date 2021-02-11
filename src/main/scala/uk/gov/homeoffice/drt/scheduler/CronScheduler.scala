@@ -1,26 +1,22 @@
 package uk.gov.homeoffice.drt.scheduler
 
-import cats.effect.{ConcurrentEffect, ContextShift, Timer}
+import cats.effect.{ConcurrentEffect, ContextShift, Resource, Timer}
 import cron4s.Cron
 import eu.timepit.fs2cron.awakeEveryCron
 import fs2.Stream
-import org.slf4j.LoggerFactory
+import org.http4s.client.Client
+import skunk.Session
+import uk.gov.homeoffice.drt.Config
 import uk.gov.homeoffice.drt.repository.{ArrivalRepository, ArrivalTableData, DepartureRepository}
-import uk.gov.homeoffice.drt.service.{FlightScheduledService, CiriumService}
-import uk.gov.homeoffice.drt.{AppResource, Config}
+import uk.gov.homeoffice.drt.service.{CiriumService, FlightScheduledService}
 
 object CronScheduler {
 
-  private val logger = LoggerFactory.getLogger(getClass.getName)
-
-  def schedulerTask[F[_] : ConcurrentEffect](cfg: Config)(implicit timer: Timer[F], C: ContextShift[F]) = {
+  def schedulerTask[F[_] : ConcurrentEffect](cfg: Config, client: Client[F], session: Resource[F, Session[F]])(implicit timer: Timer[F], C: ContextShift[F]) = {
     val cronSchedulerConfig = Cron.unsafeParse(cfg.cronJob.scheduler)
-    val session = AppResource.session(cfg.database)
-    val clientResource = AppResource.mkHttpClient(cfg.httpClient)
-
     val arrivalsService: FlightScheduledService[F] = new FlightScheduledService(new ArrivalRepository(session), new DepartureRepository(session))
 
-    val ciriumService = new CiriumService(cfg.airline, clientResource, cfg.cronJob.ciriumSchedulesEndpoint)
+    val ciriumService = new CiriumService(cfg.airline, client, cfg.cronJob.ciriumSchedulesEndpoint)
 
     awakeEveryCron(cronSchedulerConfig) >> Stream.eval {
       val arrivalTableDatas: F[List[ArrivalTableData]] = arrivalsService.getScheduledDeparture
@@ -28,6 +24,5 @@ object CronScheduler {
       arrivalsService.insertDepartureTableData(amendArrivalTableDatas)
     }
   }
-
 
 }
