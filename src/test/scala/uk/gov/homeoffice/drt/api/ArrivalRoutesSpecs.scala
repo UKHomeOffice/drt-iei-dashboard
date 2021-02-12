@@ -10,8 +10,10 @@ import uk.gov.homeoffice.drt.BaseSpec
 import uk.gov.homeoffice.drt.applicative.ArrivalFlights
 import uk.gov.homeoffice.drt.repository.{ArrivalRepositoryStub, DepartureRepositoryStub}
 import uk.gov.homeoffice.drt.service.FlightScheduledService
+import uk.gov.homeoffice.drt.utils.AirlineUtil
 
 class ArrivalRoutesSpecs extends AsyncFlatSpec with BaseSpec with Matchers {
+  AirlineUtil.populateAirlineData
 
   "ArrivalRoutes" should "return arrival flights for Romania" in {
     val arrivalFlightsResponse = retArrivalFlights(Request[IO](Method.GET, uri"/flights/athens?country=Bulgaria&date=2018-12-21", headers = Headers.of(Header("X-Auth-Roles", "iei-dashboard:view"))))
