@@ -19,8 +19,6 @@ object DateUtil {
     date1.toInstant().atZone(ZoneOffset.UTC).toLocalDate.
       compareTo(date2.toInstant().atZone(ZoneOffset.UTC).toLocalDate) == 0
 
-//  val `yyyy-MM-ddTHH:mm:ss.SSSZ` : String => Date = date => new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(date)
-
   val `yyyy-MM-ddTHH:mm:ss.SSSZ_parse_toLocalDateTime`: String => LocalDateTime = dateString => LocalDateTime.parse(dateString, `yyyy-MM-ddTHH:mm:ss.SSSZ_LocalDateFormatter`)
 
   val `yyyy-MM-ddTHH:mm:ss.SSSZ_LocalDateFormatter` = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
