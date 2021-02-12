@@ -29,7 +29,6 @@ object Dependencies {
     val scalaTestPlus = "3.2.2.0"
     val logstashLogbackEncoder = "6.5"
     val fs2CronCore = "0.2.2"
-    val scalaTestMockito = "3.2.2.0"
     
   }
 
@@ -67,7 +66,6 @@ object Dependencies {
     val scalaCheck = "org.scalacheck" %% "scalacheck" % Versions.scalaCheck
     val scalaTest = "org.scalatest" %% "scalatest" % Versions.scalaTest
     val scalaTestPlus = "org.scalatestplus" %% "scalacheck-1-14" % Versions.scalaTestPlus
-    val scalaTestMockito = "org.scalatestplus" %% "mockito-3-4" % Versions.scalaTestMockito
     val log4cats = "io.chrisdavenport" %% "log4cats-slf4j" % Versions.log4cats
   }
 

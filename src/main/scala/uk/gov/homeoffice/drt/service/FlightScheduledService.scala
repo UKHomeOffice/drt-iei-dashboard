@@ -3,7 +3,6 @@ package uk.gov.homeoffice.drt.service
 import cats.effect.Sync
 import cats.kernel.Semigroup
 import cats.syntax.all._
-import org.slf4j.LoggerFactory
 import uk.gov.homeoffice.drt.model
 import uk.gov.homeoffice.drt.model._
 import uk.gov.homeoffice.drt.repository.{ArrivalRepositoryI, ArrivalTableData, DepartureRepositoryI, DepartureTableData}
@@ -11,8 +10,6 @@ import uk.gov.homeoffice.drt.utils.AirlineUtil
 import uk.gov.homeoffice.drt.utils.DateUtil._
 
 class FlightScheduledService[F[_] : Sync](arrivalsRepository: ArrivalRepositoryI[F], departureRepository: DepartureRepositoryI[F]) {
-
-  private val logger = LoggerFactory.getLogger(getClass.getName)
 
   def getFlightsDetail(requestedDetails: FlightsRequest): F[List[ArrivalTableDataIndex]] = {
     val requestedDate = `yyyy-MM-dd_parse_toLocalDate`(requestedDetails.date).atStartOfDay()

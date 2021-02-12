@@ -3,7 +3,6 @@ package uk.gov.homeoffice.drt.repository
 import java.time.{LocalDate, LocalDateTime}
 
 import cats.effect.{Resource, Sync}
-import org.slf4j.LoggerFactory
 import skunk._
 import skunk.codec.all._
 import skunk.implicits._
@@ -30,7 +29,6 @@ trait ArrivalRepositoryI[F[_]] {
 }
 
 class ArrivalRepository[F[_] : Sync](val sessionPool: Resource[F, Session[F]]) extends ArrivalRepositoryI[F] {
-  private val logger = LoggerFactory.getLogger(getClass.getName)
 
   val decoder: Decoder[ArrivalTableData] =
     (text ~ int4 ~ text ~ text ~ text ~ text ~ timestamp ~ timestamp.opt).map {

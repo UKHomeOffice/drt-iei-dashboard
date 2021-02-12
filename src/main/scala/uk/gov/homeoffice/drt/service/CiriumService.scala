@@ -2,6 +2,7 @@ package uk.gov.homeoffice.drt.service
 
 import cats.effect.Sync
 import cats.syntax.all._
+import io.chrisdavenport.log4cats.Logger
 import io.circe.syntax._
 import org.http4s.Method.GET
 import org.http4s.circe._
@@ -18,21 +19,19 @@ import uk.gov.homeoffice.drt.utils.DateUtil
 
 class CiriumService[F[_] : Sync](airlineConfig: AirlineConfig, client: Client[F], schedulerEndpoint: String) extends Http4sClientDsl[F] {
 
-  private val logger = LoggerFactory.getLogger(getClass.getName)
-
+  implicit val logger = LoggerFactory.getLogger(getClass.getName)
 
   def process(arrivalTableData: ArrivalTableData): F[CiriumScheduledResponse] =
     Uri.fromString(s"$schedulerEndpoint${urlParams(arrivalTableData)}?appId=${airlineConfig.appId}&appKey=${airlineConfig.appKey}").liftTo[F].flatMap { uri =>
       GET(uri).flatMap { req =>
         client.run(req).use { r =>
           if (r.status == Status.Ok || r.status == Status.Conflict) {
-            logger.info(s"Response from cirium api for flight is ${r.status}")
-            r.asJsonDecode[CiriumScheduledResponse]
+              r.asJsonDecode[CiriumScheduledResponse]
           } else {
             logger.warn(s"Response from cirium api for flight is ${r.status.reason}")
-            CiriumScheduledResponseError(
-              Option(r.status.reason).getOrElse("unknown")
-            ).raiseError[F, CiriumScheduledResponse]
+              CiriumScheduledResponseError(
+                Option(r.status.reason).getOrElse("unknown")
+              ).raiseError[F, CiriumScheduledResponse]
           }
         }
       }

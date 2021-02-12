@@ -11,9 +11,9 @@ object Main extends IOApp {
   def run(args: List[String]) = {
     implicit val logger = Slf4jLogger.getLogger[IO]
     config.load[IO].flatMap { cfg =>
-      AppResources.make[IO](cfg).use { res =>
-        Logger[IO].info(s"Loaded config $cfg") >>
-          (IEIDashboardServer.stream[IO](cfg,res.client,res.psql).compile.drain,
+      Logger[IO].info(s"Loaded config $cfg") >>
+        AppResources.make[IO](cfg).use { res =>
+          (DashboardServer.stream[IO](cfg,res.client,res.psql).compile.drain,
             CronScheduler.schedulerTask[IO](cfg,res.client,res.psql).compile.drain).parTupled.as(ExitCode.Success)
       }
     }

@@ -2,12 +2,13 @@ package uk.gov.homeoffice.drt.api
 
 import java.util.Date
 
-import cats.effect.Sync
+import cats.effect.{IO, Sync}
 import cats.implicits._
+import io.chrisdavenport.log4cats.Logger
+import io.chrisdavenport.log4cats.slf4j.Slf4jLogger
 import org.http4s.dsl.Http4sDsl
 import org.http4s.util.CaseInsensitiveString
 import org.http4s.{HttpRoutes, Response, Status}
-import org.slf4j.LoggerFactory
 import uk.gov.homeoffice.drt.applicative.ArrivalFlights
 import uk.gov.homeoffice.drt.coders.ArrivalCoder._
 import uk.gov.homeoffice.drt.model.FlightsRequest
@@ -17,9 +18,8 @@ import scala.util.{Failure, Success, Try}
 
 object ArrivalRoutes {
 
-  private final val logger = LoggerFactory.getLogger(getClass.getName);
-
   def arrivalFlightsRoutes[F[_] : Sync](H: ArrivalFlights[F], permissions: List[String]): HttpRoutes[F] = {
+    implicit val logger = Slf4jLogger.getLogger[F]
     val dsl = new Http4sDsl[F] {}
     import dsl._
     HttpRoutes.of[F] {
@@ -35,7 +35,7 @@ object ArrivalRoutes {
               resp <- Ok(arrivals)
             } yield resp
           } else {
-            logger.warn(s"User logged in does not have valid permission to view the page.")
+            Logger[F].warn(s"User logged in does not have valid permission to view the page.") >>
             Response[F](Status.Forbidden)
               .withEntity(s"You need appropriate permissions to view the page.")
               .pure[F]
@@ -43,7 +43,7 @@ object ArrivalRoutes {
         } match {
           case Success(r) => r
           case Failure(e) =>
-            logger.error(s"Error while request", e)
+            Logger[F].error(s"Error while request $e") >>
             Response[F](Status.BadRequest)
               .withEntity(s"Bad Request : ${e.getMessage}")
               .pure[F]

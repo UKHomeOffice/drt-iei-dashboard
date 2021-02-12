@@ -4,6 +4,7 @@ import cats.effect.{ConcurrentEffect, ContextShift, Resource, Timer}
 import cron4s.Cron
 import eu.timepit.fs2cron.awakeEveryCron
 import fs2.Stream
+import io.chrisdavenport.log4cats.Logger
 import org.http4s.client.Client
 import skunk.Session
 import uk.gov.homeoffice.drt.Config
@@ -12,7 +13,7 @@ import uk.gov.homeoffice.drt.service.{CiriumService, FlightScheduledService}
 
 object CronScheduler {
 
-  def schedulerTask[F[_] : ConcurrentEffect](cfg: Config, client: Client[F], session: Resource[F, Session[F]])(implicit timer: Timer[F], C: ContextShift[F]) = {
+  def schedulerTask[F[_] : ConcurrentEffect : Logger](cfg: Config, client: Client[F], session: Resource[F, Session[F]])(implicit timer: Timer[F], C: ContextShift[F]) = {
     val cronSchedulerConfig = Cron.unsafeParse(cfg.cronJob.scheduler)
     val arrivalsService: FlightScheduledService[F] = new FlightScheduledService(new ArrivalRepository(session), new DepartureRepository(session))
 

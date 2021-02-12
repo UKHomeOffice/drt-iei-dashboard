@@ -1,6 +1,8 @@
 package uk.gov.homeoffice.drt.utils
 
-import org.slf4j.LoggerFactory
+import cats.effect.IO
+import io.chrisdavenport.log4cats.Logger
+import io.chrisdavenport.log4cats.slf4j.Slf4jLogger
 import uk.gov.homeoffice.drt.coders.AirlineDecoder
 import uk.gov.homeoffice.drt.model.Airlines
 
@@ -8,7 +10,7 @@ import scala.io.Source
 
 object AirlineUtil {
 
-  private val logger = LoggerFactory.getLogger(getClass.getName)
+  implicit val logger = Slf4jLogger.getLogger[IO]
 
   private var airlines: Airlines = Airlines(List.empty)
 
@@ -23,7 +25,7 @@ object AirlineUtil {
   def populateAirlineData = {
     AirlineDecoder.airlinesDecoder(Source.fromResource("airline.json").getLines().mkString) match {
       case Right(a: Airlines) => setAirline(a)
-      case Left(e) => logger.error(s"unable to get airline details ${e.getMessage}")
+      case Left(e) => Logger[IO].error(s"unable to get airline details ${e.getMessage}")
     }
   }
 
