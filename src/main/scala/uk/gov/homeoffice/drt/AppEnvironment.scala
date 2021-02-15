@@ -7,6 +7,8 @@ import eu.timepit.refined.auto._
 import eu.timepit.refined.types.net.UserPortNumber
 import eu.timepit.refined.types.string.NonEmptyString
 
+import scala.concurrent.duration._
+
 
 object AppEnvironment {
 
@@ -41,26 +43,47 @@ object AppEnvironment {
     env("AGGDB_SESSION_POOL_MAX").as[Int].default(10)
   ).parMapN(PostgreSQLConfig)
 
+  val httpClientConfig: ConfigValue[HttpClientConfig] = (
+    env("HTTP_CLIENT_CONNECTION_TIMEOUT_SECONDS").as[Int].default(2),
+    env("HTTP_CLIENT_REQUEST_TIMEOUT_SECONDS").as[Int].default(2)
+  ).parMapN { (connectTimeout, requestTimeout) =>
+    HttpClientConfig(connectTimeout seconds, requestTimeout seconds)
+  }
+
+  val cronJobConfig: ConfigValue[CronJobConfig] = (
+    env("CIRIUM_SCHEDULES_ENDPOINT").as[String].default("https://api.flightstats.com/flex/schedules/rest/v1/json/flight/"),
+    env("CRON_SCHEDULER_TIMER").as[String].default("0 0 */3 ? * *")
+  ).parMapN { (endpoint, scheduler) =>
+    CronJobConfig(endpoint, scheduler)
+  }
 
   val config: ConfigValue[Config] = (
     apiConfig,
     databaseConfig,
-    airlineConfig
-  ).parMapN { (api, database, airline) =>
+    airlineConfig,
+    httpClientConfig,
+    cronJobConfig
+  ).parMapN { (api, database, airline, httpClient, cronjob) =>
     Config(
       appName = "IEI-Dashboard",
       api = api,
       database = database,
-      airline = airline
+      airline = airline,
+      httpClient = httpClient,
+      cronJob = cronjob
     )
   }
 
 }
 
+final case class CronJobConfig(ciriumSchedulesEndpoint: String, scheduler: String)
+
 final case class AirlineConfig(endpoint: String, appId: String, appKey: String)
 
 final case class ApiConfig(port: UserPortNumber, env: Option[String], permissions: List[String])
 
-final case class Config(appName: NonEmptyString, api: ApiConfig, database: PostgreSQLConfig, airline: AirlineConfig)
+final case class Config(appName: NonEmptyString, api: ApiConfig, database: PostgreSQLConfig, airline: AirlineConfig, httpClient: HttpClientConfig, cronJob: CronJobConfig)
 
 final case class PostgreSQLConfig(host: String, port: Int, user: String, password: String, database: String, max: Int)
+
+final case class HttpClientConfig(connectTimeout: FiniteDuration, requestTimeout: FiniteDuration)

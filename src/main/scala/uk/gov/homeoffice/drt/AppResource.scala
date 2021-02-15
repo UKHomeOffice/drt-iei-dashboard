@@ -1,50 +1,43 @@
 package uk.gov.homeoffice.drt
 
-import cats.effect.{Concurrent, ContextShift, Resource, Sync}
+import cats.effect.{Concurrent, ConcurrentEffect, ContextShift, Resource}
 import cats.syntax.all._
+import io.chrisdavenport.log4cats.Logger
 import natchez.Trace.Implicits.noop
-import org.slf4j.LoggerFactory
+import org.http4s.client.Client
+import org.http4s.client.blaze.BlazeClientBuilder
 import skunk.Session
-import uk.gov.homeoffice.drt.coders.AirlineDecoder
-import uk.gov.homeoffice.drt.model.Airlines
-import uk.gov.homeoffice.drt.service.AirlineService
+import scala.concurrent.ExecutionContext
 
-import scala.io.Source
 
-object AppResource {
+final case class AppResources[F[_]](client: Client[F], psql: Resource[F, Session[F]])
 
-  private val logger = LoggerFactory.getLogger(getClass.getName)
+object AppResources {
 
-  def session[F[_] : Concurrent : ContextShift](postgreSQLConfig: PostgreSQLConfig): Resource[F, Session[F]] =
-    Session.single[F](
+  private def session[F[_] : Concurrent : ContextShift](postgreSQLConfig: PostgreSQLConfig): Resource[F, Resource[F, Session[F]]] =
+    Session
+      .pooled[F](
       host = postgreSQLConfig.host,
       port = postgreSQLConfig.port,
       user = postgreSQLConfig.user,
+      password = Option(postgreSQLConfig.password),
       database = postgreSQLConfig.database,
-      password = Some(postgreSQLConfig.password)
+      max = postgreSQLConfig.max
     )
 
-  var airlines: Airlines = Airlines(List.empty)
+  private def mkHttpClient[F[_] : ConcurrentEffect : ContextShift](c: HttpClientConfig): Resource[F, Client[F]] =
+    BlazeClientBuilder[F](ExecutionContext.global)
+      .withConnectTimeout(c.connectTimeout)
+      .withRequestTimeout(c.requestTimeout)
+      .resource
 
-  def updateAirLines[F[_] : Sync : Concurrent : ContextShift](airlineConfig: AirlineConfig, airlineService: AirlineService[F]) = {
-    airlineService.getAirlineData(airlineConfig).map(jsonString =>
-      AirlineDecoder.airlineJsonDecoder(jsonString) match {
-        case Right(a: Airlines) => airlines = a
-        case Left(e) => logger.error(s"unable to get airline details ${e.getMessage}")
-      }
-    )
+  def make[F[_] : ConcurrentEffect : ContextShift : Logger](cfg: Config): Resource[F, AppResources[F]] = {
+    (
+      mkHttpClient(cfg.httpClient),
+      session(cfg.database)
+    ).mapN(AppResources.apply[F])
+
   }
 
-  def getCarrierNameByIData(iata: String) = airlines.airlines.find( a => a.active & a.iata.getOrElse("") == iata)
-
-  def getCarrierNameByICAO(icao: String) = airlines.airlines.find(a => a.active & a.icao.getOrElse("") == icao)
-
-
-  def populateAirlineData = {
-    AirlineDecoder.airlinesDecoder(Source.fromResource("airline.json").getLines().mkString) match {
-      case Right(a: Airlines) => airlines = a
-      case Left(e) => logger.error(s"unable to get airline details ${e.getMessage}")
-    }
-  }
 
 }

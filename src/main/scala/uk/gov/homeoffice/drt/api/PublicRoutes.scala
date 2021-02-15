@@ -4,21 +4,22 @@ import java.util.concurrent.Executors
 
 import cats.effect._
 import cats.implicits._
+import io.chrisdavenport.log4cats.Logger
+import io.chrisdavenport.log4cats.slf4j.Slf4jLogger
 import org.http4s.dsl.Http4sDsl
 import org.http4s.{HttpRoutes, Response, StaticFile, Status}
-import org.slf4j.LoggerFactory
 import uk.gov.homeoffice.drt.AirlineConfig
 import uk.gov.homeoffice.drt.service.AirlineService
 
 import scala.util.{Failure, Success, Try}
 
 object PublicRoutes {
-  val logger = LoggerFactory.getLogger(getClass.getName)
 
   val blockingPool = Executors.newFixedThreadPool(4)
   val blocker = Blocker.liftExecutorService(blockingPool)
 
-  def dashboardRoutes[F[_] : Sync : ContextShift](): HttpRoutes[F] = {
+  def dashboardRoutes[F[_] : Sync : ContextShift : Logger](): HttpRoutes[F] = {
+    implicit val logger = Slf4jLogger.getLogger[F]
 
     val dsl = new Http4sDsl[F] {}
     import dsl._
@@ -53,7 +54,7 @@ object PublicRoutes {
   }
 
 
-  def airlineRoutes[F[_] : Sync : ContextShift](airlineConfig: AirlineConfig, H: AirlineService[F]): HttpRoutes[F] = {
+  def airlineRoutes[F[_] : Sync : ContextShift : Logger](airlineConfig: AirlineConfig, H: AirlineService[F]): HttpRoutes[F] = {
     val dsl = new Http4sDsl[F] {}
     import dsl._
     import org.http4s.circe.CirceEntityEncoder._
@@ -65,10 +66,10 @@ object PublicRoutes {
         } match {
           case Success(r) => r
           case Failure(e) =>
-            logger.error(s"Error while request", e)
-            Response[F](Status.BadRequest)
-              .withEntity(s"Bad Request : ${e.getMessage}")
-              .pure[F]
+            Logger[F].error(s"Error while request $e") >>
+              Response[F](Status.BadRequest)
+                .withEntity(s"Bad Request : ${e.getMessage}")
+                .pure[F]
         }
     }
   }

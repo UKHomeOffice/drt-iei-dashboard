@@ -22,11 +22,13 @@ lazy val root = (project in file("."))
       Libraries.http4sCirce,
       Libraries.logback % Runtime,
       Libraries.logstashLogbackEncoder % Runtime,
+      Libraries.log4cats,
       Libraries.skunkCore,
       Libraries.skunkCirce,
+      Libraries.fs2CronCore,
       Libraries.scalaCheck,
       Libraries.scalaTest,
-      Libraries.scalaTestPlus,
+      Libraries.scalaTestPlus
     ),
     dockerExposedPorts ++= Seq(9001),
     compile := ((compile in Compile) dependsOn buildReactApp).value

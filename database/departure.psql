@@ -1,0 +1,18 @@
+CREATE TABLE public.departure(
+  code text NOT NULL,
+  number integer NOT NULL,
+  destination text NOT NULL,
+  origin text NOT NULL,
+  terminal text NOT NULL,
+  status text NOT NULL,
+  scheduled timestamp NOT NULL,
+  scheduled_departure timestamp NOT NULL,
+  PRIMARY KEY (number, destination, terminal, scheduled)
+);
+
+CREATE INDEX departureCode ON public.departure (code);
+CREATE INDEX departureNumber ON public.departure (number);
+CREATE INDEX departureOrigin ON public.departure (origin);
+CREATE INDEX departureterminal ON public.departure (terminal);
+CREATE INDEX departureIndex ON public.departure (scheduled ASC);
+CREATE INDEX departure_scheduled ON public.departure (scheduled_departure ASC);
