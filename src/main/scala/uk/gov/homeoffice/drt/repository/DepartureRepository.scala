@@ -4,7 +4,7 @@ import java.time.LocalDateTime
 
 import cats.effect.{Resource, Sync}
 import cats.syntax.all._
-import org.slf4j.LoggerFactory
+import io.chrisdavenport.log4cats.slf4j.Slf4jLogger
 import skunk._
 import skunk.codec.all.{int4, text, timestamp, varchar}
 import skunk.data.Completion
@@ -33,7 +33,7 @@ trait DepartureRepositoryI[F[_]] {
 
 class DepartureRepository[F[_] : Sync](val sessionPool: Resource[F, Session[F]]) extends DepartureRepositoryI[F] {
 
-  private val logger = LoggerFactory.getLogger(getClass.getName)
+  implicit val logger = Slf4jLogger.getLogger[F]
 
   val decoderDepartureData: Decoder[DepartureTableData] =
     (text ~ int4 ~ text ~ text ~ text ~ text ~ timestamp ~ timestamp).map {
@@ -95,8 +95,8 @@ class DepartureRepository[F[_] : Sync](val sessionPool: Resource[F, Session[F]])
   def insertDepartureData(ps: List[DepartureTableData]): F[List[Completion]] =
     ps.traverse { p =>
       sessionPool.use { session =>
-        session.prepare(insertCommandDepartureData(p)).use(_.execute(p)).handleError {
-          case e => logger.warn(s"Error while inserting $p ${e.getMessage} $e")
+        session.prepare(insertCommandDepartureData(p)).use(_.execute(p)).handleErrorWith {
+          case e => logger.warn(s"Error while inserting $p ${e.getMessage} $e") as
             Completion.Insert(0)
         }
       }

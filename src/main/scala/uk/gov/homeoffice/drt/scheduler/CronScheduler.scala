@@ -20,9 +20,9 @@ object CronScheduler {
     val ciriumService = new CiriumService(cfg.airline, client, cfg.cronJob.ciriumSchedulesEndpoint)
 
     awakeEveryCron(cronSchedulerConfig) >> Stream.eval {
-      val arrivalTableDatas: F[List[ArrivalTableData]] = arrivalsService.getScheduledDeparture
-      val amendArrivalTableDatas: F[List[ArrivalTableData]] = ciriumService.appendScheduledDeparture(arrivalTableDatas)
-      arrivalsService.insertDepartureTableData(amendArrivalTableDatas)
+      val arrivalTableDataList: F[List[ArrivalTableData]] = arrivalsService.getScheduledDeparture
+      val amendArrivalTableDataList: F[List[ArrivalTableData]] = ciriumService.appendScheduledDeparture(arrivalTableDataList)
+      arrivalsService.insertDepartureTableData(amendArrivalTableDataList)
     }
   }
 
