@@ -36,7 +36,6 @@ class CiriumService[F[_] : Sync](airlineConfig: AirlineConfig, client: Client[F]
       }
     }
 
-
   def appendScheduledDeparture(arrivalTableDatas: F[List[ArrivalTableData]]): F[List[ArrivalTableData]] = {
     val amendArrivalTableDatas: F[List[ArrivalTableData]] = arrivalTableDatas.map(_.traverse { arrivalsTableData =>
       process(arrivalsTableData).map { sd =>
@@ -73,6 +72,4 @@ class CiriumService[F[_] : Sync](airlineConfig: AirlineConfig, client: Client[F]
       s"/${arrivalsTableData.scheduled.getMonth.getValue}/" +
       s"${arrivalsTableData.scheduled.getDayOfMonth}"
   }
-
-
 }

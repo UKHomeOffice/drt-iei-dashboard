@@ -15,8 +15,8 @@ object ArrivalFlights {
 
   def impl[F[_] : Applicative](arrivalsService: FlightScheduledService[F]): ArrivalFlights[F] = new ArrivalFlights[F] {
     def flights(n: FlightsRequest)(implicit monad: Monad[F]): F[Arrivals] = {
-      val arrivalFlights: F[List[ArrivalTableDataIndex]] = arrivalsService.getFlightsDetail(n)
-      arrivalsService.transformArrivals(arrivalFlights).map(Arrivals(_))
+      val arrivals: F[List[ArrivalTableDataIndex]] = arrivalsService.getFlightsDetail(n)
+      arrivalsService.transformArrivals(arrivals).map(Arrivals(_))
     }
   }
 

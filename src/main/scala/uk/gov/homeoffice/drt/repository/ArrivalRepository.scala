@@ -41,7 +41,7 @@ class ArrivalRepository[F[_] : Sync](val sessionPool: Resource[F, Session[F]]) e
 
   private def selectArrivalsForADate: Query[LocalDateTime ~ LocalDateTime, ArrivalTableData] =
     sql"""
-        SELECT code , number , destination , origin , terminal , status ,scheduled ,scheduled_departure
+        SELECT code, number, destination, origin, terminal, status, scheduled, scheduled_departure
         FROM arrival WHERE scheduled > $timestamp and scheduled < $timestamp;
        """.query(decoder)
 
@@ -54,7 +54,7 @@ class ArrivalRepository[F[_] : Sync](val sessionPool: Resource[F, Session[F]]) e
 
   val selectAthenOriginArrivalWithin3Days: Query[String ~ LocalDateTime ~ LocalDateTime, ArrivalTableData] =
     sql"""
-        SELECT code , number , destination , origin , terminal , status ,scheduled ,scheduled_departure
+        SELECT code, number, destination, origin, terminal, status, scheduled, scheduled_departure
         FROM arrival WHERE origin = $varchar and scheduled_departure is NULL and scheduled > $timestamp and scheduled < $timestamp;
        """.query(decoder)
 

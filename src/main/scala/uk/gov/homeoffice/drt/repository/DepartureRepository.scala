@@ -45,13 +45,13 @@ class DepartureRepository[F[_] : Sync](val sessionPool: Resource[F, Session[F]])
 
   val selectScheduleDeparture: Query[Int ~ String ~ String ~ String ~ LocalDateTime ~ LocalDateTime, DepartureTableData] =
     sql"""
-        SELECT code , number , destination , origin , terminal , status ,scheduled ,scheduled_departure
+        SELECT code, number, destination, origin, terminal, status, scheduled, scheduled_departure
         FROM departure WHERE number = $int4 and destination = $varchar and origin =$varchar and terminal = $varchar and scheduled = $timestamp and scheduled_departure = $timestamp
        """.query(decoderDepartureData)
 
   val selectScheduleDepartureWithOutDeparture: Query[Int ~ String ~ String ~ String ~ LocalDateTime, DepartureTableData] =
     sql"""
-        SELECT code , number , destination , origin , terminal , status ,scheduled ,scheduled_departure
+        SELECT code, number, destination, origin, terminal, status, scheduled, scheduled_departure
         FROM departure WHERE scheduled_departure is not NULL and number = $int4 and destination = $varchar and origin =$varchar and terminal = $varchar and scheduled = $timestamp
        """.query(decoderDepartureData)
 
@@ -89,7 +89,7 @@ class DepartureRepository[F[_] : Sync](val sessionPool: Resource[F, Session[F]])
   }
 
   private def insertCommandDepartureData(p: DepartureTableData): Command[DepartureTableData] = {
-    sql"INSERT INTO departure VALUES ($text , $int4 ,$text , $text , $text , $text , $timestamp , $timestamp)".command.gcontramap[DepartureTableData]
+    sql"INSERT INTO departure VALUES ($text, $int4, $text, $text, $text, $text, $timestamp, $timestamp)".command.gcontramap[DepartureTableData]
   }
 
   def insertDepartureData(ps: List[DepartureTableData]): F[List[Completion]] =
