@@ -20,7 +20,7 @@ class AirlineService[F[_] : Sync](client: Client[F]) {
     client.expect[Json](s"${airlineConfig.endpoint}?appId=${airlineConfig.appId}&appKey=${airlineConfig.appKey}")
   }
 
-  def updateAirLines[F[_] : Sync](airlineConfig: AirlineConfig, airlineService: AirlineService[F]): F[Unit] = {
+  def updateAirLines[F[_] : Sync](airlineConfig: AirlineConfig, airlineService: AirlineService[F]) = {
     getAirlineData(airlineConfig).map(jsonString =>
       AirlineDecoder.airlineJsonDecoder(jsonString) match {
         case Right(a: Airlines) => AirlineUtil.setAirline(a)
