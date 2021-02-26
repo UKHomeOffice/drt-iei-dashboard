@@ -16,8 +16,8 @@ steps:
   - sbt test yarnInstall buildReactApp docker:stage
   environment:
     ARTIFACTORY_PASSWORD:
-      from_secret: ARTIFACTORY_TOKEN
-    ARTIFACTORY_USERNAME: ben.eppel@digital.homeoffice.gov.uk
+      from_secret: ARTIFACTORY_PASSWORD
+    ARTIFACTORY_USERNAME: drt_artifactory_ci
   when:
     event:
     - push
