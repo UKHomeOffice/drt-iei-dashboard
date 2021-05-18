@@ -77,25 +77,25 @@ export default function SimpleTabs(props: SimpleTabProps) {
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
-        <FlightsTable region="athens" country="Greece" date={pickedDate}/>
+        <FlightsTable region="athens" country="Greece" date={pickedDate} timezone='UTC'/>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <FlightsTable region="athens" country="Cyprus" date={pickedDate}/>
+        <FlightsTable region="athens" country="Cyprus" date={pickedDate} timezone='UTC'/>
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <FlightsTable region="athens" country="Croatia" date={pickedDate}/>
+        <FlightsTable region="athens" country="Croatia" date={pickedDate} timezone='UTC'/>
       </TabPanel>
       <TabPanel value={value} index={3}>
-        <FlightsTable region="athens" country="Slovenia" date={pickedDate}/>
+        <FlightsTable region="athens" country="Slovenia" date={pickedDate} timezone='UTC'/>
       </TabPanel>
       <TabPanel value={value} index={4}>
-        <FlightsTable region="athens" country="Bulgaria" date={pickedDate}/>
+        <FlightsTable region="athens" country="Bulgaria" date={pickedDate} timezone='UTC'/>
       </TabPanel>
       <TabPanel value={value} index={5}>
-        <FlightsTable region="athens" country="Romania" date={pickedDate}/>
+        <FlightsTable region="athens" country="Romania" date={pickedDate} timezone='UTC'/>
       </TabPanel>
       <TabPanel value={value} index={6}>
-        <FlightsTable region="athens" country="Moldova" date={pickedDate}/>
+        <FlightsTable region="athens" country="Moldova" date={pickedDate} timezone='UTC'/>
       </TabPanel>
     </div>
   );

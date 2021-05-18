@@ -10,6 +10,7 @@ interface IProps {
   region: string;
   country: string;
   date: string;
+  timezone:string;
 }
 
 interface IState {
@@ -45,7 +46,8 @@ export default class FlightsTable extends React.Component<IProps, IState> {
   }
 
   componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>, snapshot?: any) {
-    if (this.props.date !== prevProps.date) {
+    console.log('FlightsTable...componentDidUpdate...' + this.props.country + ' ' +this.props.region + '' +this.props.timezone)
+    if (this.props.date !== prevProps.date || this.props.country !== prevProps.country || this.props.region !== prevProps.region ) {
       this.updateFLights();
     }
   }
@@ -78,6 +80,7 @@ export default class FlightsTable extends React.Component<IProps, IState> {
   }
 
   render() {
+  console.log('FlightsTable...' + this.props.country)
     if (this.state.hasError) {
       throw new Error(this.state.errorMessage);
     } else {
