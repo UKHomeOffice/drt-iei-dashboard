@@ -5,6 +5,8 @@ import {
   KeyboardDatePicker,
 } from '@material-ui/pickers';
 import CountryTab from './CountryTab';
+import SearchFilters from './SearchFilters';
+
 import format from 'date-fns/format';
 
 interface IProps {
@@ -46,7 +48,7 @@ export default class MaterialUIPickers extends React.Component<IProps, IState> {
             'aria-label': 'change date',
           }}
         />
-        <CountryTab pickedDate={format(this.state.selectedDate as Date, "yyyy-MM-dd")}/>
+        <SearchFilters pickedDate={format(this.state.selectedDate as Date, "yyyy-MM-dd")}/>
       </MuiPickersUtilsProvider>
     );
   }

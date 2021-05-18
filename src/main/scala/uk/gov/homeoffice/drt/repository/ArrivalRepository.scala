@@ -1,11 +1,11 @@
 package uk.gov.homeoffice.drt.repository
 
-import java.time.{LocalDate, LocalDateTime}
-
 import cats.effect.{Resource, Sync}
 import skunk._
 import skunk.codec.all._
 import skunk.implicits._
+
+import java.time.{LocalDate, LocalDateTime}
 
 case class ArrivalTableData(code: String,
                             number: Int,
@@ -26,6 +26,7 @@ trait ArrivalRepositoryI[F[_]] {
 
   def getArrivalsForOriginAndDate(origin: String): F[List[ArrivalTableData]]
 
+  def getArrivalForListOriginAndDate(origins: List[String]): F[List[ArrivalTableData]]
 }
 
 class ArrivalRepository[F[_] : Sync](val sessionPool: Resource[F, Session[F]]) extends ArrivalRepositoryI[F] {
@@ -58,6 +59,23 @@ class ArrivalRepository[F[_] : Sync](val sessionPool: Resource[F, Session[F]]) e
         FROM arrival WHERE origin = $varchar and scheduled_departure is NULL and scheduled > $timestamp and scheduled < $timestamp;
        """.query(decoder)
 
+
+  def getArrivalForListOriginAndDate(origins: List[String]): F[List[ArrivalTableData]] = {
+    val query : Query[List[String] ~ LocalDateTime ~ LocalDateTime, ArrivalTableData] =
+      sql"""
+        select code, number, destination, origin, terminal, status, scheduled, scheduled_departure
+        FROM arrival where origin in(${text.list(origins.size)})and scheduled_departure is NULL and scheduled > $timestamp and scheduled < $timestamp"
+       """.query(decoder)
+
+    val currentDate: LocalDateTime = LocalDate.now().atStartOfDay()
+    val currentDatePlus3Days: LocalDateTime = currentDate.plusDays(3)
+    sessionPool.use { session =>
+      session.prepare(query).use { ps =>
+        val a = ps.stream(origins ~ currentDate ~ currentDatePlus3Days, 1024)
+        a.compile.toList
+      }
+    }
+  }
 
   def getArrivalsForOriginAndDate(origin: String): F[List[ArrivalTableData]] = {
 

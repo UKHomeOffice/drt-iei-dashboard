@@ -16,6 +16,7 @@
     "typescript": "^4.0.3",
     "web-vitals": "^0.2.4",
     "@material-ui/core": "^4.11.1",
+    "@material-ui/lab": "4.0.0-alpha.58",
     "@material-ui/data-grid": "^4.0.0-alpha.10",
     "axios": "^0.20.0",
     "date-fns": "latest",

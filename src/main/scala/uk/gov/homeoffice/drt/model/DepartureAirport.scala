@@ -3,7 +3,7 @@ package uk.gov.homeoffice.drt.model
 case class Port(code: String, name: String)
 
 sealed trait Country {
-  def portList : Seq[Port]
+  def portList: Seq[Port]
 }
 
 case object Greece extends Country {
@@ -75,7 +75,69 @@ case object Moldova extends Country {
   val portList = List(Port("KIV", "Chisinau"))
 }
 
+case object Netherlands extends Country {
+  val portList = List(
+    Port("AMS", "Schiphol"),
+    Port("EHBD", "Budel"),
+    Port("MST", "Maastricht"),
+    Port("EHDL", "Deelen"),
+    Port("EHDR", "Drachten"),
+    Port("EIN", "Eindhoven"),
+    Port("GRQ", "Eelde"),
+    Port("EHGR", "Gilze Rijen"),
+    Port("DHR", "De Kooy"),
+    Port("EHLE", "Lelystad"),
+    Port("LWR", "Leeuwarden"),
+    Port("RTM", "Rotterdam"),
+    Port("UTC", "Soesterberg"),
+    Port("ENS", "Twenthe"),
+    Port("LID", "Valkenburg"),
+    Port("WOE", "Woensdrecht")
+  )
+}
+
+case object Belgium extends Country {
+  val portList = List(
+    Port("ANR", "Deurne"),
+    Port("EBBE", "Beauvechain"),
+    Port("EBBL", "Kleine Brogel"),
+    Port("BRU", "Brussels Natl"),
+    Port("EBBX", "Bertrix"),
+    Port("CRL", "Brussels South"),
+    Port("EBCV", "Chievres Ab"),
+    Port("EBFN", "Koksijde"),
+    Port("EBFS", "Florennes"),
+    Port("QKT", "Wevelgem"),
+    Port("LGG", "Liege"),
+    Port("OST", "Oostende"),
+    Port("EBSL", "Zutendaal"),
+    Port("EBST", "Sint Truiden"),
+    Port("EBSU", "Saint Hubert Mil"),
+    Port("EBUL", "Ursel"),
+    Port("EBWE", "Weelde"),
+    Port("EBZR", "Zoersel"),
+
+  )
+}
+
+case object Luxembourg extends Country {
+  val portList = List(
+    Port("LUX", "Luxembourg")
+  )
+}
+
+
 object DepartureAirport {
+
+  def beneluxDeparturePortForCountry(country: String): List[Port] = {
+    country.toLowerCase match {
+      case "netherlands" => Netherlands.portList
+      case "belgium" => Belgium.portList
+      case "luxembourg" => Luxembourg.portList
+      case _ => List.empty
+    }
+  }
+
   def athensDeparturePortsForCountry(country: String): List[Port] = {
     country.toLowerCase match {
       case "greece" => Greece.portList
@@ -90,8 +152,12 @@ object DepartureAirport {
 
   }
 
+  def beneluxRegionsPortList = List(
+    Netherlands, Belgium, Luxembourg
+  )
+
   def athenRegionsPortList = List(
-    Greece,Cyprus,Croatia,Slovenia,Bulgaria,Romania,Moldova
+    Greece, Cyprus, Croatia, Slovenia, Bulgaria, Romania, Moldova
   )
 
 }
