@@ -7,6 +7,7 @@ interface ArrivalsData {
 }
 
 interface IProps {
+  regionZone : string;
   region: string;
   country: string;
   date: string;
@@ -47,7 +48,7 @@ export default class FlightsTable extends React.Component<IProps, IState> {
 
   componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>, snapshot?: any) {
     console.log('FlightsTable...componentDidUpdate...' + this.props.country + ' ' +this.props.region + '' +this.props.timezone)
-    if (this.props.date !== prevProps.date || this.props.country !== prevProps.country || this.props.region !== prevProps.region ) {
+    if (this.props.date !== prevProps.date || this.props.country !== prevProps.country || this.props.region !== prevProps.region || this.props.regionZone !== prevProps.regionZone ) {
       this.updateFLights();
     }
   }
@@ -85,8 +86,8 @@ export default class FlightsTable extends React.Component<IProps, IState> {
       throw new Error(this.state.errorMessage);
     } else {
       return (
-        <div style={{height: 800, width: 1100}}>
-          <DataGrid rows={this.state.arrivalRows as RowData[]} columns={this.columnsHeaders} pageSize={25}/>
+        <div style={{height: 800 ,width: '100%'}}>
+             <DataGrid rows={this.state.arrivalRows as RowData[]} columns={this.columnsHeaders} pageSize={25}/>
         </div>
       );
     }

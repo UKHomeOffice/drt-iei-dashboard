@@ -5,9 +5,10 @@ import FlightsTable from './FlightsTable'
 import Grid from '@material-ui/core/Grid';
 
 interface IState {
-  country : string;
-  region : string;
   date : string;
+  regionZone : string;
+  region : string;
+  country : string;
   timezone : string;
 }
 
@@ -21,6 +22,7 @@ export default class SearchFilters extends React.Component<IProps, IState> {
     super(props);
 
     this.state = {
+      regionZone : 'Euromed South',
       country : 'Greece',
       region : 'athens',
       date : props.pickedDate,
@@ -34,7 +36,22 @@ export default class SearchFilters extends React.Component<IProps, IState> {
       return (
           <div>
               <Grid container spacing={3}>
-               <Grid item xs={12} sm={4}>
+               <Grid item xs={12} sm={3}>
+                 <Autocomplete
+                       value = {this.state.regionZone !== null ? {regionZone:this.state.regionZone} : {regionZone:''}}
+                       onChange= {(event, newValue) => {
+                           console.log("Region Zone...." +this.state.regionZone + "....."+ newValue)
+                           let {regionZone : newRegionZone} = newValue !== null ? newValue : {regionZone: ''}
+                            this.setState({...this.state, regionZone : newRegionZone })
+                        }}
+                       id="regionZone-combo-box"
+                       options={regionZones}
+                       getOptionLabel={(option) => option.regionZone}
+                       style={{ width: 200 }}
+                       renderInput={(params) => <TextField {...params} label="RegionZone" variant="outlined" />}
+                     />
+               </Grid>
+               <Grid item xs={12} sm={3}>
                     <Autocomplete
                         value = {this.state.region !== null ? {region:this.state.region} : {region:''}}
                         onChange= {(event, newValue) => {
@@ -46,10 +63,10 @@ export default class SearchFilters extends React.Component<IProps, IState> {
                         options={regions}
                         getOptionLabel={(option) => option.region}
                         style={{ width: 200 }}
-                        renderInput={(params) => <TextField {...params} label="Region name" variant="outlined" />}
+                        renderInput={(params) => <TextField {...params} label="Region" variant="outlined" />}
                       />
                </Grid>
-               <Grid item xs={12} sm={4}>
+               <Grid item xs={12} sm={3}>
                     <Autocomplete
                         value = {this.state.country !== null ? {country:this.state.country} : {country:''}}
                         onChange= {(event, newValue) => {
@@ -61,10 +78,10 @@ export default class SearchFilters extends React.Component<IProps, IState> {
                         options={countries}
                         getOptionLabel={(option) => option.country}
                         style={{ width: 200 }}
-                        renderInput={(params) => <TextField {...params} label="Country name" variant="outlined" />}
+                        renderInput={(params) => <TextField {...params} label="Country" variant="outlined" />}
                       />
                </Grid>
-               <Grid item xs={12} sm={4}>
+               <Grid item xs={12} sm={3}>
                      <Autocomplete
                         value = {this.state.timezone !== null ? {timezone:this.state.timezone} : {timezone:''}}
                         onChange= {(event, newValue) => {
@@ -76,17 +93,22 @@ export default class SearchFilters extends React.Component<IProps, IState> {
                         options={timezones}
                         getOptionLabel={(option) => option.timezone}
                         style={{ width: 200 }}
-                        renderInput={(params) => <TextField {...params} label="Timezone name" variant="outlined" />}
+                        renderInput={(params) => <TextField {...params} label="Timezone" variant="outlined" />}
                       />
                </Grid>
               </Grid>
-              <FlightsTable region={this.state.region} country={this.state.country} date={this.props.pickedDate} timezone={this.state.timezone}/>
+             <FlightsTable region={this.state.region} country={this.state.country} date={this.props.pickedDate} timezone={this.state.timezone} regionZone={this.state.regionZone}/>
            </div>
       );
   }
 
 }
 
+const regionZones = [
+    { regionZone : 'Euromed North'},
+    { regionZone : 'Euromed South'},
+
+]
 const timezones = [
     { timezone : 'UK'},
     { timezone : 'UTC'},
