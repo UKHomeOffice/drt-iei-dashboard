@@ -1,8 +1,12 @@
 package uk.gov.homeoffice.drt.model
 
+import uk.gov.homeoffice.drt.utils.AirportUtil
+
 case class Port(code: String, name: String)
 
 sealed trait Country {
+  val defaultTimeZone = "UTC"
+
   def portList: Seq[Port]
 }
 
@@ -96,6 +100,27 @@ case object Netherlands extends Country {
   )
 }
 
+case object Poland extends Country {
+  override val defaultTimeZone = "Europe/Warsaw"
+  val portList = List(
+    Port("EPBC", "Babice"),
+    Port("GDN", "Lech Walesa"),
+    Port("KRK", "Balice"),
+    Port("EPKM", "Muchowiec"),
+    Port("KTW", "Pyrzowice"),
+    Port("EPML", "Mielec"),
+    Port("POZ", "Lawica"),
+    Port("RZE", "Jasionka"),
+    Port("SZZ", "Goleniow"),
+    Port("OSP", "Redzikowo"),
+    Port("EPSN", "Swidwin"),
+    Port("WAW", "Okecie"),
+    Port("WRO", "Strachowice"),
+    Port("IEG", "Babimost")
+
+  )
+}
+
 case object Belgium extends Country {
   val portList = List(
     Port("ANR", "Deurne"),
@@ -129,7 +154,7 @@ case object Luxembourg extends Country {
 
 object DepartureAirport {
 
-  def beneluxDeparturePortForCountry(country: String): List[Port] = {
+  def beneluxDeparturePortForCountry(implicit country: String): List[Port] = {
     country.toLowerCase match {
       case "netherlands" => Netherlands.portList
       case "belgium" => Belgium.portList
@@ -138,7 +163,49 @@ object DepartureAirport {
     }
   }
 
-  def athensDeparturePortsForCountry(country: String): List[Port] = {
+  def warsawDeparturePortForCountry(implicit country: String): List[Port] = {
+    country.toLowerCase match {
+      case "all" => List("Poland","Czech Republic","Ukraine","Belarus","Latvia","Estonia","Lithuania","Iceland").flatMap(AirportUtil.getPortListForCountry(_))
+      case _ => AirportUtil.getPortListForCountry
+    }
+  }
+
+  def berlinDeparturePortForCountry(implicit country: String): List[Port] = {
+    country.toLowerCase match {
+      case "all" => List("Germany","Austria","Switzerland","Liechenstein","Finland","Denmark","Norway","Sweden").flatMap(AirportUtil.getPortListForCountry(_))
+      case _ => AirportUtil.getPortListForCountry
+    }
+  }
+
+  def parisDeparturePortForCountry(implicit country: String): List[Port] = {
+    country.toLowerCase match {
+      case "all" => List("France","Tunisia","Morocco","Algeria","Basel Mulhouse").flatMap(AirportUtil.getPortListForCountry(_))
+      case _ => AirportUtil.getPortListForCountry
+    }
+  }
+
+  def romeDeparturePortForCountry(implicit country: String): List[Port] = {
+    country.toLowerCase match {
+      case "all" => List("Italy","Malta").flatMap(AirportUtil.getPortListForCountry(_))
+      case _ => AirportUtil.getPortListForCountry
+    }
+  }
+
+  def madridDeparturePortForCountry(implicit country: String): List[Port] = {
+    country.toLowerCase match {
+      case "all" => List("Spain","Portugual").flatMap(AirportUtil.getPortListForCountry(_))
+      case _ => AirportUtil.getPortListForCountry
+    }
+  }
+
+  def albaniaDeparturePortForCountry(implicit country: String): List[Port] = {
+    country.toLowerCase match {
+      case "all" => List("Albania","Serbia","North Macedonia","Bosnia","Kosovo","Montenegro").flatMap(AirportUtil.getPortListForCountry(_))
+      case _ => AirportUtil.getPortListForCountry
+    }
+  }
+
+  def athensDeparturePortsForCountry(implicit country: String): List[Port] = {
     country.toLowerCase match {
       case "greece" => Greece.portList
       case "cyprus" => Cyprus.portList
@@ -147,6 +214,8 @@ object DepartureAirport {
       case "bulgaria" => Bulgaria.portList
       case "romania" => Romania.portList
       case "moldova" => Moldova.portList
+      case "all" => Greece.portList ::: Cyprus.portList ::: Croatia.portList :::
+        Slovenia.portList ::: Bulgaria.portList ::: Romania.portList ::: Moldova.portList
       case _ => List.empty
     }
 
@@ -159,5 +228,24 @@ object DepartureAirport {
   def athenRegionsPortList = List(
     Greece, Cyprus, Croatia, Slovenia, Bulgaria, Romania, Moldova
   )
+
+  def getDeparturePortForCountry(post: String)(implicit country: String): List[Port] = {
+    post.toLowerCase match {
+      case "benelux" => beneluxDeparturePortForCountry
+      case "warsaw" => warsawDeparturePortForCountry
+      case "berlin" => berlinDeparturePortForCountry
+      case "paris" => parisDeparturePortForCountry
+      case "rome" => romeDeparturePortForCountry
+      case "athens" => athensDeparturePortsForCountry
+      case "madrid" => madridDeparturePortForCountry
+      case "albania" => albaniaDeparturePortForCountry
+      case "all" => if (country == "all") beneluxDeparturePortForCountry ::: warsawDeparturePortForCountry ::: berlinDeparturePortForCountry :::
+        parisDeparturePortForCountry ::: romeDeparturePortForCountry ::: athensDeparturePortsForCountry :::
+        madridDeparturePortForCountry ::: albaniaDeparturePortForCountry
+      else List.empty
+      case _ => List.empty
+
+    }
+  }
 
 }

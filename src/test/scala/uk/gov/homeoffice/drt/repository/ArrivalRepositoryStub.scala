@@ -158,4 +158,7 @@ class ArrivalRepositoryStub[F[_] : Sync] extends ArrivalRepositoryI[F] {
   }
 
   override def getArrivalsForOriginAndDate(origin: String): F[List[ArrivalTableData]] = ???
+
+  override def getArrivalForListOriginAndDate(origins: List[String]): F[List[ArrivalTableData]] = ???
+
 }

@@ -20,7 +20,7 @@ class FlightScheduledServiceSpecs extends AsyncFlatSpec with Matchers with Scala
 
     val flightScheduledService: FlightScheduledService[IO] = context
 
-    val requestedDetails = FlightsRequest("Athens", "Greece", "2018-12-21")
+    val requestedDetails = FlightsRequest("Euromed South","Athens", "Greece", "2018-12-21","UTC")
 
     val expectedResult = List(Arrival(
       _id = "1",
@@ -43,7 +43,7 @@ class FlightScheduledServiceSpecs extends AsyncFlatSpec with Matchers with Scala
   "Arrival" should "return arrival flights for the requested details for CLJ" in {
     val arrivalService: FlightScheduledService[IO] = context
 
-    val requestedDetails = FlightsRequest("Athens", "Bulgaria", "2018-12-21")
+    val requestedDetails = FlightsRequest("Euromed South","Athens", "Bulgaria", "2018-12-21","UTC")
 
     val expectedResult = List(Arrival(
       _id = "1",
@@ -65,7 +65,7 @@ class FlightScheduledServiceSpecs extends AsyncFlatSpec with Matchers with Scala
   "Arrival" should "return arrival details with scheduled Departure date when departure time is present in departure table but not in arrival table" in {
     val arrivalService: FlightScheduledService[IO] = context
 
-    val requestedDetails = FlightsRequest("Athens", "Moldova", "2018-12-22")
+    val requestedDetails = FlightsRequest("Euromed South","Athens", "Moldova", "2018-12-22","UTC")
 
     val expectedResult = List(Arrival(
       _id = "1",
@@ -86,7 +86,7 @@ class FlightScheduledServiceSpecs extends AsyncFlatSpec with Matchers with Scala
   "Arrival" should "return arrival details without scheduled Departure date when departure time is not present in departure table and arrival table" in {
     val arrivalService: FlightScheduledService[IO] = context
 
-    val requestedDetails = FlightsRequest("Athens", "Moldova", "2018-12-23")
+    val requestedDetails = FlightsRequest("Euromed South","Athens", "Moldova", "2018-12-23","UTC")
 
     val expectedResult = List(Arrival(
       _id = "1",
