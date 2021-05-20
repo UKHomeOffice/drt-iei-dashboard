@@ -7,8 +7,8 @@ interface ArrivalsData {
 }
 
 interface IProps {
-  regionZone : string;
-  region: string;
+  region : string;
+  post: string;
   country: string;
   date: string;
   timezone:string;
@@ -47,14 +47,14 @@ export default class FlightsTable extends React.Component<IProps, IState> {
   }
 
   componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>, snapshot?: any) {
-    console.log('FlightsTable...componentDidUpdate...' + this.props.country + ' ' +this.props.region + '' +this.props.timezone)
-    if (this.props.date !== prevProps.date || this.props.country !== prevProps.country || this.props.region !== prevProps.region || this.props.regionZone !== prevProps.regionZone ) {
+    console.log('FlightsTable...componentDidUpdate...' + this.props.country + ' ' +this.props.post + '' +this.props.timezone)
+    if (this.props.date !== prevProps.date || this.props.country !== prevProps.country || this.props.post !== prevProps.post || this.props.region !== prevProps.region ) {
       this.updateFLights();
     }
   }
 
   private updateFLights() {
-    let endpoint = this.flightsEndPoint(this.props.region, this.props.country, this.props.date);
+    let endpoint = this.flightsEndPoint(this.props.region, this.props.post, this.props.country, this.props.date, this.props.timezone);
     this.getFlightsData(endpoint, this.updateFlightsData)
   }
 
@@ -62,8 +62,8 @@ export default class FlightsTable extends React.Component<IProps, IState> {
     headers: {'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json'}
   };
 
-  public flightsEndPoint(region: string, country: string, filterDate: string) {
-    return "/flights/" + region + "?country=" + country + "&date=" + filterDate
+  public flightsEndPoint(region: string, post: string, country: string, filterDate: string, timezone:string) {
+    return "/flights/" + region + "/" + post + "/" + country + "/"+ filterDate + "/" + timezone
   }
 
   public getFlightsData(endPoint: string, handleResponse: (r: AxiosResponse) => void) {

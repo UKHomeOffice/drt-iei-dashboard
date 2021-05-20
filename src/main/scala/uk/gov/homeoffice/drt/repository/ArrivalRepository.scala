@@ -64,7 +64,7 @@ class ArrivalRepository[F[_] : Sync](val sessionPool: Resource[F, Session[F]]) e
     val query : Query[List[String] ~ LocalDateTime ~ LocalDateTime, ArrivalTableData] =
       sql"""
         select code, number, destination, origin, terminal, status, scheduled, scheduled_departure
-        FROM arrival where origin in(${text.list(origins.size)})and scheduled_departure is NULL and scheduled > $timestamp and scheduled < $timestamp"
+        FROM arrival where origin in(${text.list(origins.size)})and scheduled_departure is NULL and scheduled > $timestamp and scheduled < $timestamp;
        """.query(decoder)
 
     val currentDate: LocalDateTime = LocalDate.now().atStartOfDay()

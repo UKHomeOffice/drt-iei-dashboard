@@ -6,8 +6,8 @@ import Grid from '@material-ui/core/Grid';
 
 interface IState {
   date : string;
-  regionZone : string;
   region : string;
+  post : string;
   country : string;
   timezone : string;
 }
@@ -22,9 +22,9 @@ export default class SearchFilters extends React.Component<IProps, IState> {
     super(props);
 
     this.state = {
-      regionZone : 'Euromed South',
+      region : 'Euromed South',
       country : 'Greece',
-      region : 'athens',
+      post : 'athens',
       date : props.pickedDate,
       timezone : 'UK'
     };
@@ -32,38 +32,38 @@ export default class SearchFilters extends React.Component<IProps, IState> {
   }
 
   render()  {
-      console.log("SearchFilter...."+ this.state.region + +"....." +this.state.country + "....."+ this.state.date + "....." + this.state.timezone)
+      console.log("SearchFilter...."+ this.state.post + +"....." +this.state.country + "....."+ this.state.date + "....." + this.state.timezone)
       return (
           <div>
               <Grid container spacing={3}>
                <Grid item xs={12} sm={3}>
                  <Autocomplete
-                       value = {this.state.regionZone !== null ? {regionZone:this.state.regionZone} : {regionZone:''}}
+                       value = {this.state.region !== null ? {region:this.state.region} : {region:''}}
                        onChange= {(event, newValue) => {
-                           console.log("Region Zone...." +this.state.regionZone + "....."+ newValue)
-                           let {regionZone : newRegionZone} = newValue !== null ? newValue : {regionZone: ''}
-                            this.setState({...this.state, regionZone : newRegionZone })
+                           console.log("Region ...." +this.state.region + "....."+ newValue)
+                           let {region : newRegionZone} = newValue !== null ? newValue : {region: ''}
+                            this.setState({...this.state, region : newRegionZone })
                         }}
-                       id="regionZone-combo-box"
-                       options={regionZones}
-                       getOptionLabel={(option) => option.regionZone}
+                       id="region-combo-box"
+                       options={regions}
+                       getOptionLabel={(option) => option.region}
                        style={{ width: 200 }}
-                       renderInput={(params) => <TextField {...params} label="RegionZone" variant="outlined" />}
+                       renderInput={(params) => <TextField {...params} label="Region" variant="outlined" />}
                      />
                </Grid>
                <Grid item xs={12} sm={3}>
                     <Autocomplete
-                        value = {this.state.region !== null ? {region:this.state.region} : {region:''}}
+                        value = {this.state.post !== null ? {post:this.state.post} : {post:''}}
                         onChange= {(event, newValue) => {
-                            console.log("Region...." +this.state.region + "....."+ newValue)
-                            let {region : newRegion} = newValue !== null ? newValue : {region: ''}
-                             this.setState({...this.state, region : newRegion })
+                            console.log("Post...." +this.state.post + "....."+ newValue)
+                            let {post : newRegion} = newValue !== null ? newValue : {post: ''}
+                             this.setState({...this.state, post : newRegion })
                          }}
-                        id="region-combo-box"
-                        options={regions}
-                        getOptionLabel={(option) => option.region}
+                        id="post-combo-box"
+                        options={posts}
+                        getOptionLabel={(option) => option.post}
                         style={{ width: 200 }}
-                        renderInput={(params) => <TextField {...params} label="Region" variant="outlined" />}
+                        renderInput={(params) => <TextField {...params} label="Post" variant="outlined" />}
                       />
                </Grid>
                <Grid item xs={12} sm={3}>
@@ -97,16 +97,16 @@ export default class SearchFilters extends React.Component<IProps, IState> {
                       />
                </Grid>
               </Grid>
-             <FlightsTable region={this.state.region} country={this.state.country} date={this.props.pickedDate} timezone={this.state.timezone} regionZone={this.state.regionZone}/>
+             <FlightsTable post={this.state.post} country={this.state.country} date={this.props.pickedDate} timezone={this.state.timezone} region={this.state.region}/>
            </div>
       );
   }
 
 }
 
-const regionZones = [
-    { regionZone : 'Euromed North'},
-    { regionZone : 'Euromed South'},
+const regions = [
+    { region : 'Euromed North'},
+    { region : 'Euromed South'},
 
 ]
 const timezones = [
@@ -115,15 +115,15 @@ const timezones = [
     { timezone : 'Local'}
 ]
 
-const regions = [
-    { region : 'athens'},
-    { region : 'benelux'},
-    { region : 'warsaw'},
-    { region : 'berlin'},
-    { region : 'paris'},
-    { region : 'rome'},
-    { region : 'madrid'},
-    { region : 'albania'}
+const posts = [
+    { post : 'athens'},
+    { post : 'benelux'},
+    { post : 'warsaw'},
+    { post : 'berlin'},
+    { post : 'paris'},
+    { post : 'rome'},
+    { post : 'madrid'},
+    { post : 'albania'}
 ]
 
 const countries = [

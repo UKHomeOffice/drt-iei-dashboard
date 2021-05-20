@@ -4,7 +4,6 @@ import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from '@material-ui/pickers';
-import CountryTab from './CountryTab';
 import SearchFilters from './SearchFilters';
 import Grid from '@material-ui/core/Grid';
 import format from 'date-fns/format';
