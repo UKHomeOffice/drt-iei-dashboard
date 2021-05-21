@@ -6,7 +6,7 @@ import uk.gov.homeoffice.drt.repository.ArrivalTableData
 
 case class Arrivals(data: List[Arrival])
 
-case class Arrival(_id: String,
+case class Arrival( _id: String,
                    scheduledArrivalDate: Date,
                    carrierName: String,
                    flightNumber: String,

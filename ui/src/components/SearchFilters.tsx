@@ -108,7 +108,6 @@ export default class SearchFilters extends React.Component<IProps, IState> {
                  <Autocomplete
                        value = {this.state.region !== null ? {region:this.state.region} : {region:''}}
                        onChange= {(event, newValue) => {
-                           console.log("Region ...." +this.state.region + "....."+ newValue)
                            let {region : newRegionZone} = newValue !== null ? newValue : {region: ''}
                             this.setState({...this.state, region : newRegionZone })
                         }}
@@ -123,7 +122,6 @@ export default class SearchFilters extends React.Component<IProps, IState> {
                     <Autocomplete
                         value = {this.state.post !== null ? {post:this.state.post} : {post:''}}
                         onChange= {(event, newValue) => {
-                            console.log("Post...." +this.state.post + "....."+ newValue)
                             let {post : newRegion} = newValue !== null ? newValue : {post: ''}
                              this.setState({...this.state, post : newRegion })
                          }}
@@ -138,7 +136,6 @@ export default class SearchFilters extends React.Component<IProps, IState> {
                     <Autocomplete
                         value = {this.state.country !== null ? {country:this.state.country} : {country:''}}
                         onChange= {(event, newValue) => {
-                            console.log("Country...." +this.state.country + "....."+ newValue)
                             let {country : newCountry} = newValue !== null ? newValue : {country: ''}
                              this.setState({...this.state, country : newCountry })
                          }}
@@ -153,7 +150,6 @@ export default class SearchFilters extends React.Component<IProps, IState> {
                      <Autocomplete
                         value = {this.state.timezone !== null ? {timezone:this.state.timezone} : {timezone:''}}
                         onChange= {(event, newValue) => {
-                            console.log("timezone...." +this.state.timezone + "....."+ newValue)
                             let {timezone : newTimezone} = newValue !== null ? newValue : {timezone: ''}
                              this.setState({...this.state, timezone : newTimezone })
                          }}
@@ -161,7 +157,7 @@ export default class SearchFilters extends React.Component<IProps, IState> {
                         options={timezones}
                         getOptionLabel={(option) => option.timezone}
                         style={{ width: 200 }}
-                        renderInput={(params) => <TextField {...params} label="Timezone" variant="outlined" />}
+                        renderInput={(params) => <TextField {...params} label="Departure Timezone" variant="outlined" />}
                       />
                </Grid>
               </Grid>

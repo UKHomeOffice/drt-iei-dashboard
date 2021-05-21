@@ -11,7 +11,7 @@ interface IProps {
   post: string;
   country: string;
   date: string;
-  timezone:string;
+  timezone: string;
 }
 
 interface IState {
@@ -23,13 +23,12 @@ interface IState {
 export default class FlightsTable extends React.Component<IProps, IState> {
 
   columnsHeaders = [
-    {field: 'id', headerName: "Id", width: 50},
-    {field: 'arrivalAirport', headerName: 'Arrival Airport', width: 150},
-    {field: 'carrierName', headerName: 'Carrier Name', width: 150},
-    {field: 'flightNumber', headerName: 'Carrier Code', width: 150},
+    {field: 'scheduledDepartureTime', headerName: 'Scheduled Departure', width: 200},
     {field: 'origin', headerName: "Departure Airport", width: 150},
-    {field: 'scheduledArrivalDate', headerName: 'Scheduled Arrival (UTC)', width: 200},
-    {field: 'scheduledDepartureTime', headerName: 'Scheduled Departure (UTC+2)', width: 250}
+    {field: 'flightNumber', headerName: 'Carrier Code', width: 150},
+    {field: 'carrierName', headerName: 'Carrier Name', width: 150},
+    {field: 'arrivalAirport', headerName: 'Arrival Airport', width: 150},
+    {field: 'scheduledArrivalDate', headerName: 'Scheduled Arrival (UK)', width: 200}
   ] as ColDef[];
 
   constructor(props: IProps) {
@@ -47,8 +46,8 @@ export default class FlightsTable extends React.Component<IProps, IState> {
   }
 
   componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>, snapshot?: any) {
-    console.log('FlightsTable...componentDidUpdate...' + this.props.country + ' ' +this.props.post + '' +this.props.timezone)
-    if (this.props.date !== prevProps.date || this.props.country !== prevProps.country || this.props.post !== prevProps.post || this.props.region !== prevProps.region ) {
+    console.log('FlightsTable...componentDidUpdate...' + this.props.country + ' ' +this.props.post + ' ' +this.props.timezone)
+    if (this.props.date !== prevProps.date || this.props.country !== prevProps.country || this.props.post !== prevProps.post || this.props.region !== prevProps.region || this.props.timezone !== prevProps.timezone ) {
       this.updateFLights();
     }
   }
@@ -81,7 +80,6 @@ export default class FlightsTable extends React.Component<IProps, IState> {
   }
 
   render() {
-  console.log('FlightsTable...' + this.props.country)
     if (this.state.hasError) {
       throw new Error(this.state.errorMessage);
     } else {
@@ -91,6 +89,5 @@ export default class FlightsTable extends React.Component<IProps, IState> {
         </div>
       );
     }
-
   }
 }
