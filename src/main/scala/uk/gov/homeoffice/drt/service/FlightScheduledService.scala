@@ -50,15 +50,10 @@ class FlightScheduledService[F[_] : Sync](arrivalsRepository: ArrivalRepositoryI
 
 
   def getScheduledDeparture: F[List[ArrivalTableData]] = {
-//    athenPortsCodes.traverse { originPort =>
-//      arrivalsRepository.getArrivalsForOriginAndDate(originPort)
-//    }.map(_.flatten)
-    arrivalsRepository.getArrivalForListOriginAndDate(athenPortsCodes)
+    arrivalsRepository.getArrivalForListOriginAndDate(allPortsCodes)
   }
 
-  val athenPortsCodes: List[String] = DepartureAirport.athenRegionsPortList.flatMap { country =>
-    country.portList.map(_.code.toString)
-  }
+  val allPortsCodes: List[String] = DepartureAirport.getDeparturePortForCountry("All","All")("All") .map(_.code)
 
 
   def insertDepartureTableData(arrivalTableDataF: F[List[ArrivalTableData]]) = {

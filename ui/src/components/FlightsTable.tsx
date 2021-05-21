@@ -28,7 +28,7 @@ export default class FlightsTable extends React.Component<IProps, IState> {
     {field: 'flightNumber', headerName: 'Carrier Code', width: 150},
     {field: 'carrierName', headerName: 'Carrier Name', width: 150},
     {field: 'arrivalAirport', headerName: 'Arrival Airport', width: 150},
-    {field: 'scheduledArrivalDate', headerName: 'Scheduled Arrival (UK)', width: 200}
+    {field: 'scheduledArrivalDate', headerName: 'Scheduled Arrival (UTC)', width: 200}
   ] as ColDef[];
 
   constructor(props: IProps) {
