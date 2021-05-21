@@ -16,7 +16,7 @@ class ArrivalRoutesSpecs extends AsyncFlatSpec with BaseSpec with Matchers {
   AirlineUtil.populateAirlineData
 
   "ArrivalRoutes" should "return arrival flights for Romania" in {
-    val arrivalFlightsResponse = retArrivalFlights(Request[IO](Method.GET, uri"/flights/athens?country=Bulgaria&date=2018-12-21", headers = Headers.of(Header("X-Auth-Roles", "iei-dashboard:view"))))
+    val arrivalFlightsResponse = retArrivalFlights(Request[IO](Method.GET, uri"/flights/Euromed%20South/Athens/Bulgaria/2018-12-21/UK", headers = Headers.of(Header("X-Auth-Roles", "iei-dashboard:view"))))
 
     arrivalFlightsResponse.status mustEqual Status.Ok
     arrivalFlightsResponse.as[String].unsafeRunSync() mustEqual
@@ -25,13 +25,13 @@ class ArrivalRoutesSpecs extends AsyncFlatSpec with BaseSpec with Matchers {
 
   "ArrivalRoutes" should "return empty arrival flights for default" in {
     val arrivalFlightsResponse = retArrivalFlights(Request[IO](Method.GET, uri"/flights/athens", headers = Headers.of(Header("X-Auth-Roles", "iei-dashboard:view"))))
-    arrivalFlightsResponse.status mustEqual Status.Ok
-    arrivalFlightsResponse.as[String].unsafeRunSync() mustEqual """{"data":[]}"""
+    arrivalFlightsResponse.status mustEqual Status.NotFound
+    arrivalFlightsResponse.as[String].unsafeRunSync() mustEqual """Not found"""
   }
 
 
   "ArrivalRoutes" should "return Error with appropriate permission" in {
-    val arrivalFlightsResponse = retArrivalFlights(Request[IO](Method.GET, uri"/flights/athens"))
+    val arrivalFlightsResponse = retArrivalFlights(Request[IO](Method.GET, uri"/flights/Euromed%20South/Athens/Bulgaria/2018-12-21/UK"))
     arrivalFlightsResponse.status mustEqual Status.Forbidden
     arrivalFlightsResponse.as[String].unsafeRunSync() mustEqual """You need appropriate permissions to view the page."""
   }

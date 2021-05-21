@@ -159,6 +159,7 @@ object DepartureAirport {
       case "netherlands" => Netherlands.portList
       case "belgium" => Belgium.portList
       case "luxembourg" => Luxembourg.portList
+      case "all" =>   Netherlands.portList ::: Belgium.portList ::: Luxembourg.portList
       case _ => List.empty
     }
   }
@@ -239,10 +240,9 @@ object DepartureAirport {
       case "athens" => athensDeparturePortsForCountry
       case "madrid" => madridDeparturePortForCountry
       case "albania" => albaniaDeparturePortForCountry
-      case "all" => if (country == "all") beneluxDeparturePortForCountry ::: warsawDeparturePortForCountry ::: berlinDeparturePortForCountry :::
+      case "all" => beneluxDeparturePortForCountry ::: warsawDeparturePortForCountry ::: berlinDeparturePortForCountry :::
         parisDeparturePortForCountry ::: romeDeparturePortForCountry ::: athensDeparturePortsForCountry :::
         madridDeparturePortForCountry ::: albaniaDeparturePortForCountry
-      else List.empty
       case _ => List.empty
 
     }

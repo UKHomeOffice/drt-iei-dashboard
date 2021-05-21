@@ -22,17 +22,85 @@ export default class SearchFilters extends React.Component<IProps, IState> {
     super(props);
 
     this.state = {
-      region : 'Euromed South',
-      country : 'Greece',
-      post : 'athens',
+      region : 'All',
+      country : 'All',
+      post : 'All',
       date : props.pickedDate,
       timezone : 'UK'
     };
 
   }
 
+  componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>, snapshot?: any) {
+        console.log("this.state.region" + this.state.region);
+
+        if(this.state.region !== prevState.region) {
+           this.setState({post : 'All'});
+            switch(this.state.region) {
+               case 'Euromed North' :
+                    regionPosts = euromedNorthPost;
+                    console.log("It is a euromedNorthPost.");
+                break;
+               case 'Euromed South' :
+                 regionPosts = euromedSouthPost;
+                 console.log("It is a euromedSouthPost.");
+                break;
+               case 'All' :
+                   regionPosts = allPosts;
+                   console.log("It is a allPosts.");
+                break;
+            }
+        }
+
+        if (this.state.post !== prevState.post) {
+        this.setState({country : 'All'});
+            switch (this.state.post) {
+                case 'Athens' :
+                    postCountries = athensCountries;
+                    console.log("It is a athens.");
+                    break;
+                case 'Benelux':
+                    postCountries = beneluxCountries;
+                    console.log("It is a beneluxCountries.");
+                    break;
+                case 'Warsaw':
+                    postCountries = warsawCountries;
+                    console.log("It is a warsawCountries.");
+                    break;
+                case 'Berlin':
+                    postCountries = berlinCountries;
+                    console.log("It is a berlinCountries.");
+                    break;
+                case 'Paris':
+                    postCountries = parisCountries;
+                    console.log("It is a parisCountries.");
+                    break;
+                case 'Rome':
+                    postCountries = romeCountries;
+                    console.log("It is a romeCountries.");
+                    break;
+                case 'Madrid':
+                     postCountries = madridCountries;
+                    console.log("It is a madridCountries.");
+                    break;
+                case 'Albania':
+                    postCountries = albaniaCountries;
+                    console.log("It is a albaniaCountries.");
+                    break;
+                case 'All':
+                    postCountries = allCountries;
+                    console.log("It is a all countries.");
+                    break;
+                default:
+                    postCountries = allCountries;
+                    console.log("No such day exists!");
+                    break;
+          }
+      }
+   }
+
   render()  {
-      console.log("SearchFilter...."+ this.state.post + +"....." +this.state.country + "....."+ this.state.date + "....." + this.state.timezone)
+      console.log("SearchFilter...."+ this.state.region + "...." + this.state.post  + "....." +this.state.country + "....."+ this.state.date + "....." + this.state.timezone)
       return (
           <div>
               <Grid container spacing={3}>
@@ -60,7 +128,7 @@ export default class SearchFilters extends React.Component<IProps, IState> {
                              this.setState({...this.state, post : newRegion })
                          }}
                         id="post-combo-box"
-                        options={posts}
+                        options={regionPosts}
                         getOptionLabel={(option) => option.post}
                         style={{ width: 200 }}
                         renderInput={(params) => <TextField {...params} label="Post" variant="outlined" />}
@@ -75,7 +143,7 @@ export default class SearchFilters extends React.Component<IProps, IState> {
                              this.setState({...this.state, country : newCountry })
                          }}
                         id="country-combo-box"
-                        options={countries}
+                        options={postCountries}
                         getOptionLabel={(option) => option.country}
                         style={{ width: 200 }}
                         renderInput={(params) => <TextField {...params} label="Country" variant="outlined" />}
@@ -97,16 +165,19 @@ export default class SearchFilters extends React.Component<IProps, IState> {
                       />
                </Grid>
               </Grid>
-             <FlightsTable post={this.state.post} country={this.state.country} date={this.props.pickedDate} timezone={this.state.timezone} region={this.state.region}/>
+             <FlightsTable region={this.state.region} post={this.state.post} country={this.state.country} date={this.props.pickedDate} timezone={this.state.timezone} />
            </div>
       );
   }
 
 }
 
+
+
 const regions = [
     { region : 'Euromed North'},
     { region : 'Euromed South'},
+    { region : 'All'}
 
 ]
 const timezones = [
@@ -115,19 +186,102 @@ const timezones = [
     { timezone : 'Local'}
 ]
 
-const posts = [
-    { post : 'athens'},
-    { post : 'benelux'},
-    { post : 'warsaw'},
-    { post : 'berlin'},
-    { post : 'paris'},
-    { post : 'rome'},
-    { post : 'madrid'},
-    { post : 'albania'},
-    { post : 'all'}
+const euromedNorthPost = [
+    { post : 'Benelux'},
+    { post : 'Warsaw'},
+    { post : 'Berlin'},
+    { post : 'Paris'},
+    { post : 'All' }
 ]
 
-const countries = [
+const euromedSouthPost = [
+     { post : 'Athens'},
+     { post : 'Rome'},
+     { post : 'Madrid'},
+     { post : 'Albania'},
+     { post : 'All' }
+]
+
+const allPosts = [
+    { post : 'Athens'},
+    { post : 'Benelux'},
+    { post : 'Warsaw'},
+    { post : 'Berlin'},
+    { post : 'Paris'},
+    { post : 'Rome'},
+    { post : 'Madrid'},
+    { post : 'Albania'},
+    { post : 'All'}
+]
+
+const athensCountries = [
+  { country: 'Greece'},
+  { country: 'Cyprus'},
+  { country: 'Croatia'},
+  { country: 'Slovenia'},
+  { country: 'Bulgaria'},
+  { country: 'Romania' },
+  { country: 'Moldova' }
+]
+
+const beneluxCountries = [
+  { country: 'Netherlands'},
+  { country: 'Belgium'},
+  { country: 'Luxembourg'}
+]
+
+const warsawCountries = [
+  { country: 'Poland'},
+  { country: 'Czech Republic'},
+  { country: 'Slovakia'},
+  { country: 'Ukraine'},
+  { country: 'Russia'},
+  { country: 'Belarus'},
+  { country: 'Latvia'},
+  { country: 'Estonia'},
+  { country: 'Lithuania'},
+  { country: 'Iceland'}
+]
+
+const berlinCountries = [
+  { country: 'Germany'},
+  { country: 'Austria'},
+  { country: 'Switzerland'},
+  { country: 'Liechenstein'},
+  { country: 'Finland'},
+  { country: 'Denmark'},
+  { country: 'Norway'},
+  { country: 'Sweden'}
+]
+
+const parisCountries = [
+  { country: 'France'},
+  { country: 'Tunisia'},
+  { country: 'Morocco'},
+  { country: 'Algeria'},
+  { country: 'Basel Mulhouse'}
+]
+
+const romeCountries = [
+  { country: 'Italy'},
+  { country: 'Malta'}
+]
+
+const madridCountries = [
+   { country: 'Spain'},
+   { country: 'Portugual'}
+]
+
+const albaniaCountries = [
+  { country: 'Albania'},
+  { country: 'Serbia'},
+  { country: 'North Macedonia'},
+  { country: 'Bosnia'},
+  { country: 'Kosovo'},
+  { country: 'Montenegro'}
+]
+
+const allCountries = [
   { country: 'Netherlands'},
   { country: 'Belgium'},
   { country: 'Luxembourg'},
@@ -173,3 +327,6 @@ const countries = [
   { country: 'Montenegro'},
   { country: 'All'}
 ];
+
+let regionPosts = allPosts
+let postCountries = allCountries
