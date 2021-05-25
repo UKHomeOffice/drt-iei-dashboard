@@ -14,20 +14,21 @@ class FlightScheduledService[F[_] : Sync](arrivalsRepository: ArrivalRepositoryI
   def getFlightsDetail(requestedDetails: FlightsRequest): F[List[ArrivalTableDataIndex]] = {
     val requestedDate = `yyyy-MM-dd_parse_toLocalDate`(requestedDetails.date).atStartOfDay()
     val portList: List[Port] = DepartureAirport.getDeparturePortForCountry(requestedDetails.region,requestedDetails.post)(requestedDetails.country)
-    val arrivalFlights = arrivalsRepository.findArrivalsForADate(requestedDate).map(_.filter(a => portList.map(_.code) contains a.origin))
-    val arrivalFlightsWithScheduledDeparture: F[List[ArrivalTableData]] = arrivalFlights.map(_.filterNot(_.scheduled_departure.isEmpty))
-    val arrivalFlightsWithoutScheduledDeparture: F[List[ArrivalTableData]] = arrivalFlights.map(_.filter(_.scheduled_departure.isEmpty))
-
-    val amendArrivalFlightsData: F[List[ArrivalTableData]] = arrivalFlightsWithoutScheduledDeparture.flatMap(_.traverse { arrivalTableData =>
-      departureRepository.selectScheduleDepartureTableWithOutDeparture(arrivalTableData).map(_.headOption).map { d =>
-        if (d.nonEmpty)
-          arrivalTableData.copy(scheduled_departure = Option(d.head.scheduled_departure))
-        else arrivalTableData
-      }
-    })
-
-    val combined: F[List[ArrivalTableData]] = arrivalFlightsWithScheduledDeparture.map(a => amendArrivalFlightsData.map(b => Semigroup[List[ArrivalTableData]].combine(a, b))).flatten
-    combined.map(_.zipWithIndex.map(a => ArrivalTableDataIndex(a._1, a._2)))
+    val arrivalFlights: F[List[ArrivalTableData]] = arrivalsRepository.findArrivalsForADate(requestedDate).map(_.filter(a => portList.map(_.code) contains a.origin))
+//    val arrivalFlightsWithScheduledDeparture: F[List[ArrivalTableData]] = arrivalFlights.map(_.filterNot(_.scheduled_departure.isEmpty))
+//    val arrivalFlightsWithoutScheduledDeparture: F[List[ArrivalTableData]] = arrivalFlights.map(_.filter(_.scheduled_departure.isEmpty))
+//
+//    val amendArrivalFlightsData: F[List[ArrivalTableData]] = arrivalFlightsWithoutScheduledDeparture.flatMap(_.traverse { arrivalTableData =>
+//      departureRepository.selectScheduleDepartureTableWithOutDeparture(arrivalTableData).map(_.headOption).map { d =>
+//        if (d.nonEmpty)
+//          arrivalTableData.copy(scheduled_departure = Option(d.head.scheduled_departure))
+//        else arrivalTableData
+//      }
+//    })
+//
+//    val combined: F[List[ArrivalTableData]] = arrivalFlightsWithScheduledDeparture.map(a => amendArrivalFlightsData.map(b => Semigroup[List[ArrivalTableData]].combine(a, b))).flatten
+//    combined.map(_.zipWithIndex.map(a => ArrivalTableDataIndex(a._1, a._2)))
+    arrivalFlights.map(_.zipWithIndex.map(a => ArrivalTableDataIndex(a._1, a._2)))
 
   }
 
@@ -61,4 +62,8 @@ class FlightScheduledService[F[_] : Sync](arrivalsRepository: ArrivalRepositoryI
     insertDepartureTableDataF.map(departureRepository.insertDepartureData(_)).flatten
   }
 
+
+  def updateScheduledDepartureForArrival(arrivalTableDataF: F[List[ArrivalTableData]]) = {
+    arrivalTableDataF.flatMap(arrivalsRepository.updateDepartureDate(_))
+  }
 }
