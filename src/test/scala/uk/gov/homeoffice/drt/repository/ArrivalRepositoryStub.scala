@@ -1,10 +1,10 @@
 package uk.gov.homeoffice.drt.repository
 
 import java.time.LocalDateTime
-
 import cats.effect.{Resource, Sync}
 import cats.implicits._
 import skunk.Session
+import skunk.data.Completion
 import uk.gov.homeoffice.drt.utils.DateUtil
 
 class ArrivalRepositoryStub[F[_] : Sync] extends ArrivalRepositoryI[F] {
@@ -160,5 +160,8 @@ class ArrivalRepositoryStub[F[_] : Sync] extends ArrivalRepositoryI[F] {
   override def getArrivalsForOriginAndDate(origin: String): F[List[ArrivalTableData]] = ???
 
   override def getArrivalForListOriginAndDate(origins: List[String]): F[List[ArrivalTableData]] = ???
+
+  override def updateDepartureDate(arrivals: List[ArrivalTableData]): F[List[Completion]] = ???
+
 
 }

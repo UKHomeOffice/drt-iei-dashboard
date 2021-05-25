@@ -62,26 +62,26 @@ class FlightScheduledServiceSpecs extends AsyncFlatSpec with Matchers with Scala
   }
 
 
-  "Arrival" should "return arrival details with scheduled Departure date when departure time is present in departure table but not in arrival table" in {
-    val arrivalService: FlightScheduledService[IO] = context
-
-    val requestedDetails = FlightsRequest("Euromed South","Athens", "Moldova", "2018-12-22","UTC")
-
-    val expectedResult = List(Arrival(
-      _id = "1",
-      scheduledArrivalDate = DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toDate`("2018-12-22 21:35:0"),
-      carrierName = "British Airways",
-      flightNumber = "BA6068",
-      arrivingAirport = "BRG",
-      origin = "KIV",
-      scheduledDepartureTime = Some(DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toDate`("2018-12-22 17:35:00"))
-    ))
-
-    val arrivalTableData = arrivalService.getFlightsDetail(requestedDetails)
-    val actualResult = arrivalService.transformArrivals(arrivalTableData).unsafeRunSync()
-
-    actualResult mustEqual expectedResult
-  }
+//  "Arrival" should "return arrival details with scheduled Departure date when departure time is present in departure table but not in arrival table" in {
+//    val arrivalService: FlightScheduledService[IO] = context
+//
+//    val requestedDetails = FlightsRequest("Euromed South","Athens", "Moldova", "2018-12-22","UTC")
+//
+//    val expectedResult = List(Arrival(
+//      _id = "1",
+//      scheduledArrivalDate = DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toDate`("2018-12-22 21:35:0"),
+//      carrierName = "British Airways",
+//      flightNumber = "BA6068",
+//      arrivingAirport = "BRG",
+//      origin = "KIV",
+//      scheduledDepartureTime = Some(DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toDate`("2018-12-22 17:35:00"))
+//    ))
+//
+//    val arrivalTableData = arrivalService.getFlightsDetail(requestedDetails)
+//    val actualResult = arrivalService.transformArrivals(arrivalTableData).unsafeRunSync()
+//
+//    actualResult mustEqual expectedResult
+//  }
 
   "Arrival" should "return arrival details without scheduled Departure date when departure time is not present in departure table and arrival table" in {
     val arrivalService: FlightScheduledService[IO] = context
