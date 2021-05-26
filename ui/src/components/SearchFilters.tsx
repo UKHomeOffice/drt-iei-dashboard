@@ -118,9 +118,9 @@ export default class SearchFilters extends React.Component<IProps, IState> {
               <Grid container spacing={3}>
                <Grid item xs={12} sm={3}>
                  <Autocomplete
-                       value = {this.state.region !== null ? {region:this.state.region} : {region:''}}
+                       value = {this.state.region !== null ? {region:this.state.region} : {region:'All'}}
                        onChange= {(event, newValue) => {
-                           let {region : newRegionZone} = newValue !== null ? newValue : {region: ''}
+                           let {region : newRegionZone} = newValue !== null ? newValue : {region: 'All'}
                             this.setState({...this.state, region : newRegionZone })
                         }}
                        id="region-combo-box"
@@ -132,9 +132,9 @@ export default class SearchFilters extends React.Component<IProps, IState> {
                </Grid>
                <Grid item xs={12} sm={3}>
                     <Autocomplete
-                        value = {this.state.post !== null ? {post:this.state.post} : {post:''}}
+                        value = {this.state.post !== null ? {post:this.state.post} : {post:'All'}}
                         onChange= {(event, newValue) => {
-                            let {post : newRegion} = newValue !== null ? newValue : {post: ''}
+                            let {post : newRegion} = newValue !== null ? newValue : {post: 'All'}
                              this.setState({...this.state, post : newRegion })
                          }}
                         id="post-combo-box"
@@ -146,9 +146,9 @@ export default class SearchFilters extends React.Component<IProps, IState> {
                </Grid>
                <Grid item xs={12} sm={3}>
                     <Autocomplete
-                        value = {this.state.country !== null ? {country:this.state.country} : {country:''}}
+                        value = {this.state.country !== null ? {country:this.state.country} : {country:'All'}}
                         onChange= {(event, newValue) => {
-                            let {country : newCountry} = newValue !== null ? newValue : {country: ''}
+                            let {country : newCountry} = newValue !== null ? newValue : {country: 'All'}
                              this.setState({...this.state, country : newCountry })
                          }}
                         id="country-combo-box"
@@ -160,9 +160,9 @@ export default class SearchFilters extends React.Component<IProps, IState> {
                </Grid>
                <Grid item xs={12} sm={3}>
                      <Autocomplete
-                        value = {this.state.timezone !== null ? {timezone:this.state.timezone} : {timezone:''}}
+                        value = {this.state.timezone !== null ? {timezone:this.state.timezone} : {timezone:'UTC'}}
                         onChange= {(event, newValue) => {
-                            let {timezone : newTimezone} = newValue !== null ? newValue : {timezone: ''}
+                            let {timezone : newTimezone} = newValue !== null ? newValue : {timezone: 'UTC'}
                              this.setState({...this.state, timezone : newTimezone })
                          }}
                         id="timezone-combo-box"
