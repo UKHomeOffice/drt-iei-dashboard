@@ -10,9 +10,7 @@ import org.http4s.{HttpRoutes, Response, Status}
 import uk.gov.homeoffice.drt.applicative.ArrivalFlights
 import uk.gov.homeoffice.drt.coders.ArrivalCoder._
 import uk.gov.homeoffice.drt.model.FlightsRequest
-import uk.gov.homeoffice.drt.utils.DateUtil.`yyyy-MM-dd_format_toString`
 
-import java.util.Date
 import scala.util.{Failure, Success, Try}
 
 object ArrivalRoutes {
@@ -27,8 +25,7 @@ object ArrivalRoutes {
           val xAuthRoles: List[String] = req.headers.get(CaseInsensitiveString("X-Auth-Roles")).map(_.value.split(",").toList).getOrElse(List.empty)
           val requiredPermissions: Boolean = xAuthRoles.exists(p => permissions.contains(p))
           if (requiredPermissions) {
-//            val country = params.getOrElse("country", List("Greece")).head
-//            val date = params.getOrElse("date", List(`yyyy-MM-dd_format_toString`(new Date()))).head
+            Logger[F].info(s"Request details $region $post $departureCountry $filterDate $timezone")
             for {
               arrivals <- H.flights(FlightsRequest(region, post, departureCountry, filterDate, timezone))
               resp <- Ok(arrivals)

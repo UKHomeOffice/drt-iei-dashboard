@@ -2,7 +2,7 @@ package uk.gov.homeoffice.drt.utils
 
 import java.text.SimpleDateFormat
 import java.time.format.DateTimeFormatter
-import java.time.{LocalDate, LocalDateTime, ZoneId, ZoneOffset}
+import java.time.{LocalDate, LocalDateTime, ZoneId, ZoneOffset, ZonedDateTime}
 import java.util.Date
 
 object DateUtil {
@@ -35,8 +35,10 @@ object DateUtil {
 
   val `yyyy-MM-dd_formatLocalDate_toString`: LocalDate => String = date => `yyyy-MM-dd_LocalDateFormatter`.format(date)
 
-  val UTCTimeZoneConvertDate: LocalDateTime => Date = localDate => Date.from(localDate.atZone(ZoneId.of("UTC")).toInstant())
+  val UTCTimeZoneConvertDate: LocalDateTime => Date = localDateTime => Date.from(localDateTime.atZone(ZoneId.of("UTC")).toInstant())
 
-  val `UTC+2TimeZoneConvertDate`: LocalDateTime => Date = localDate => Date.from(localDate.atZone(ZoneId.of("UTC+2")).toInstant())
+  val `UTC+2TimeZoneConvertDate`: LocalDateTime => Date = localDateTime => Date.from(localDateTime.atZone(ZoneId.of("UTC+2")).toInstant())
+
+  val ZonedTimeDateToDate : ZonedDateTime => Date = zonedDateTime => Date.from(zonedDateTime.toInstant)
 
 }

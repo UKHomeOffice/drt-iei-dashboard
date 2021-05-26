@@ -1,47 +1,44 @@
 package uk.gov.homeoffice.drt.service
 
 import cats.effect.Sync
-import cats.kernel.Semigroup
 import cats.syntax.all._
 import uk.gov.homeoffice.drt.model
 import uk.gov.homeoffice.drt.model._
 import uk.gov.homeoffice.drt.repository.{ArrivalRepositoryI, ArrivalTableData, DepartureRepositoryI, DepartureTableData}
-import uk.gov.homeoffice.drt.utils.AirlineUtil
 import uk.gov.homeoffice.drt.utils.DateUtil._
+import uk.gov.homeoffice.drt.utils.{AirlineUtil, AirportUtil}
+
+import java.time.{LocalDateTime, ZoneId, ZonedDateTime}
 
 class FlightScheduledService[F[_] : Sync](arrivalsRepository: ArrivalRepositoryI[F], departureRepository: DepartureRepositoryI[F]) {
 
   def getFlightsDetail(requestedDetails: FlightsRequest): F[List[ArrivalTableDataIndex]] = {
     val requestedDate = `yyyy-MM-dd_parse_toLocalDate`(requestedDetails.date).atStartOfDay()
-    val portList: List[Port] = DepartureAirport.getDeparturePortForCountry(requestedDetails.region,requestedDetails.post)(requestedDetails.country)
+    val portList: List[Port] = DepartureAirport.getDeparturePortForCountry(requestedDetails.region, requestedDetails.post)(requestedDetails.country)
     val arrivalFlights: F[List[ArrivalTableData]] = arrivalsRepository.findArrivalsForADate(requestedDate).map(_.filter(a => portList.map(_.code) contains a.origin))
-//    val arrivalFlightsWithScheduledDeparture: F[List[ArrivalTableData]] = arrivalFlights.map(_.filterNot(_.scheduled_departure.isEmpty))
-//    val arrivalFlightsWithoutScheduledDeparture: F[List[ArrivalTableData]] = arrivalFlights.map(_.filter(_.scheduled_departure.isEmpty))
-//
-//    val amendArrivalFlightsData: F[List[ArrivalTableData]] = arrivalFlightsWithoutScheduledDeparture.flatMap(_.traverse { arrivalTableData =>
-//      departureRepository.selectScheduleDepartureTableWithOutDeparture(arrivalTableData).map(_.headOption).map { d =>
-//        if (d.nonEmpty)
-//          arrivalTableData.copy(scheduled_departure = Option(d.head.scheduled_departure))
-//        else arrivalTableData
-//      }
-//    })
-//
-//    val combined: F[List[ArrivalTableData]] = arrivalFlightsWithScheduledDeparture.map(a => amendArrivalFlightsData.map(b => Semigroup[List[ArrivalTableData]].combine(a, b))).flatten
-//    combined.map(_.zipWithIndex.map(a => ArrivalTableDataIndex(a._1, a._2)))
     arrivalFlights.map(_.zipWithIndex.map(a => ArrivalTableDataIndex(a._1, a._2)))
 
   }
 
-  def transformArrivals(arrivalsTableData: F[List[ArrivalTableDataIndex]]): F[List[Arrival]] = {
+  def transformArrivals(requestedDetails: FlightsRequest, arrivalsTableData: F[List[ArrivalTableDataIndex]]): F[List[Arrival]] = {
     arrivalsTableData.map(_.map(a =>
       model.Arrival((a.index + 1).toString,
-        UTCTimeZoneConvertDate(a.arrivalsTableData.scheduled),
-        carrierName(a.arrivalsTableData.code,
-          a.arrivalsTableData.number.toString),
+        ZonedTimeDateToDate(localTimeDateAccordingToTimezone(requestedDetails, a.arrivalsTableData.scheduled)),
+        carrierName(a.arrivalsTableData.code, a.arrivalsTableData.number.toString),
         a.arrivalsTableData.code.toString,
         a.arrivalsTableData.destination,
         a.arrivalsTableData.origin,
-        a.arrivalsTableData.scheduled_departure.map(`UTC+2TimeZoneConvertDate`(_)))))
+        a.arrivalsTableData.scheduled_departure.map(d => ZonedTimeDateToDate(localTimeDateAccordingToTimezone(requestedDetails, d))))))
+  }
+
+  def localTimeDateAccordingToTimezone(requestedDetails: FlightsRequest, localtime: LocalDateTime): ZonedDateTime = {
+    (requestedDetails.country, requestedDetails.timezone.toLowerCase) match {
+      case (_, "uk") => ZonedDateTime.of(localtime, ZoneId.of("Europe/London"))
+      case ("All", "local") => ZonedDateTime.of(localtime, ZoneId.of("UTC"))
+      case (country, "local") => ZonedDateTime.of(localtime, ZoneId.of(AirportUtil.getTimezoneForCountry(country)))
+      case (_, _) => ZonedDateTime.of(localtime, ZoneId.of("UTC"))
+    }
+
   }
 
   def carrierName(code: String, number: String): String = {
@@ -54,7 +51,7 @@ class FlightScheduledService[F[_] : Sync](arrivalsRepository: ArrivalRepositoryI
     arrivalsRepository.getArrivalForListOriginAndDate(allPortsCodes)
   }
 
-  val allPortsCodes: List[String] = DepartureAirport.getDeparturePortForCountry("All","All")("All") .map(_.code)
+  val allPortsCodes: List[String] = DepartureAirport.getDeparturePortForCountry("All", "All")("All").map(_.code)
 
 
   def insertDepartureTableData(arrivalTableDataF: F[List[ArrivalTableData]]) = {

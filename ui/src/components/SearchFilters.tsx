@@ -26,16 +26,16 @@ export default class SearchFilters extends React.Component<IProps, IState> {
       country : 'All',
       post : 'All',
       date : props.pickedDate,
-      timezone : 'UK'
+      timezone : 'UTC'
     };
 
   }
 
   componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>, snapshot?: any) {
         console.log("this.state.region" + this.state.region);
-
         if(this.state.region !== prevState.region) {
            this.setState({post : 'All'});
+           this.setState({timezone : 'UTC'});
             switch(this.state.region) {
                case 'Euromed North' :
                     regionPosts = euromedNorthPost;
@@ -54,6 +54,7 @@ export default class SearchFilters extends React.Component<IProps, IState> {
 
         if (this.state.post !== prevState.post) {
         this.setState({country : 'All'});
+        this.setState({timezone : 'UTC'});
             switch (this.state.post) {
                 case 'Athens' :
                     postCountries = athensCountries;
@@ -101,6 +102,17 @@ export default class SearchFilters extends React.Component<IProps, IState> {
 
   render()  {
       console.log("SearchFilter...."+ this.state.region + "...." + this.state.post  + "....." +this.state.country + "....."+ this.state.date + "....." + this.state.timezone)
+       switch(this.state.country) {
+            case 'All' :
+               timezones = nonLocalTimezones;
+               console.log("this is All country");
+               break;
+            default :
+               timezones = allTimezones;
+               console.log("this is local country " + this.state.country);
+               break;
+
+       };
       return (
           <div>
               <Grid container spacing={3}>
@@ -176,10 +188,16 @@ const regions = [
     { region : 'All'}
 
 ]
-const timezones = [
+
+const allTimezones = [
     { timezone : 'UK'},
     { timezone : 'UTC'},
     { timezone : 'Local'}
+]
+
+const nonLocalTimezones = [
+    { timezone : 'UK'},
+    { timezone : 'UTC'}
 ]
 
 const euromedNorthPost = [
@@ -334,3 +352,4 @@ const allCountries = [
 
 let regionPosts = allPosts
 let postCountries = allCountries
+let timezones = nonLocalTimezones
