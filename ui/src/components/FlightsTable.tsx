@@ -75,7 +75,6 @@ export default class FlightsTable extends React.Component<IProps, IState> {
   updateFlightsData = (response: AxiosResponse) => {
     let arrivalsData = response.data as ArrivalsData;
     let arrivalRows = arrivalsData.data as RowData[]
-
     this.setState({...this.state, arrivalRows: arrivalRows});
   }
 

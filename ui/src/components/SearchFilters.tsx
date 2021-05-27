@@ -180,8 +180,6 @@ export default class SearchFilters extends React.Component<IProps, IState> {
 
 }
 
-
-
 const regions = [
     { region : 'Euromed North'},
     { region : 'Euromed South'},

@@ -28,6 +28,7 @@ class FlightScheduledService[F[_] : Sync](arrivalsRepository: ArrivalRepositoryI
         a.arrivalsTableData.code.toString,
         a.arrivalsTableData.destination,
         a.arrivalsTableData.origin,
+        a.arrivalsTableData.status,
         a.arrivalsTableData.scheduled_departure.map(d => ZonedTimeDateToDate(localTimeDateAccordingToTimezone(requestedDetails, d))))))
   }
 

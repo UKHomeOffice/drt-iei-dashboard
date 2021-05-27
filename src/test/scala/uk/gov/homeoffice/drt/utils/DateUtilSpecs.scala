@@ -1,10 +1,9 @@
 package uk.gov.homeoffice.drt.utils
 
-import java.time.Month
-
-import cats.NotNull
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.must.Matchers
+
+import java.time.Month
 
 class DateUtilSpecs extends AsyncFlatSpec with Matchers {
 
@@ -37,8 +36,8 @@ class DateUtilSpecs extends AsyncFlatSpec with Matchers {
   "Date format" should "give string of `yyyy-MM-dd HH:mm:ss` format" in {
     val date1 = DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toDate`("2018-11-23 21:35:00")
 
-    val dateString = DateUtil.`yyyy-MM-dd HH:mm:ss_format_toString`(date1)
-    dateString mustEqual "2018-11-23 21:35:00"
+    val dateString = DateUtil.`yyyy-MM-dd HH:mm_format_toString`(date1)
+    dateString mustEqual "2018-11-23 21:35"
   }
 
   "LocalDate format" should "give string of `yyyy-MM-dd` format" in {

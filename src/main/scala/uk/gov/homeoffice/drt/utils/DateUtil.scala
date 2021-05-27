@@ -2,14 +2,14 @@ package uk.gov.homeoffice.drt.utils
 
 import java.text.SimpleDateFormat
 import java.time.format.DateTimeFormatter
-import java.time.{LocalDate, LocalDateTime, ZoneId, ZoneOffset, ZonedDateTime}
+import java.time._
 import java.util.Date
 
 object DateUtil {
 
   val `yyyy-MM-dd HH:mm:ss_parse_toDate`: String => Date = date => new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date)
 
-  val `yyyy-MM-dd HH:mm:ss_format_toString`: Date => String = date => new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date)
+  val `yyyy-MM-dd HH:mm_format_toString`: Date => String = date => new SimpleDateFormat("yyyy-MM-dd HH:mm").format(date)
 
   val `yyyy-MM-dd_format_toString`: Date => String = date => new SimpleDateFormat("yyyy-MM-dd").format(date)
 
@@ -39,6 +39,6 @@ object DateUtil {
 
   val `UTC+2TimeZoneConvertDate`: LocalDateTime => Date = localDateTime => Date.from(localDateTime.atZone(ZoneId.of("UTC+2")).toInstant())
 
-  val ZonedTimeDateToDate : ZonedDateTime => Date = zonedDateTime => Date.from(zonedDateTime.toInstant)
+  val ZonedTimeDateToDate: ZonedDateTime => Date = zonedDateTime => Date.from(zonedDateTime.toInstant)
 
 }
