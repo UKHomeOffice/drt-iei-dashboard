@@ -29,7 +29,7 @@ class FlightScheduledServiceSpecs extends AsyncFlatSpec with Matchers with Scala
       flightNumber = "EZX6062",
       arrivingAirport = "BRB",
       origin = "ATH",
-      status = "ACL Forecast",
+      status = "Forecast",
       scheduledDepartureTime = Some(DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toDate`("2018-11-23 21:35:00"))
     ))
 
@@ -53,7 +53,7 @@ class FlightScheduledServiceSpecs extends AsyncFlatSpec with Matchers with Scala
       flightNumber = "BA6067",
       arrivingAirport = "BRG",
       origin = "SOF",
-      status = "ACL Forecast",
+      status = "Forecast",
       scheduledDepartureTime = Some(DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toDate`("2018-11-23 21:35:00"))
     ))
 
@@ -75,7 +75,7 @@ class FlightScheduledServiceSpecs extends AsyncFlatSpec with Matchers with Scala
       flightNumber = "BA6069",
       arrivingAirport = "BRG",
       origin = "KIV",
-      status = "ACL Forecast",
+      status = "Forecast",
       scheduledDepartureTime = None
     ))
 

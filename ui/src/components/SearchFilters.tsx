@@ -173,7 +173,7 @@ export default class SearchFilters extends React.Component<IProps, IState> {
                       />
                </Grid>
               </Grid>
-             <FlightsTable region={this.state.region} post={this.state.post} country={this.state.country} date={this.props.pickedDate} timezone={this.state.timezone} />
+             <FlightsTable region={this.state.region} post={this.state.post} country={this.state.country} date={this.props.pickedDate} timezone={this.state.timezone}/>
            </div>
       );
   }

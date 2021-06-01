@@ -1,12 +1,15 @@
 import React from 'react';
-import {DataGrid, ColDef, RowData} from '@material-ui/data-grid';
+import {DataGrid, GridRowModel ,getThemePaletteMode } from '@material-ui/data-grid';
 import axios, {AxiosRequestConfig, AxiosResponse} from "axios";
+import { withStyles, createStyles, createMuiTheme, darken, lighten, Theme } from '@material-ui/core/styles';
+import { WithStyles } from '@material-ui/core';
+
 
 interface ArrivalsData {
-  data: RowData[];
+  data: GridRowModel[];
 }
 
-interface IProps {
+interface IProps extends WithStyles<typeof useStyles>  {
   region : string;
   post: string;
   country: string;
@@ -15,12 +18,54 @@ interface IProps {
 }
 
 interface IState {
-  arrivalRows?: RowData[]
+  arrivalRows?: GridRowModel[]
   hasError: boolean;
   errorMessage: string;
 }
 
-export default class FlightsTable extends React.Component<IProps, IState> {
+const getBackgroundColor = (color:string,palette:any) => getThemePaletteMode(palette) === 'dark' ? darken(color, 0.6): lighten(color, 0.6);
+
+const getHoverBackgroundColor = (color:string,palette:any) => getThemePaletteMode(palette) === 'dark'? darken(color, 0.5) : lighten(color, 0.5);
+
+const defaultTheme = createMuiTheme();
+const useStyles = (theme: Theme) => createStyles(
+{
+      root: {
+        '& .super-app-theme--Deleted': {
+          backgroundColor: getBackgroundColor(theme.palette.warning.main,theme.palette),
+          '&:hover': {
+            backgroundColor: getHoverBackgroundColor(theme.palette.warning.main,theme.palette),
+          },
+        },
+        '& .super-app-theme--Cancelled': {
+          backgroundColor: getBackgroundColor(theme.palette.error.main,theme.palette),
+          '&:hover': {
+            backgroundColor: getHoverBackgroundColor(theme.palette.error.main,theme.palette),
+          },
+        },
+        '& .super-app-theme--Forecast': {
+          backgroundColor: getBackgroundColor(theme.palette.info.main,theme.palette),
+          '&:hover': {
+            backgroundColor: getHoverBackgroundColor(theme.palette.info.main,theme.palette),
+          },
+        },
+        '& .super-app-theme--Active': {
+                  backgroundColor: getBackgroundColor(theme.palette.success.main,theme.palette),
+                  '&:hover': {
+                    backgroundColor: getHoverBackgroundColor(theme.palette.success.main,theme.palette),
+             }
+         },
+        '& .super-app-theme--Others': {
+          backgroundColor: getBackgroundColor(theme.palette.primary.main,theme.palette),
+          '&:hover': {
+            backgroundColor: getHoverBackgroundColor(theme.palette.primary.main,theme.palette),
+          },
+        },
+        defaultTheme
+      }
+});
+
+class FlightsTable extends React.Component<IProps, IState> {
 
   columnsHeaders = [
     {field: 'scheduledDepartureTime', headerName: 'Scheduled Departure', width: 200},
@@ -28,8 +73,10 @@ export default class FlightsTable extends React.Component<IProps, IState> {
     {field: 'flightNumber', headerName: 'Carrier Code', width: 150},
     {field: 'carrierName', headerName: 'Carrier Name', width: 150},
     {field: 'arrivalAirport', headerName: 'Arrival Airport', width: 150},
-    {field: 'scheduledArrivalDate', headerName: 'Scheduled Arrival', width: 200}
-  ] as ColDef[];
+    {field: 'scheduledArrivalDate', headerName: 'Scheduled Arrival', width: 200},
+    {field: 'status', headerName: 'Status', width: 200}
+
+  ]
 
   constructor(props: IProps) {
     super(props);
@@ -38,7 +85,7 @@ export default class FlightsTable extends React.Component<IProps, IState> {
       arrivalRows: [],
       hasError: false,
       errorMessage: ''
-    };
+    }
   }
 
   componentDidMount() {
@@ -74,7 +121,7 @@ export default class FlightsTable extends React.Component<IProps, IState> {
 
   updateFlightsData = (response: AxiosResponse) => {
     let arrivalsData = response.data as ArrivalsData;
-    let arrivalRows = arrivalsData.data as RowData[]
+    let arrivalRows = arrivalsData.data as GridRowModel[]
     this.setState({...this.state, arrivalRows: arrivalRows});
   }
 
@@ -83,10 +130,12 @@ export default class FlightsTable extends React.Component<IProps, IState> {
       throw new Error(this.state.errorMessage);
     } else {
       return (
-        <div style={{height: 800 ,width: '100%'}}>
-             <DataGrid rows={this.state.arrivalRows as RowData[]} columns={this.columnsHeaders} pageSize={25}/>
+        <div style={{height: 800 ,width: '100%'}} className={this.props.classes.root}>
+             <DataGrid rows={this.state.arrivalRows as GridRowModel[]} columns={this.columnsHeaders} getRowClassName={(params) => `super-app-theme--${params.getValue(params.id,'status')}`} pageSize={25}/>
         </div>
       );
     }
   }
 }
+
+export default withStyles(useStyles)(FlightsTable)

@@ -28,10 +28,23 @@ class FlightScheduledService[F[_] : Sync](arrivalsRepository: ArrivalRepositoryI
         a.arrivalsTableData.code.toString,
         a.arrivalsTableData.destination,
         a.arrivalsTableData.origin,
-        a.arrivalsTableData.status,
+        getDisplayStatus(a.arrivalsTableData.status),
         a.arrivalsTableData.scheduled_departure.map(d => ZonedTimeDateToDate(localTimeDateAccordingToTimezone(requestedDetails, d))))))
   }
 
+  def getDisplayStatus(status:String) :String =  status match {
+    case "ACL Forecast" | "Port Forecast" => "Forecast"
+    case "CANCELLED" | "Cancelled" | "Canceled" => "Cancelled"
+    case "Deleted / Removed Flight Record" => "Deleted"
+    case "DIVERTED" | "Diverted" |"Arrival diverted away from airport"| "Arrival is on block at a stand" |"On Approach" |
+         "First Bag Delivered" | "Last Bag Delivered" |"Active" | "LANDED" | "Arrived" | "ARRIVED ON STAND" |
+         "InApproach" | "Landed" | "ON APPROACH" | "Delayed" | "Zoned" | "Zoning" | "Final Approach" |
+          "Scheduled" | "EXPECTED" |"BAGGAGE IN HALL" | "Redirected" | "Airborne from preceding airport" |
+          "Flight is on schedule" | "LAST BAG DELIVERED" | "On Chocks" |  "Finals"  | "On Finals" => "Active"
+    case "RESCHEDULED" | "Estimated" | "Calculated" | "Operated" => "Calculated"
+    case _ => "Others"
+
+  }
   def localTimeDateAccordingToTimezone(requestedDetails: FlightsRequest, localtime: LocalDateTime): ZonedDateTime = {
     (requestedDetails.country, requestedDetails.timezone.toLowerCase) match {
       case (_, "uk") => ZonedDateTime.of(localtime, ZoneId.of("Europe/London"))

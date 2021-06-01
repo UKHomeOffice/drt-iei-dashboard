@@ -20,7 +20,7 @@ class ArrivalRoutesSpecs extends AsyncFlatSpec with BaseSpec with Matchers {
 
     arrivalFlightsResponse.status mustEqual Status.Ok
     arrivalFlightsResponse.as[String].unsafeRunSync() mustEqual
-      """{"data":[{"id":"1","origin":"SOF","arrivalAirport":"BRG","flightNumber":"BA6067","carrierName":"British Airways","status":"ACL Forecast","scheduledArrivalDate":"2018-12-21 21:35","scheduledDepartureTime":"2018-11-23 21:35"}]}"""
+      """{"data":[{"id":"1","origin":"SOF","arrivalAirport":"BRG","flightNumber":"BA6067","carrierName":"British Airways","status":"Forecast","scheduledArrivalDate":"2018-12-21 21:35","scheduledDepartureTime":"2018-11-23 21:35"}]}"""
   }
 
   "ArrivalRoutes" should "return empty arrival flights for default" in {
