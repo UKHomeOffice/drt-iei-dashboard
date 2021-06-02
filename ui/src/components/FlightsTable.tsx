@@ -38,6 +38,7 @@ const useStyles = (theme: Theme) => createStyles(
           },
         },
         '& .super-app-theme--Cancelled': {
+          textDecoration : 'line-through',
           backgroundColor: getBackgroundColor(theme.palette.error.main,theme.palette),
           '&:hover': {
             backgroundColor: getHoverBackgroundColor(theme.palette.error.main,theme.palette),
@@ -50,9 +51,9 @@ const useStyles = (theme: Theme) => createStyles(
           },
         },
         '& .super-app-theme--Active': {
-                  backgroundColor: getBackgroundColor(theme.palette.success.main,theme.palette),
-                  '&:hover': {
-                    backgroundColor: getHoverBackgroundColor(theme.palette.success.main,theme.palette),
+          backgroundColor: getBackgroundColor(theme.palette.success.main,theme.palette),
+          '&:hover': {
+            backgroundColor: getHoverBackgroundColor(theme.palette.success.main,theme.palette),
              }
          },
         '& .super-app-theme--Others': {
