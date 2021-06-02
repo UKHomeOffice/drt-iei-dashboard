@@ -68,7 +68,7 @@ const useStyles = (theme: Theme) => createStyles(
 });
 
 class FlightsTable extends React.Component<IProps, IState> {
-
+  private interval : any  ;
   columnsHeaders = [
     {field: 'scheduledDepartureTime', headerName: 'Scheduled Departure', width: 200},
     {field: 'origin', headerName: "Departure Airport", width: 150},
@@ -76,7 +76,7 @@ class FlightsTable extends React.Component<IProps, IState> {
     {field: 'carrierName', headerName: 'Carrier Name', width: 150},
     {field: 'arrivalAirport', headerName: 'Arrival Airport', width: 150},
     {field: 'scheduledArrivalDate', headerName: 'Scheduled Arrival', width: 200},
-    {field: 'status', headerName: 'Status', width: 200}
+    {field: 'status', headerName: 'Status', width: 100}
 
   ]
 
@@ -92,21 +92,24 @@ class FlightsTable extends React.Component<IProps, IState> {
   }
 
   componentDidMount() {
+      this.interval =  setInterval( () => {
+          this.setState({
+            currentTime : new Date().toLocaleString()
+          })
+      },60000);
     this.updateFLights();
   }
 
   componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>, snapshot?: any) {
-    setInterval( () => {
-        this.setState({
-          currentTime : new Date().toLocaleString()
-        })
-    },60000);
-
     console.log('FlightsTable...componentDidUpdate...' + this.props.country + ' ' +this.props.post + ' ' +this.props.timezone + ' ' + this.state.currentTime )
     if (this.props.date !== prevProps.date || this.props.country !== prevProps.country || this.props.post !== prevProps.post || this.props.region !== prevProps.region || this.props.timezone !== prevProps.timezone ) {
       this.updateFLights();
     }
   }
+
+    componentWillUnmount() {
+      clearInterval(this.interval);
+    }
 
   private updateFLights() {
     let endpoint = this.flightsEndPoint(this.props.region, this.props.post, this.props.country, this.props.date, this.props.timezone);

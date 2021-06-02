@@ -98,10 +98,15 @@ export default class SearchFilters extends React.Component<IProps, IState> {
                     break;
           }
       }
+
+        if (this.state.country !== prevState.country) {
+              if(this.state.country === 'All') {
+                 this.setState({timezone : 'UTC'});
+              }
+      }
    }
 
   render()  {
-      console.log("SearchFilter...."+ this.state.region + "...." + this.state.post  + "....." +this.state.country + "....."+ this.state.date + "....." + this.state.timezone)
        switch(this.state.country) {
             case 'All' :
                timezones = nonLocalTimezones;
@@ -111,8 +116,8 @@ export default class SearchFilters extends React.Component<IProps, IState> {
                timezones = allTimezones;
                console.log("this is local country " + this.state.country);
                break;
-
        };
+      console.log("SearchFilter...."+ this.state.region + "...." + this.state.post  + "....." +this.state.country + "....."+ this.state.date + "....." + this.state.timezone)
       return (
           <div>
               <Grid container spacing={3}>
