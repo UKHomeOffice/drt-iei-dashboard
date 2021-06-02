@@ -21,6 +21,7 @@ interface IState {
   arrivalRows?: GridRowModel[]
   hasError: boolean;
   errorMessage: string;
+  currentTime : string;
 }
 
 const getBackgroundColor = (color:string,palette:any) => getThemePaletteMode(palette) === 'dark' ? darken(color, 0.6): lighten(color, 0.6);
@@ -85,7 +86,8 @@ class FlightsTable extends React.Component<IProps, IState> {
     this.state = {
       arrivalRows: [],
       hasError: false,
-      errorMessage: ''
+      errorMessage: '',
+      currentTime : new Date().toLocaleString()
     }
   }
 
@@ -94,7 +96,13 @@ class FlightsTable extends React.Component<IProps, IState> {
   }
 
   componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>, snapshot?: any) {
-    console.log('FlightsTable...componentDidUpdate...' + this.props.country + ' ' +this.props.post + ' ' +this.props.timezone)
+    setInterval( () => {
+        this.setState({
+          currentTime : new Date().toLocaleString()
+        })
+    },60000);
+
+    console.log('FlightsTable...componentDidUpdate...' + this.props.country + ' ' +this.props.post + ' ' +this.props.timezone + ' ' + this.state.currentTime )
     if (this.props.date !== prevProps.date || this.props.country !== prevProps.country || this.props.post !== prevProps.post || this.props.region !== prevProps.region || this.props.timezone !== prevProps.timezone ) {
       this.updateFLights();
     }
