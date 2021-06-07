@@ -2,7 +2,8 @@ package uk.gov.homeoffice.drt.utils
 
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.must.Matchers
-import uk.gov.homeoffice.drt.model.{Airport, DepartureAirport, Poland}
+import uk.gov.homeoffice.drt.model.Airport
+import uk.gov.homeoffice.drt.model.DepartAirportTestModel.Poland
 
 class AirportUtilSpecs extends AsyncFlatSpec with Matchers  {
 
@@ -20,6 +21,6 @@ class AirportUtilSpecs extends AsyncFlatSpec with Matchers  {
 
   "Poland port" should "match the list of port as expected" in {
     val polandAirport = AirportUtil.getPortListForCountry("Poland")
-    polandAirport must contain allElementsOf  Poland.portList
+    polandAirport must contain allElementsOf Poland.portList
   }
 }
