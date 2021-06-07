@@ -85,11 +85,11 @@ class ArrivalRepository[F[_] : Sync](val sessionPool: Resource[F, Session[F]]) e
          """.command
 
     val arrivalsWithDeparture = arrivals.filter(_.scheduled_departure.isDefined)
-    logger.info(s"....................updating arrival departure call for size ${arrivalsWithDeparture.size}")
+    logger.info(s"Updating arrival departure call for size ${arrivalsWithDeparture.size}")
     sessionPool.use { session =>
       session.prepare(updateStatus).use { ps =>
         arrivalsWithDeparture.traverse { arrival =>
-          logger.info(s"....................Updating arrival departure scheduled for arrival $arrival")
+          logger.info(s"Updating arrival departure scheduled for arrival $arrival")
           ps.execute(arrival.scheduled_departure.get ~ arrival.scheduled ~ arrival.code ~ arrival.number ~ arrival.destination ~ arrival.origin)
             .handleErrorWith {
               case e =>

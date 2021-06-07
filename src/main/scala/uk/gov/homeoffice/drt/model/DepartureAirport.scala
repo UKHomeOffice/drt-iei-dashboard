@@ -63,17 +63,17 @@ object DepartureAirport {
   }
 
   def getDeparturePortForCountry(region: String, post: String)(implicit country: String): List[Port] = {
-    (post.toLowerCase, region.toLowerCase) match {
-      case ("benelux", _) => beneluxDeparturePortForCountry
-      case ("warsaw", _) => warsawDeparturePortForCountry
-      case ("berlin", _) => berlinDeparturePortForCountry
-      case ("paris", _) => parisDeparturePortForCountry
-      case ("rome", _) => romeDeparturePortForCountry
-      case ("athens", _) => athensDeparturePortsForCountry
-      case ("madrid", _) => madridDeparturePortForCountry
-      case ("albania", _) => albaniaDeparturePortForCountry
-      case ("all", "euromed north") => beneluxDeparturePortForCountry ::: warsawDeparturePortForCountry ::: berlinDeparturePortForCountry ::: parisDeparturePortForCountry
-      case ("all", "euromed south") => romeDeparturePortForCountry ::: athensDeparturePortsForCountry ::: madridDeparturePortForCountry ::: albaniaDeparturePortForCountry
+    (region.toLowerCase, post.toLowerCase) match {
+      case (_, "benelux") => beneluxDeparturePortForCountry
+      case (_, "warsaw") => warsawDeparturePortForCountry
+      case (_, "berlin") => berlinDeparturePortForCountry
+      case (_, "paris") => parisDeparturePortForCountry
+      case (_, "rome") => romeDeparturePortForCountry
+      case (_, "athens") => athensDeparturePortsForCountry
+      case (_, "madrid") => madridDeparturePortForCountry
+      case (_, "albania") => albaniaDeparturePortForCountry
+      case ("euromed north", "all") => beneluxDeparturePortForCountry ::: warsawDeparturePortForCountry ::: berlinDeparturePortForCountry ::: parisDeparturePortForCountry
+      case ("euromed south", "all") => romeDeparturePortForCountry ::: athensDeparturePortsForCountry ::: madridDeparturePortForCountry ::: albaniaDeparturePortForCountry
       case ("all", "all") => beneluxDeparturePortForCountry ::: warsawDeparturePortForCountry ::: berlinDeparturePortForCountry :::
         parisDeparturePortForCountry ::: romeDeparturePortForCountry ::: athensDeparturePortsForCountry :::
         madridDeparturePortForCountry ::: albaniaDeparturePortForCountry
