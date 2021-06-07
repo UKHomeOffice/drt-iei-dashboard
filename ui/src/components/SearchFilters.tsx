@@ -177,6 +177,7 @@ export default class SearchFilters extends React.Component<IProps, IState> {
                         renderInput={(params) => <TextField {...params} label="Departure Timezone" variant="outlined" />}
                       />
                </Grid>
+                <Grid item xs={12}/>
               </Grid>
              <FlightsTable region={this.state.region} post={this.state.post} country={this.state.country} date={this.props.pickedDate} timezone={this.state.timezone}/>
            </div>

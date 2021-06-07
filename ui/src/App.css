@@ -36,3 +36,33 @@
     transform: rotate(360deg);
   }
 }
+
+.header-logo {
+    display: block;
+    position: relative;
+    width: 150px;
+    height: auto;
+    margin-left: 0;
+    margin-right: 25%;
+    line-height: 0;
+}
+
+.image-homeOffice {
+   float:center;
+   height: 50px;
+   width: 50px;
+   font-family: Veranda;
+   padding: 0px 1px ;
+   vertical-align: baseline;
+   padding: 5px 0px 0px  25px;
+ }
+
+.image-div {
+    float:center;
+    display: flex;
+}
+
+.image-text {
+  padding: 20px 0 0px 0px;
+  font-size: 20px;
+}

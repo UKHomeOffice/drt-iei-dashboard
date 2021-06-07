@@ -39,9 +39,10 @@ class FlightScheduledService[F[_] : Sync](arrivalsRepository: ArrivalRepositoryI
     case "DIVERTED" | "Diverted" |"Arrival diverted away from airport"| "Arrival is on block at a stand" |"On Approach" |
          "First Bag Delivered" | "Last Bag Delivered" |"Active" | "LANDED" | "Arrived" | "ARRIVED ON STAND" |
          "InApproach" | "Landed" | "ON APPROACH" | "Delayed" | "Zoned" | "Zoning" | "Final Approach" |
-          "Scheduled" | "EXPECTED" |"BAGGAGE IN HALL" | "Redirected" | "Airborne from preceding airport" |
-          "Flight is on schedule" | "LAST BAG DELIVERED" | "On Chocks" |  "Finals"  | "On Finals" => "Active"
-    case "RESCHEDULED" | "Estimated" | "Calculated" | "Operated" => "Calculated"
+         "EXPECTED" | "BAGGAGE IN HALL" | "Redirected" | "Airborne from preceding airport" |
+         "Flight is on schedule" | "LAST BAG DELIVERED" | "On Chocks" |  "Finals"  | "On Finals"
+          => "Active"
+    case  "Scheduled"| "Estimated" | "RESCHEDULED" | "Calculated" | "Operated" => "Scheduled"
     case _ => "Others"
 
   }

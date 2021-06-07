@@ -33,9 +33,9 @@ const useStyles = (theme: Theme) => createStyles(
 {
       root: {
         '& .super-app-theme--Deleted': {
-          backgroundColor: getBackgroundColor(theme.palette.warning.main,theme.palette),
+          backgroundColor: getBackgroundColor(theme.palette.secondary.main,theme.palette),
           '&:hover': {
-            backgroundColor: getHoverBackgroundColor(theme.palette.warning.main,theme.palette),
+            backgroundColor: getHoverBackgroundColor(theme.palette.secondary.main,theme.palette),
           },
         },
         '& .super-app-theme--Cancelled': {
@@ -57,12 +57,18 @@ const useStyles = (theme: Theme) => createStyles(
             backgroundColor: getHoverBackgroundColor(theme.palette.success.main,theme.palette),
              }
          },
-        '& .super-app-theme--Others': {
+        '& .super-app-theme--Scheduled': {
           backgroundColor: getBackgroundColor(theme.palette.primary.main,theme.palette),
           '&:hover': {
             backgroundColor: getHoverBackgroundColor(theme.palette.primary.main,theme.palette),
           },
         },
+      '& .super-app-theme--Others': {
+         backgroundColor: getBackgroundColor(theme.palette.warning.main,theme.palette),
+         '&:hover': {
+           backgroundColor: getHoverBackgroundColor(theme.palette.warning.main,theme.palette),
+         },
+       },
         defaultTheme
       }
 });
