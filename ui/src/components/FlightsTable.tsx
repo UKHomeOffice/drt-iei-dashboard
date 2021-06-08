@@ -88,7 +88,6 @@ class FlightsTable extends React.Component<IProps, IState> {
 
   constructor(props: IProps) {
     super(props);
-
     this.state = {
       arrivalRows: [],
       hasError: false,
@@ -107,7 +106,7 @@ class FlightsTable extends React.Component<IProps, IState> {
   }
 
   componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>, snapshot?: any) {
-    console.log('FlightsTable...componentDidUpdate...' + this.props.country + ' ' +this.props.post + ' ' +this.props.timezone + ' ' + this.state.currentTime )
+    console.log('FlightsTable componentDidUpdate...' + this.props.country + ' ' +this.props.post + ' ' +this.props.timezone + ' ' + this.state.currentTime )
     if (this.props.date !== prevProps.date || this.props.country !== prevProps.country || this.props.post !== prevProps.post || this.props.region !== prevProps.region || this.props.timezone !== prevProps.timezone ) {
       this.updateFlights();
     }

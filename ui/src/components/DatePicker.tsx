@@ -35,26 +35,26 @@ export default class MaterialUIPickers extends React.Component<IProps, IState> {
 
   render() {
     return (
-    <div style={{width: 1100}}>
-     <Grid container spacing={3}>
-      <Grid item xs={12}>
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <KeyboardDatePicker
-              margin="normal"
-              id="date-picker-dialog"
-              label="Flight departure date"
-              format="yyyy-MM-dd"
-              value={this.state.selectedDate}
-              onChange={this.handleDateChange}
-              KeyboardButtonProps={{
-                'aria-label': 'change date',
-              }}
-            />
-          </MuiPickersUtilsProvider>
-      </Grid>
-     </Grid>
-     <SearchFilters pickedDate={format(this.state.selectedDate as Date, "yyyy-MM-dd")}/>
-    </div>
+      <div style={{width: 1100}}>
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+              <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <KeyboardDatePicker
+                  margin="normal"
+                  id="date-picker-dialog"
+                  label="Flight departure date"
+                  format="yyyy-MM-dd"
+                  value={this.state.selectedDate}
+                  onChange={this.handleDateChange}
+                  KeyboardButtonProps={{
+                    'aria-label': 'change date',
+                  }}
+                />
+              </MuiPickersUtilsProvider>
+          </Grid>
+        </Grid>
+        <SearchFilters pickedDate={format(this.state.selectedDate as Date, "yyyy-MM-dd")}/>
+      </div>
     );
   }
 }
