@@ -23,6 +23,7 @@ object CronScheduler {
       val arrivalTableDataList: F[List[ArrivalTableData]] = arrivalsService.getScheduledDeparture
       val amendArrivalTableDataList: F[List[ArrivalTableData]] = ciriumService.appendScheduledDeparture(arrivalTableDataList)
       arrivalsService.insertDepartureTableData(amendArrivalTableDataList)
+      arrivalsService.updateScheduledDepartureForArrival(amendArrivalTableDataList)
     }
   }
 

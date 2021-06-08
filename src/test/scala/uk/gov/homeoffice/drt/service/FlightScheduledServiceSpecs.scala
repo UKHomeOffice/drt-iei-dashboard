@@ -20,7 +20,7 @@ class FlightScheduledServiceSpecs extends AsyncFlatSpec with Matchers with Scala
 
     val flightScheduledService: FlightScheduledService[IO] = context
 
-    val requestedDetails = FlightsRequest("Athens", "Greece", "2018-12-21")
+    val requestedDetails = FlightsRequest("Euromed South", "Athens", "Greece", "2018-12-21", "UTC")
 
     val expectedResult = List(Arrival(
       _id = "1",
@@ -29,11 +29,12 @@ class FlightScheduledServiceSpecs extends AsyncFlatSpec with Matchers with Scala
       flightNumber = "EZX6062",
       arrivingAirport = "BRB",
       origin = "ATH",
-      scheduledDepartureTime = Some(DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toDate`("2018-11-23 19:35:00"))
+      status = "Forecast",
+      scheduledDepartureTime = Some(DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toDate`("2018-11-23 21:35:00"))
     ))
 
     val arrivalTableData = flightScheduledService.getFlightsDetail(requestedDetails)
-    val actualResult = flightScheduledService.transformArrivals(arrivalTableData).unsafeRunSync()
+    val actualResult = flightScheduledService.transformArrivals(requestedDetails, arrivalTableData).unsafeRunSync()
 
     actualResult mustEqual expectedResult
 
@@ -43,7 +44,7 @@ class FlightScheduledServiceSpecs extends AsyncFlatSpec with Matchers with Scala
   "Arrival" should "return arrival flights for the requested details for CLJ" in {
     val arrivalService: FlightScheduledService[IO] = context
 
-    val requestedDetails = FlightsRequest("Athens", "Bulgaria", "2018-12-21")
+    val requestedDetails = FlightsRequest("Euromed South", "Athens", "Bulgaria", "2018-12-21", "UTC")
 
     val expectedResult = List(Arrival(
       _id = "1",
@@ -52,33 +53,12 @@ class FlightScheduledServiceSpecs extends AsyncFlatSpec with Matchers with Scala
       flightNumber = "BA6067",
       arrivingAirport = "BRG",
       origin = "SOF",
-      scheduledDepartureTime = Some(DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toDate`("2018-11-23 19:35:00"))
+      status = "Forecast",
+      scheduledDepartureTime = Some(DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toDate`("2018-11-23 21:35:00"))
     ))
 
     val arrivalTableData = arrivalService.getFlightsDetail(requestedDetails)
-    val actualResult = arrivalService.transformArrivals(arrivalTableData).unsafeRunSync()
-
-    actualResult mustEqual expectedResult
-  }
-
-
-  "Arrival" should "return arrival details with scheduled Departure date when departure time is present in departure table but not in arrival table" in {
-    val arrivalService: FlightScheduledService[IO] = context
-
-    val requestedDetails = FlightsRequest("Athens", "Moldova", "2018-12-22")
-
-    val expectedResult = List(Arrival(
-      _id = "1",
-      scheduledArrivalDate = DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toDate`("2018-12-22 21:35:0"),
-      carrierName = "British Airways",
-      flightNumber = "BA6068",
-      arrivingAirport = "BRG",
-      origin = "KIV",
-      scheduledDepartureTime = Some(DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toDate`("2018-12-22 17:35:00"))
-    ))
-
-    val arrivalTableData = arrivalService.getFlightsDetail(requestedDetails)
-    val actualResult = arrivalService.transformArrivals(arrivalTableData).unsafeRunSync()
+    val actualResult = arrivalService.transformArrivals(requestedDetails, arrivalTableData).unsafeRunSync()
 
     actualResult mustEqual expectedResult
   }
@@ -86,7 +66,7 @@ class FlightScheduledServiceSpecs extends AsyncFlatSpec with Matchers with Scala
   "Arrival" should "return arrival details without scheduled Departure date when departure time is not present in departure table and arrival table" in {
     val arrivalService: FlightScheduledService[IO] = context
 
-    val requestedDetails = FlightsRequest("Athens", "Moldova", "2018-12-23")
+    val requestedDetails = FlightsRequest("Euromed South", "Athens", "Moldova", "2018-12-23", "UTC")
 
     val expectedResult = List(Arrival(
       _id = "1",
@@ -95,11 +75,12 @@ class FlightScheduledServiceSpecs extends AsyncFlatSpec with Matchers with Scala
       flightNumber = "BA6069",
       arrivingAirport = "BRG",
       origin = "KIV",
+      status = "Forecast",
       scheduledDepartureTime = None
     ))
 
     val arrivalTableData = arrivalService.getFlightsDetail(requestedDetails)
-    val actualResult = arrivalService.transformArrivals(arrivalTableData).unsafeRunSync()
+    val actualResult = arrivalService.transformArrivals(requestedDetails, arrivalTableData).unsafeRunSync()
 
     actualResult mustEqual expectedResult
   }

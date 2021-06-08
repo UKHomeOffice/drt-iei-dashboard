@@ -1,92 +1,160 @@
 import React from 'react';
-import {DataGrid, ColDef, RowData} from '@material-ui/data-grid';
+import {DataGrid, GridRowModel, getThemePaletteMode} from '@material-ui/data-grid';
 import axios, {AxiosRequestConfig, AxiosResponse} from "axios";
+import {withStyles, createStyles, createMuiTheme, darken, lighten, Theme} from '@material-ui/core/styles';
+import {WithStyles} from '@material-ui/core';
+
 
 interface ArrivalsData {
-  data: RowData[];
+    data: GridRowModel[];
 }
 
-interface IProps {
-  region: string;
-  country: string;
-  date: string;
+interface IProps extends WithStyles<typeof useStyles> {
+    region: string;
+    post: string;
+    country: string;
+    date: string;
+    timezone: string;
 }
 
 interface IState {
-  arrivalRows?: RowData[]
-  hasError: boolean;
-  errorMessage: string;
+    arrivalRows?: GridRowModel[]
+    hasError: boolean;
+    errorMessage: string;
+    currentTime: string;
 }
 
-export default class FlightsTable extends React.Component<IProps, IState> {
+const getBackgroundColor = (color: string, palette: any) => getThemePaletteMode(palette) === 'dark' ? darken(color, 0.6) : lighten(color, 0.6);
 
-  columnsHeaders = [
-    {field: 'id', headerName: "Id", width: 50},
-    {field: 'arrivalAirport', headerName: 'Arrival Airport', width: 150},
-    {field: 'carrierName', headerName: 'Carrier Name', width: 150},
-    {field: 'flightNumber', headerName: 'Carrier Code', width: 150},
-    {field: 'origin', headerName: "Departure Airport", width: 150},
-    {field: 'scheduledArrivalDate', headerName: 'Scheduled Arrival (UTC)', width: 200},
-    {field: 'scheduledDepartureTime', headerName: 'Scheduled Departure (UTC+2)', width: 250}
-  ] as ColDef[];
+const getHoverBackgroundColor = (color: string, palette: any) => getThemePaletteMode(palette) === 'dark' ? darken(color, 0.5) : lighten(color, 0.5);
 
-  constructor(props: IProps) {
-    super(props);
+const defaultTheme = createMuiTheme();
+const useStyles = (theme: Theme) => createStyles(
+    {
+        root: {
+            '& .super-app-theme--Deleted': {
+                backgroundColor: getBackgroundColor(theme.palette.secondary.main, theme.palette),
+                '&:hover': {
+                    backgroundColor: getHoverBackgroundColor(theme.palette.secondary.main, theme.palette),
+                },
+            },
+            '& .super-app-theme--Cancelled': {
+                textDecoration: 'line-through',
+                backgroundColor: getBackgroundColor(theme.palette.error.main, theme.palette),
+                '&:hover': {
+                    backgroundColor: getHoverBackgroundColor(theme.palette.error.main, theme.palette),
+                },
+            },
+            '& .super-app-theme--Forecast': {
+                backgroundColor: getBackgroundColor(theme.palette.info.main, theme.palette),
+                '&:hover': {
+                    backgroundColor: getHoverBackgroundColor(theme.palette.info.main, theme.palette),
+                },
+            },
+            '& .super-app-theme--Active': {
+                backgroundColor: getBackgroundColor(theme.palette.success.main, theme.palette),
+                '&:hover': {
+                    backgroundColor: getHoverBackgroundColor(theme.palette.success.main, theme.palette),
+                }
+            },
+            '& .super-app-theme--Scheduled': {
+                backgroundColor: getBackgroundColor(theme.palette.primary.main, theme.palette),
+                '&:hover': {
+                    backgroundColor: getHoverBackgroundColor(theme.palette.primary.main, theme.palette),
+                },
+            },
+            '& .super-app-theme--Others': {
+                backgroundColor: getBackgroundColor(theme.palette.warning.main, theme.palette),
+                '&:hover': {
+                    backgroundColor: getHoverBackgroundColor(theme.palette.warning.main, theme.palette),
+                },
+            },
+            defaultTheme
+        }
+    });
 
-    this.state = {
-      arrivalRows: [],
-      hasError: false,
-      errorMessage: ''
+class FlightsTable extends React.Component<IProps, IState> {
+    private interval: any;
+    columnsHeaders = [
+        {field: 'scheduledDepartureTime', headerName: 'Scheduled Departure', width: 200},
+        {field: 'origin', headerName: "Departure Airport", width: 150},
+        {field: 'flightNumber', headerName: 'Carrier Code', width: 150},
+        {field: 'carrierName', headerName: 'Carrier Name', width: 150},
+        {field: 'arrivalAirport', headerName: 'Arrival Airport', width: 150},
+        {field: 'scheduledArrivalDate', headerName: 'Scheduled Arrival', width: 200},
+        {field: 'status', headerName: 'Status', width: 100}
+
+    ]
+
+    constructor(props: IProps) {
+        super(props);
+        this.state = {
+            arrivalRows: [],
+            hasError: false,
+            errorMessage: '',
+            currentTime: new Date().toLocaleString()
+        }
+    }
+
+    componentDidMount() {
+        this.interval = setInterval(() => {
+            this.setState({
+                currentTime: new Date().toLocaleString()
+            })
+        }, 60000);
+        this.updateFlights();
+    }
+
+    componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>, snapshot?: any) {
+        console.log('FlightsTable componentDidUpdate...' + this.props.country + ' ' + this.props.post + ' ' + this.props.timezone + ' ' + this.state.currentTime)
+        if (this.props.date !== prevProps.date || this.props.country !== prevProps.country || this.props.post !== prevProps.post || this.props.region !== prevProps.region || this.props.timezone !== prevProps.timezone) {
+            this.updateFlights();
+        }
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.interval);
+    }
+
+    private updateFlights() {
+        let endpoint = this.flightsEndPoint(this.props.region, this.props.post, this.props.country, this.props.date, this.props.timezone);
+        this.getFlightsData(endpoint, this.updateFlightsData)
+    }
+
+    public reqConfig: AxiosRequestConfig = {
+        headers: {'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json'}
     };
-  }
 
-  componentDidMount() {
-    this.updateFLights();
-  }
-
-  componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>, snapshot?: any) {
-    if (this.props.date !== prevProps.date) {
-      this.updateFLights();
-    }
-  }
-
-  private updateFLights() {
-    let endpoint = this.flightsEndPoint(this.props.region, this.props.country, this.props.date);
-    this.getFlightsData(endpoint, this.updateFlightsData)
-  }
-
-  public reqConfig: AxiosRequestConfig = {
-    headers: {'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json'}
-  };
-
-  public flightsEndPoint(region: string, country: string, filterDate: string) {
-    return "/flights/" + region + "?country=" + country + "&date=" + filterDate
-  }
-
-  public getFlightsData(endPoint: string, handleResponse: (r: AxiosResponse) => void) {
-    axios
-      .get(endPoint, this.reqConfig)
-      .then(response => handleResponse(response))
-      .catch(t => this.setState(() => ({hasError: true, errorMessage: t})))
-  }
-
-  updateFlightsData = (response: AxiosResponse) => {
-    let arrivalsData = response.data as ArrivalsData;
-    let arrivalRows = arrivalsData.data as RowData[]
-
-    this.setState({...this.state, arrivalRows: arrivalRows});
-  }
-
-  render() {
-    if (this.state.hasError) {
-      throw new Error(this.state.errorMessage);
-    } else {
-      return (
-        <div style={{height: 800, width: 1100}}>
-          <DataGrid rows={this.state.arrivalRows as RowData[]} columns={this.columnsHeaders} pageSize={25}/>
-        </div>
-      );
+    public flightsEndPoint(region: string, post: string, country: string, filterDate: string, timezone: string) {
+        return "/flights/" + region + "/" + post + "/" + country + "/" + filterDate + "/" + timezone
     }
 
-  }
+    public getFlightsData(endPoint: string, handleResponse: (r: AxiosResponse) => void) {
+        axios
+            .get(endPoint, this.reqConfig)
+            .then(response => handleResponse(response))
+            .catch(t => this.setState(() => ({hasError: true, errorMessage: t})))
+    }
+
+    updateFlightsData = (response: AxiosResponse) => {
+        let arrivalsData = response.data as ArrivalsData;
+        let arrivalRows = arrivalsData.data as GridRowModel[]
+        this.setState({...this.state, arrivalRows: arrivalRows});
+    }
+
+    render() {
+        if (this.state.hasError) {
+            throw new Error(this.state.errorMessage);
+        } else {
+            return (
+                <div style={{height: 800, width: '100%'}} className={this.props.classes.root}>
+                    <DataGrid rows={this.state.arrivalRows as GridRowModel[]} columns={this.columnsHeaders}
+                              getRowClassName={(params) => `super-app-theme--${params.getValue(params.id, 'status')}`}
+                              pageSize={25}/>
+                </div>
+            );
+        }
+    }
 }
+
+export default withStyles(useStyles)(FlightsTable)

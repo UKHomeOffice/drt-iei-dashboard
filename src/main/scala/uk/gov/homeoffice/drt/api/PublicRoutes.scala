@@ -1,7 +1,5 @@
 package uk.gov.homeoffice.drt.api
 
-import java.util.concurrent.Executors
-
 import cats.effect._
 import cats.implicits._
 import io.chrisdavenport.log4cats.Logger
@@ -11,6 +9,7 @@ import org.http4s.{HttpRoutes, Response, StaticFile, Status}
 import uk.gov.homeoffice.drt.AirlineConfig
 import uk.gov.homeoffice.drt.service.AirlineService
 
+import java.util.concurrent.Executors
 import scala.util.{Failure, Success, Try}
 
 object PublicRoutes {

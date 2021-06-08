@@ -1,97 +1,85 @@
 package uk.gov.homeoffice.drt.model
 
+import uk.gov.homeoffice.drt.utils.AirportUtil
+
 case class Port(code: String, name: String)
 
-sealed trait Country {
-  def portList : Seq[Port]
-}
-
-case object Greece extends Country {
-  val portList = List(
-    Port("ATH", "Athens"),
-    Port("SKG", "Thessaloniki"),
-    Port("KLX", "Kalamata"),
-    Port("KVA", "Kavala"),
-    Port("VOL", "Volos"),
-    Port("PVK", "Preveza"),
-    Port("HER", "Heraklion"),
-    Port("CHQ", "Chania"),
-    Port("ZTH", "Zakynthos"),
-    Port("RHO", "Rhodes"),
-    Port("CFU", "Kerkyra"),
-    Port("KGS", "Kos"),
-    Port("JSI", "Skiathos"),
-    Port("JMK", "Mykonos"),
-    Port("JTR", "Santorini"),
-    Port("EFL", "Kefalonia")
-  )
-}
-
-case object Cyprus extends Country {
-  val portList = List(
-    Port("LCA", "Larnaca"),
-    Port("PFO", "Paphos")
-  )
-}
-
-case object Croatia extends Country {
-  val portList = List(
-    Port("ZAD", "Zadar"),
-    Port("SPU", "Split"),
-    Port("DBV", "Dubrovnik"),
-    Port("ZAG", "Zagreb"),
-    Port("PUY", "Pula"),
-    Port("OSI", "Osijek"))
-}
-
-
-case object Slovenia extends Country {
-  val portList = List(Port("LJU", "Ljubljana"))
-}
-
-
-case object Bulgaria extends Country {
-  val portList = List(
-    Port("VAR", "Varna"),
-    Port("BOJ", "Bourgas"),
-    Port("PDV", "Plovdiv"),
-    Port("SOF", "Sofia"))
-}
-
-case object Romania extends Country {
-  val portList = List(
-    Port("OTP", "Otopeni"),
-    Port("BBU", "Baneasa"),
-    Port("CLJ", "Cluj-Napoca"),
-    Port("SBZ", "Sibiu"),
-    Port("TSR", "Timisoara"),
-    Port("BCM", "Bacău"),
-    Port("CND", "Constanta"),
-    Port("CRA", "Craiova")
-  )
-}
-
-case object Moldova extends Country {
-  val portList = List(Port("KIV", "Chisinau"))
-}
-
 object DepartureAirport {
-  def athensDeparturePortsForCountry(country: String): List[Port] = {
-    country.toLowerCase match {
-      case "greece" => Greece.portList
-      case "cyprus" => Cyprus.portList
-      case "croatia" => Croatia.portList
-      case "slovenia" => Slovenia.portList
-      case "bulgaria" => Bulgaria.portList
-      case "romania" => Romania.portList
-      case "moldova" => Moldova.portList
-      case _ => List.empty
-    }
 
+  def beneluxDeparturePortForCountry(implicit country: String): List[Port] = {
+    country.toLowerCase match {
+      case "all" => List("Netherlands", "Belgium", "Luxembourg").flatMap(AirportUtil.getPortListForCountry(_))
+      case _ => AirportUtil.getPortListForCountry
+    }
   }
 
-  def athenRegionsPortList = List(
-    Greece,Cyprus,Croatia,Slovenia,Bulgaria,Romania,Moldova
-  )
+  def warsawDeparturePortForCountry(implicit country: String): List[Port] = {
+    country.toLowerCase match {
+      case "all" => List("Poland", "Czech Republic", "Ukraine", "Belarus", "Latvia", "Estonia", "Lithuania", "Iceland").flatMap(AirportUtil.getPortListForCountry(_))
+      case _ => AirportUtil.getPortListForCountry
+    }
+  }
+
+  def berlinDeparturePortForCountry(implicit country: String): List[Port] = {
+    country.toLowerCase match {
+      case "all" => List("Germany", "Austria", "Switzerland", "Liechenstein", "Finland", "Denmark", "Norway", "Sweden").flatMap(AirportUtil.getPortListForCountry(_))
+      case _ => AirportUtil.getPortListForCountry
+    }
+  }
+
+  def parisDeparturePortForCountry(implicit country: String): List[Port] = {
+    country.toLowerCase match {
+      case "all" => List("France", "Tunisia", "Morocco", "Algeria", "Basel Mulhouse").flatMap(AirportUtil.getPortListForCountry(_))
+      case _ => AirportUtil.getPortListForCountry
+    }
+  }
+
+  def romeDeparturePortForCountry(implicit country: String): List[Port] = {
+    country.toLowerCase match {
+      case "all" => List("Italy", "Malta").flatMap(AirportUtil.getPortListForCountry(_))
+      case _ => AirportUtil.getPortListForCountry
+    }
+  }
+
+  def madridDeparturePortForCountry(implicit country: String): List[Port] = {
+    country.toLowerCase match {
+      case "all" => List("Spain", "Portugual").flatMap(AirportUtil.getPortListForCountry(_))
+      case _ => AirportUtil.getPortListForCountry
+    }
+  }
+
+  def albaniaDeparturePortForCountry(implicit country: String): List[Port] = {
+    country.toLowerCase match {
+      case "all" => List("Albania", "Serbia", "North Macedonia", "Bosnia", "Kosovo", "Montenegro").flatMap(AirportUtil.getPortListForCountry(_))
+      case _ => AirportUtil.getPortListForCountry
+    }
+  }
+
+  def athensDeparturePortsForCountry(implicit country: String): List[Port] = {
+    country.toLowerCase match {
+      case "all" => List("Greece", "Cyprus", "Croatia", "Slovenia", "Bulgaria", "Romania", "Moldova").flatMap(AirportUtil.getPortListForCountry(_))
+      case _ => AirportUtil.getPortListForCountry
+    }
+  }
+
+  def getDeparturePortForCountry(region: String, post: String)(implicit country: String): List[Port] = {
+    (region.toLowerCase, post.toLowerCase) match {
+      case (_, "benelux") => beneluxDeparturePortForCountry
+      case (_, "warsaw") => warsawDeparturePortForCountry
+      case (_, "berlin") => berlinDeparturePortForCountry
+      case (_, "paris") => parisDeparturePortForCountry
+      case (_, "rome") => romeDeparturePortForCountry
+      case (_, "athens") => athensDeparturePortsForCountry
+      case (_, "madrid") => madridDeparturePortForCountry
+      case (_, "albania") => albaniaDeparturePortForCountry
+      case ("euromed north", "all") => beneluxDeparturePortForCountry ::: warsawDeparturePortForCountry ::: berlinDeparturePortForCountry ::: parisDeparturePortForCountry
+      case ("euromed south", "all") => romeDeparturePortForCountry ::: athensDeparturePortsForCountry ::: madridDeparturePortForCountry ::: albaniaDeparturePortForCountry
+      case ("all", "all") => beneluxDeparturePortForCountry ::: warsawDeparturePortForCountry ::: berlinDeparturePortForCountry :::
+        parisDeparturePortForCountry ::: romeDeparturePortForCountry ::: athensDeparturePortsForCountry :::
+        madridDeparturePortForCountry ::: albaniaDeparturePortForCountry
+      case _ => List.empty
+
+    }
+  }
 
 }
