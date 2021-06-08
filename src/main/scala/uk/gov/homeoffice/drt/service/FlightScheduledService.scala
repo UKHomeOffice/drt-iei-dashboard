@@ -23,13 +23,13 @@ class FlightScheduledService[F[_] : Sync](arrivalsRepository: ArrivalRepositoryI
   def transformArrivals(requestedDetails: FlightsRequest, arrivalsTableData: F[List[ArrivalTableDataIndex]]): F[List[Arrival]] = {
     arrivalsTableData.map(_.map(a =>
       model.Arrival((a.index + 1).toString,
-        ZonedTimeDateToDate(localTimeDateAccordingToTimezone(requestedDetails, a.arrivalsTableData.scheduled)),
+        ZonedTimeDateToDate(localDateTimeAccordingToTimezone(requestedDetails, a.arrivalsTableData.scheduled)),
         carrierName(a.arrivalsTableData.code, a.arrivalsTableData.number.toString),
         a.arrivalsTableData.code.toString,
         a.arrivalsTableData.destination,
         a.arrivalsTableData.origin,
         getDisplayStatus(a.arrivalsTableData.status),
-        a.arrivalsTableData.scheduled_departure.map(d => ZonedTimeDateToDate(localTimeDateAccordingToTimezone(requestedDetails, d))))))
+        a.arrivalsTableData.scheduled_departure.map(d => ZonedTimeDateToDate(localDateTimeAccordingToTimezone(requestedDetails, d))))))
   }
 
   def getDisplayStatus(status:String) :String =  status match {
@@ -46,7 +46,7 @@ class FlightScheduledService[F[_] : Sync](arrivalsRepository: ArrivalRepositoryI
     case _ => "Others"
 
   }
-  def localTimeDateAccordingToTimezone(requestedDetails: FlightsRequest, localtime: LocalDateTime): ZonedDateTime = {
+  def localDateTimeAccordingToTimezone(requestedDetails: FlightsRequest, localtime: LocalDateTime): ZonedDateTime = {
     (requestedDetails.country, requestedDetails.timezone.toLowerCase) match {
       case (_, "uk") => ZonedDateTime.of(localtime, ZoneId.of("Europe/London"))
       case ("All", "local") => ZonedDateTime.of(localtime, ZoneId.of("UTC"))
@@ -63,7 +63,7 @@ class FlightScheduledService[F[_] : Sync](arrivalsRepository: ArrivalRepositoryI
 
 
   def getScheduledDeparture: F[List[ArrivalTableData]] = {
-    arrivalsRepository.getArrivalForListOriginAndDate(allPortsCodes)
+    arrivalsRepository.getArrivalForOriginsAndDate(allPortsCodes)
   }
 
   val allPortsCodes: List[String] = DepartureAirport.getDeparturePortForCountry("All", "All")("All").map(_.code)

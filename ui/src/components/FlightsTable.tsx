@@ -31,46 +31,46 @@ const getHoverBackgroundColor = (color:string,palette:any) => getThemePaletteMod
 const defaultTheme = createMuiTheme();
 const useStyles = (theme: Theme) => createStyles(
 {
-      root: {
-        '& .super-app-theme--Deleted': {
-          backgroundColor: getBackgroundColor(theme.palette.secondary.main,theme.palette),
-          '&:hover': {
-            backgroundColor: getHoverBackgroundColor(theme.palette.secondary.main,theme.palette),
-          },
-        },
-        '& .super-app-theme--Cancelled': {
-          textDecoration : 'line-through',
-          backgroundColor: getBackgroundColor(theme.palette.error.main,theme.palette),
-          '&:hover': {
-            backgroundColor: getHoverBackgroundColor(theme.palette.error.main,theme.palette),
-          },
-        },
-        '& .super-app-theme--Forecast': {
-          backgroundColor: getBackgroundColor(theme.palette.info.main,theme.palette),
-          '&:hover': {
-            backgroundColor: getHoverBackgroundColor(theme.palette.info.main,theme.palette),
-          },
-        },
-        '& .super-app-theme--Active': {
-          backgroundColor: getBackgroundColor(theme.palette.success.main,theme.palette),
-          '&:hover': {
-            backgroundColor: getHoverBackgroundColor(theme.palette.success.main,theme.palette),
-             }
-         },
-        '& .super-app-theme--Scheduled': {
-          backgroundColor: getBackgroundColor(theme.palette.primary.main,theme.palette),
-          '&:hover': {
-            backgroundColor: getHoverBackgroundColor(theme.palette.primary.main,theme.palette),
-          },
-        },
-      '& .super-app-theme--Others': {
-         backgroundColor: getBackgroundColor(theme.palette.warning.main,theme.palette),
-         '&:hover': {
-           backgroundColor: getHoverBackgroundColor(theme.palette.warning.main,theme.palette),
-         },
-       },
-        defaultTheme
-      }
+  root: {
+    '& .super-app-theme--Deleted': {
+      backgroundColor: getBackgroundColor(theme.palette.secondary.main,theme.palette),
+      '&:hover': {
+        backgroundColor: getHoverBackgroundColor(theme.palette.secondary.main,theme.palette),
+      },
+    },
+    '& .super-app-theme--Cancelled': {
+      textDecoration : 'line-through',
+      backgroundColor: getBackgroundColor(theme.palette.error.main,theme.palette),
+      '&:hover': {
+        backgroundColor: getHoverBackgroundColor(theme.palette.error.main,theme.palette),
+      },
+    },
+    '& .super-app-theme--Forecast': {
+      backgroundColor: getBackgroundColor(theme.palette.info.main,theme.palette),
+      '&:hover': {
+        backgroundColor: getHoverBackgroundColor(theme.palette.info.main,theme.palette),
+      },
+    },
+    '& .super-app-theme--Active': {
+      backgroundColor: getBackgroundColor(theme.palette.success.main,theme.palette),
+      '&:hover': {
+        backgroundColor: getHoverBackgroundColor(theme.palette.success.main,theme.palette),
+         }
+     },
+    '& .super-app-theme--Scheduled': {
+      backgroundColor: getBackgroundColor(theme.palette.primary.main,theme.palette),
+      '&:hover': {
+        backgroundColor: getHoverBackgroundColor(theme.palette.primary.main,theme.palette),
+      },
+    },
+  '& .super-app-theme--Others': {
+     backgroundColor: getBackgroundColor(theme.palette.warning.main,theme.palette),
+     '&:hover': {
+       backgroundColor: getHoverBackgroundColor(theme.palette.warning.main,theme.palette),
+     },
+   },
+    defaultTheme
+  }
 });
 
 class FlightsTable extends React.Component<IProps, IState> {
@@ -103,13 +103,13 @@ class FlightsTable extends React.Component<IProps, IState> {
             currentTime : new Date().toLocaleString()
           })
       },60000);
-    this.updateFLights();
+    this.updateFlights();
   }
 
   componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>, snapshot?: any) {
     console.log('FlightsTable...componentDidUpdate...' + this.props.country + ' ' +this.props.post + ' ' +this.props.timezone + ' ' + this.state.currentTime )
     if (this.props.date !== prevProps.date || this.props.country !== prevProps.country || this.props.post !== prevProps.post || this.props.region !== prevProps.region || this.props.timezone !== prevProps.timezone ) {
-      this.updateFLights();
+      this.updateFlights();
     }
   }
 
@@ -117,7 +117,7 @@ class FlightsTable extends React.Component<IProps, IState> {
       clearInterval(this.interval);
     }
 
-  private updateFLights() {
+  private updateFlights() {
     let endpoint = this.flightsEndPoint(this.props.region, this.props.post, this.props.country, this.props.date, this.props.timezone);
     this.getFlightsData(endpoint, this.updateFlightsData)
   }

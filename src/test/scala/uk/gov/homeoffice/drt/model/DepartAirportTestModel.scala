@@ -196,4 +196,19 @@ object DepartAirportTestModel {
       Port("LUX", "Luxembourg")
     )
   }
+
+  case object Maldives extends Country {
+    val portList = List(
+      Port("ARIA", "South Ari Atoll"),
+      Port("MLE", "Male Intl"),
+      Port("KDM", "Kaadedhdhoo"),
+      Port("GAN", "Gan Island Airport"),
+      Port("HAQ", "Hanimaadhoo Airport"),
+      Port("KDO", "Kadhdhoo Airport"),
+      Port("MSI", "Sun Island Airport"),
+      Port("VAM", "Maamigili Airport"),
+      Port("IRU", "Hilton Iru fushi"),
+      Port("DHG", "Dhigurah Centara Grand Maldives"),
+      Port("GKK", "Kooddoo"))
+  }
 }

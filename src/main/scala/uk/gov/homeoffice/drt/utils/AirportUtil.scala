@@ -25,6 +25,6 @@ object AirportUtil {
     }.toList.flatten
   }
 
-  def getTimezoneForCountry(implicit country: String) = airportDetails.filter(_.country == country).map(_.timeZone).head
+  def getTimezoneForCountry(implicit country: String) = airportDetails.filter(_.country == country).map(_.timeZone).headOption.getOrElse("")
 
 }

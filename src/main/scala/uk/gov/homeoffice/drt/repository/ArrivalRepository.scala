@@ -27,7 +27,7 @@ trait ArrivalRepositoryI[F[_]] {
 
   def findArrivalsForADate(queryDate: LocalDateTime): F[List[ArrivalTableData]]
 
-  def getArrivalForListOriginAndDate(origins: List[String]): F[List[ArrivalTableData]]
+  def getArrivalForOriginsAndDate(origins: List[String]): F[List[ArrivalTableData]]
 
   def updateDepartureDate(arrivals: List[ArrivalTableData]): F[List[Completion]]
 
@@ -59,7 +59,7 @@ class ArrivalRepository[F[_] : Sync](val sessionPool: Resource[F, Session[F]]) e
       }
     }
 
-  def getArrivalForListOriginAndDate(origins: List[String]): F[List[ArrivalTableData]] = {
+  def getArrivalForOriginsAndDate(origins: List[String]): F[List[ArrivalTableData]] = {
     val query: Query[List[String] ~ LocalDateTime ~ LocalDateTime, ArrivalTableData] =
       sql"""
         select code, number, destination, origin, terminal, status, scheduled, scheduled_departure

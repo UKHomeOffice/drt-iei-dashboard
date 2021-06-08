@@ -3,7 +3,7 @@ package uk.gov.homeoffice.drt.utils
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.must.Matchers
 import uk.gov.homeoffice.drt.model.Airport
-import uk.gov.homeoffice.drt.model.DepartAirportTestModel.Poland
+import uk.gov.homeoffice.drt.model.DepartAirportTestModel.{Maldives, Poland}
 
 class AirportUtilSpecs extends AsyncFlatSpec with Matchers  {
 
@@ -22,5 +22,11 @@ class AirportUtilSpecs extends AsyncFlatSpec with Matchers  {
   "Poland port" should "match the list of port as expected" in {
     val polandAirport = AirportUtil.getPortListForCountry("Poland")
     polandAirport must contain allElementsOf Poland.portList
+  }
+
+  "Maldives port" should "match the list of port as excepted and ignores empty iata and \\N icoa rows from the file" in {
+    val maldivesPorts = AirportUtil.getPortListForCountry("Maldives")
+    maldivesPorts must contain allElementsOf Maldives.portList
+
   }
 }

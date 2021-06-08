@@ -58,43 +58,33 @@ export default class SearchFilters extends React.Component<IProps, IState> {
             switch (this.state.post) {
                 case 'Athens' :
                     postCountries = athensCountries;
-                    console.log("It is a athens.");
                     break;
                 case 'Benelux':
                     postCountries = beneluxCountries;
-                    console.log("It is a beneluxCountries.");
                     break;
                 case 'Warsaw':
                     postCountries = warsawCountries;
-                    console.log("It is a warsawCountries.");
                     break;
                 case 'Berlin':
                     postCountries = berlinCountries;
-                    console.log("It is a berlinCountries.");
                     break;
                 case 'Paris':
                     postCountries = parisCountries;
-                    console.log("It is a parisCountries.");
                     break;
                 case 'Rome':
                     postCountries = romeCountries;
-                    console.log("It is a romeCountries.");
                     break;
                 case 'Madrid':
                      postCountries = madridCountries;
-                    console.log("It is a madridCountries.");
                     break;
                 case 'Albania':
                     postCountries = albaniaCountries;
-                    console.log("It is a albaniaCountries.");
                     break;
                 case 'All':
                     postCountries = allCountries;
-                    console.log("It is a all countries.");
                     break;
                 default:
                     postCountries = allCountries;
-                    console.log("No such day exists!");
                     break;
           }
       }
@@ -107,82 +97,82 @@ export default class SearchFilters extends React.Component<IProps, IState> {
    }
 
   render()  {
-       switch(this.state.country) {
-            case 'All' :
-               timezones = nonLocalTimezones;
-               console.log("this is All country");
-               break;
-            default :
-               timezones = allTimezones;
-               console.log("this is local country " + this.state.country);
-               break;
-       };
-      console.log("SearchFilter...."+ this.state.region + "...." + this.state.post  + "....." +this.state.country + "....."+ this.state.date + "....." + this.state.timezone)
-      return (
-          <div>
-              <Grid container spacing={3}>
-               <Grid item xs={12} sm={3}>
+   switch(this.state.country) {
+        case 'All' :
+           timezones = nonLocalTimezones;
+           console.log("this is All country");
+           break;
+        default :
+           timezones = allTimezones;
+           console.log("this is local country " + this.state.country);
+           break;
+   };
+  console.log("SearchFilter...."+ this.state.region + "...." + this.state.post  + "....." +this.state.country + "....."+ this.state.date + "....." + this.state.timezone)
+  return (
+      <div>
+         <Grid container spacing={3}>
+           <Grid item xs={12} sm={3}>
+             <Autocomplete
+                   value = {this.state.region !== null ? {region:this.state.region} : {region:'All'}}
+                   onChange= {(event, newValue) => {
+                       let {region : newRegionZone} = newValue !== null ? newValue : {region: 'All'}
+                        this.setState({...this.state, region : newRegionZone })
+                    }}
+                   id="region-combo-box"
+                   options={regions}
+                   getOptionLabel={(option) => option.region}
+                   style={{ width: 200 }}
+                   renderInput={(params) => <TextField {...params} label="Region" variant="outlined" />}
+                 />
+           </Grid>
+           <Grid item xs={12} sm={3}>
+                <Autocomplete
+                    value = {this.state.post !== null ? {post:this.state.post} : {post:'All'}}
+                    onChange= {(event, newValue) => {
+                        let {post : newRegion} = newValue !== null ? newValue : {post: 'All'}
+                         this.setState({...this.state, post : newRegion })
+                     }}
+                    id="post-combo-box"
+                    options={regionPosts}
+                    getOptionLabel={(option) => option.post}
+                    style={{ width: 200 }}
+                    renderInput={(params) => <TextField {...params} label="Post" variant="outlined" />}
+                  />
+           </Grid>
+           <Grid item xs={12} sm={3}>
+                <Autocomplete
+                    value = {this.state.country !== null ? {country:this.state.country} : {country:'All'}}
+                    onChange= {(event, newValue) => {
+                        let {country : newCountry} = newValue !== null ? newValue : {country: 'All'}
+                         this.setState({...this.state, country : newCountry })
+                     }}
+                    id="country-combo-box"
+                    options={postCountries}
+                    getOptionLabel={(option) => option.country}
+                    style={{ width: 200 }}
+                    renderInput={(params) => <TextField {...params} label="Country" variant="outlined" />}
+                  />
+           </Grid>
+           <Grid item xs={12} sm={3}>
                  <Autocomplete
-                       value = {this.state.region !== null ? {region:this.state.region} : {region:'All'}}
-                       onChange= {(event, newValue) => {
-                           let {region : newRegionZone} = newValue !== null ? newValue : {region: 'All'}
-                            this.setState({...this.state, region : newRegionZone })
-                        }}
-                       id="region-combo-box"
-                       options={regions}
-                       getOptionLabel={(option) => option.region}
-                       style={{ width: 200 }}
-                       renderInput={(params) => <TextField {...params} label="Region" variant="outlined" />}
-                     />
-               </Grid>
-               <Grid item xs={12} sm={3}>
-                    <Autocomplete
-                        value = {this.state.post !== null ? {post:this.state.post} : {post:'All'}}
-                        onChange= {(event, newValue) => {
-                            let {post : newRegion} = newValue !== null ? newValue : {post: 'All'}
-                             this.setState({...this.state, post : newRegion })
-                         }}
-                        id="post-combo-box"
-                        options={regionPosts}
-                        getOptionLabel={(option) => option.post}
-                        style={{ width: 200 }}
-                        renderInput={(params) => <TextField {...params} label="Post" variant="outlined" />}
-                      />
-               </Grid>
-               <Grid item xs={12} sm={3}>
-                    <Autocomplete
-                        value = {this.state.country !== null ? {country:this.state.country} : {country:'All'}}
-                        onChange= {(event, newValue) => {
-                            let {country : newCountry} = newValue !== null ? newValue : {country: 'All'}
-                             this.setState({...this.state, country : newCountry })
-                         }}
-                        id="country-combo-box"
-                        options={postCountries}
-                        getOptionLabel={(option) => option.country}
-                        style={{ width: 200 }}
-                        renderInput={(params) => <TextField {...params} label="Country" variant="outlined" />}
-                      />
-               </Grid>
-               <Grid item xs={12} sm={3}>
-                     <Autocomplete
-                        value = {this.state.timezone !== null ? {timezone:this.state.timezone} : {timezone:'UTC'}}
-                        onChange= {(event, newValue) => {
-                            let {timezone : newTimezone} = newValue !== null ? newValue : {timezone: 'UTC'}
-                             this.setState({...this.state, timezone : newTimezone })
-                         }}
-                        id="timezone-combo-box"
-                        options={timezones}
-                        getOptionLabel={(option) => option.timezone}
-                        style={{ width: 200 }}
-                        renderInput={(params) => <TextField {...params} label="Departure Timezone" variant="outlined" />}
-                      />
-               </Grid>
-                <Grid item xs={12}/>
-              </Grid>
-             <FlightsTable region={this.state.region} post={this.state.post} country={this.state.country} date={this.props.pickedDate} timezone={this.state.timezone}/>
-           </div>
-      );
-  }
+                    value = {this.state.timezone !== null ? {timezone:this.state.timezone} : {timezone:'UTC'}}
+                    onChange= {(event, newValue) => {
+                        let {timezone : newTimezone} = newValue !== null ? newValue : {timezone: 'UTC'}
+                         this.setState({...this.state, timezone : newTimezone })
+                     }}
+                    id="timezone-combo-box"
+                    options={timezones}
+                    getOptionLabel={(option) => option.timezone}
+                    style={{ width: 200 }}
+                    renderInput={(params) => <TextField {...params} label="Departure Timezone" variant="outlined" />}
+                  />
+           </Grid>
+           <Grid item xs={12}/>
+         </Grid>
+         <FlightsTable region={this.state.region} post={this.state.post} country={this.state.country} date={this.props.pickedDate} timezone={this.state.timezone}/>
+      </div>
+  );
+}
 
 }
 
