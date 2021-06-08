@@ -2,6 +2,7 @@ package uk.gov.homeoffice.drt.repository
 
 import cats.effect.{Resource, Sync}
 import cats.syntax.all._
+import io.chrisdavenport.log4cats.Logger
 import io.chrisdavenport.log4cats.slf4j.Slf4jLogger
 import skunk.codec.all._
 import skunk.data.Completion
@@ -77,6 +78,7 @@ class ArrivalRepository[F[_] : Sync](val sessionPool: Resource[F, Session[F]]) e
   }
 
   def updateDepartureDate(arrivals: List[ArrivalTableData]): F[List[Completion]] = {
+
     val updateStatus: Command[LocalDateTime ~ LocalDateTime ~ String ~ Int ~ String ~ String] =
       sql"""
          UPDATE arrival
@@ -85,17 +87,16 @@ class ArrivalRepository[F[_] : Sync](val sessionPool: Resource[F, Session[F]]) e
          """.command
 
     val arrivalsWithDeparture = arrivals.filter(_.scheduled_departure.isDefined)
-    logger.info(s"Updating arrival departure call for size ${arrivalsWithDeparture.size}")
+    Logger[F].info(s"Updating arrival departure call for size ${arrivalsWithDeparture.size}") >>
     sessionPool.use { session =>
       session.prepare(updateStatus).use { ps =>
         arrivalsWithDeparture.traverse { arrival =>
-          logger.info(s"Updating arrival departure scheduled for arrival $arrival")
-          ps.execute(arrival.scheduled_departure.get ~ arrival.scheduled ~ arrival.code ~ arrival.number ~ arrival.destination ~ arrival.origin)
-            .handleErrorWith {
-              case e =>
-                logger.warn(s"Error while updating $arrival ${e.getMessage} $e") as
+          Logger[F].info(s"Updating arrival departure scheduled for arrival $arrival") >>
+            ps.execute(arrival.scheduled_departure.get ~ arrival.scheduled ~ arrival.code ~ arrival.number ~ arrival.destination ~ arrival.origin)
+              .handleErrorWith {
+                case e => Logger[F].info(s"Error while updating $arrival ${e.getMessage} $e") as
                   Completion.Update(0)
-            }
+              }
         }
       }
     }

@@ -2,6 +2,7 @@ package uk.gov.homeoffice.drt.service
 
 import cats.effect.Sync
 import cats.syntax.all._
+import io.chrisdavenport.log4cats.Logger
 import io.chrisdavenport.log4cats.slf4j.Slf4jLogger
 import io.circe.syntax._
 import org.http4s.Method.GET
@@ -27,7 +28,7 @@ class CiriumService[F[_] : Sync](airlineConfig: AirlineConfig, client: Client[F]
           if (r.status == Status.Ok || r.status == Status.Conflict) {
             r.asJsonDecode[CiriumScheduledResponse]
           } else {
-            logger.warn(s"Response from cirium api for flight is ${r.status.reason}") >>
+            Logger[F].warn(s"Response from cirium api for flight is ${r.status.reason}") >>
             CiriumScheduledResponseError(
               Option(r.status.reason).getOrElse("unknown")
             ).raiseError[F, CiriumScheduledResponse]
@@ -46,8 +47,8 @@ class CiriumService[F[_] : Sync](airlineConfig: AirlineConfig, client: Client[F]
         }
       }.handleErrorWith {
         case e: CiriumScheduledResponseError =>
-          logger.warn(s"Exception while calling cirium api ${e.getCause} ${e.getMessage}").as(arrivalsTableData)
-        case e => logger.warn(s"Error while calling cirium api ${e.getCause} ${e.getMessage}").as(arrivalsTableData)
+          Logger[F].warn(s"Exception while calling cirium api ${e.getCause} ${e.getMessage}").as(arrivalsTableData)
+        case e => Logger[F].warn(s"Error while calling cirium api ${e.getCause} ${e.getMessage}").as(arrivalsTableData)
       }
     }).flatten
     amendArrivalTableDatas.map(_.filter(_.scheduled_departure.isDefined))
