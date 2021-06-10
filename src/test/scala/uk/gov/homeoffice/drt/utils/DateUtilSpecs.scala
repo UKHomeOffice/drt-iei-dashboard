@@ -14,22 +14,23 @@ class DateUtilSpecs extends AsyncFlatSpec with Matchers {
     val date1 = DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toDate`("2018-11-23 21:35:00")
     val date2 = DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toDate`("2018-11-23 22:35:00")
 
-    areEqual(date1, date2) mustEqual true
+    date1 mustEqual date2
   }
 
   "Compare date check" should "be true for same dates and one no time" in {
     val date1 = DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toDate`("2018-11-23 21:35:00")
     val date2 = DateUtil.`yyyy-MM-dd_parse_toDate`("2018-11-23")
 
-    areEqual(date1, date2) mustEqual true
+    date1 mustEqual date2
+
   }
 
 
   "Compare date check" should "be false for different dates" in {
     val date1 = DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toDate`("2018-11-23 21:35:00")
     val date2 = DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toDate`("2018-11-24 22:35:00")
+    date1 mustEqual date2
 
-    areEqual(date1, date2) mustEqual false
   }
 
 

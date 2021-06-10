@@ -2,13 +2,14 @@ package uk.gov.homeoffice.drt.service
 
 import cats.effect.Sync
 import cats.syntax.all._
+import org.joda.time.{DateTime, DateTimeZone}
 import uk.gov.homeoffice.drt.model
 import uk.gov.homeoffice.drt.model._
 import uk.gov.homeoffice.drt.repository.{ArrivalRepositoryI, ArrivalTableData, DepartureRepositoryI, DepartureTableData}
 import uk.gov.homeoffice.drt.utils.DateUtil._
 import uk.gov.homeoffice.drt.utils.{AirlineUtil, AirportUtil}
 
-import java.time.{LocalDateTime, ZoneId, ZonedDateTime}
+import java.time.LocalDateTime
 
 class FlightScheduledService[F[_] : Sync](arrivalsRepository: ArrivalRepositoryI[F], departureRepository: DepartureRepositoryI[F]) {
 
@@ -23,35 +24,36 @@ class FlightScheduledService[F[_] : Sync](arrivalsRepository: ArrivalRepositoryI
   def transformArrivals(requestedDetails: FlightsRequest, arrivalsTableData: F[List[ArrivalTableDataIndex]]): F[List[Arrival]] = {
     arrivalsTableData.map(_.map(a =>
       model.Arrival((a.index + 1).toString,
-        ZonedTimeDateToDate(localDateTimeAccordingToTimezone(requestedDetails, a.arrivalsTableData.scheduled)),
+        localDateTimeAccordingToTimezone(requestedDetails, a.arrivalsTableData.scheduled),
         carrierName(a.arrivalsTableData.code, a.arrivalsTableData.number.toString),
         a.arrivalsTableData.code.toString,
         a.arrivalsTableData.destination,
         a.arrivalsTableData.origin,
         getDisplayStatus(a.arrivalsTableData.status),
-        a.arrivalsTableData.scheduled_departure.map(d => ZonedTimeDateToDate(localDateTimeAccordingToTimezone(requestedDetails, d))))))
+        a.arrivalsTableData.scheduled_departure.map(d => localDateTimeAccordingToTimezone(requestedDetails, d)))))
   }
 
-  def getDisplayStatus(status:String) :String =  status match {
+  def getDisplayStatus(status: String): String = status match {
     case "ACL Forecast" | "Port Forecast" => "Forecast"
     case "CANCELLED" | "Cancelled" | "Canceled" => "Cancelled"
     case "Deleted / Removed Flight Record" => "Deleted"
-    case "DIVERTED" | "Diverted" |"Arrival diverted away from airport"| "Arrival is on block at a stand" |"On Approach" |
-         "First Bag Delivered" | "Last Bag Delivered" |"Active" | "LANDED" | "Arrived" | "ARRIVED ON STAND" |
+    case "DIVERTED" | "Diverted" | "Arrival diverted away from airport" | "Arrival is on block at a stand" | "On Approach" |
+         "First Bag Delivered" | "Last Bag Delivered" | "Active" | "LANDED" | "Arrived" | "ARRIVED ON STAND" |
          "InApproach" | "Landed" | "ON APPROACH" | "Delayed" | "Zoned" | "Zoning" | "Final Approach" |
          "EXPECTED" | "BAGGAGE IN HALL" | "Redirected" | "Airborne from preceding airport" |
-         "Flight is on schedule" | "LAST BAG DELIVERED" | "On Chocks" |  "Finals"  | "On Finals"
-          => "Active"
-    case  "Scheduled"| "Estimated" | "RESCHEDULED" | "Calculated" | "Operated" => "Scheduled"
+         "Flight is on schedule" | "LAST BAG DELIVERED" | "On Chocks" | "Finals" | "On Finals" => "Active"
+    case "Scheduled" | "Estimated" | "RESCHEDULED" | "Calculated" | "Operated" => "Scheduled"
     case _ => "Others"
 
   }
-  def localDateTimeAccordingToTimezone(requestedDetails: FlightsRequest, localtime: LocalDateTime): ZonedDateTime = {
+
+  def localDateTimeAccordingToTimezone(requestedDetails: FlightsRequest, localtime: LocalDateTime): DateTime = {
+    val dateTime = new DateTime(localtime.getYear, localtime.getMonthValue, localtime.getDayOfMonth, localtime.getHour, localtime.getMinute, localtime.getSecond, DateTimeZone.UTC)
     (requestedDetails.country, requestedDetails.timezone.toLowerCase) match {
-      case (_, "uk") => ZonedDateTime.of(localtime, ZoneId.of("Europe/London"))
-      case ("All", "local") => ZonedDateTime.of(localtime, ZoneId.of("UTC"))
-      case (country, "local") => ZonedDateTime.of(localtime, ZoneId.of(AirportUtil.getTimezoneForCountry(country)))
-      case (_, _) => ZonedDateTime.of(localtime, ZoneId.of("UTC"))
+      case (_, "uk") => dateTime.toDateTime(DateTimeZone.forID("Europe/London"))
+      case ("All", "local") => dateTime
+      case (country, "local") => dateTime.toDateTime(DateTimeZone.forID(AirportUtil.getTimezoneForCountry(country)))
+      case (_, _) => dateTime
     }
 
   }
