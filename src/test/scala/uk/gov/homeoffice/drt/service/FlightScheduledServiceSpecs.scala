@@ -27,13 +27,13 @@ class FlightScheduledServiceSpecs extends AsyncFlatSpec with Matchers with Scala
 
     val expectedResult = List(Arrival(
       _id = "1",
-      scheduledArrivalDate = DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toDate`("2018-12-21 21:35:0"),
+      scheduledArrivalDate = DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toDate_withTimezone`("2018-12-21 21:35:0","Europe/London"),
       carrierName = "Eaglexpress Air",
       flightNumber = "EZX6062",
       arrivingAirport = "BRB",
       origin = "ATH",
       status = "Forecast",
-      scheduledDepartureTime = Some(DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toDate`("2018-11-23 21:35:00"))
+      scheduledDepartureTime = Some(DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toDate_withTimezone`("2018-11-23 21:35:00","Europe/London"))
     ))
 
     val arrivalTableData = flightScheduledService.getFlightsDetail(requestedDetails)

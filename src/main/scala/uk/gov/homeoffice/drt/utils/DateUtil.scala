@@ -36,10 +36,4 @@ object DateUtil {
 
   val `yyyy-MM-dd_formatLocalDate_toString`: LocalDate => String = date => `yyyy-MM-dd_LocalDateFormatter`.format(date)
 
-  val UTCTimeZoneConvertDate: LocalDateTime => Date = localDateTime => Date.from(localDateTime.atZone(ZoneId.of("UTC")).toInstant())
-
-  val `UTC+2TimeZoneConvertDate`: LocalDateTime => Date = localDateTime => Date.from(localDateTime.atZone(ZoneId.of("UTC+2")).toInstant())
-
-  val ZonedTimeDateToDate: ZonedDateTime => Date = zonedDateTime => Date.from(zonedDateTime.toInstant)
-
 }
