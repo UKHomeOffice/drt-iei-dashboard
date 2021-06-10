@@ -18,7 +18,7 @@ object DateUtil {
 
   val `yyyy-MM-dd_format_toString`: Date => String = date => new SimpleDateFormat("yyyy-MM-dd").format(date)
 
-  val `yyyy-MM-dd_parse_toDate`: String => Date = date => new SimpleDateFormat("yyyy-MM-dd").parse(date)
+  val `yyyy-MM-dd_parse_toDate`: String => DateTime = date => DateTime.parse(date, DateTimeFormat.forPattern("yyyy-MM-dd"));
 
   val `yyyy-MM-ddTHH:mm:ss.SSSZ_parse_toLocalDateTime`: String => LocalDateTime = dateString => LocalDateTime.parse(dateString, `yyyy-MM-ddTHH:mm:ss.SSSZ_LocalDateFormatter`)
 

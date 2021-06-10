@@ -17,6 +17,7 @@ case class ArrivalTableData(code: String,
                             origin: String,
                             terminal: String,
                             status: String,
+                            totalPaxNumber: Int,
                             scheduled: LocalDateTime,
                             scheduled_departure: Option[LocalDateTime]
                            )
@@ -39,17 +40,17 @@ class ArrivalRepository[F[_] : Sync](val sessionPool: Resource[F, Session[F]]) e
   implicit val logger = Slf4jLogger.getLogger[F]
 
   val decoder: Decoder[ArrivalTableData] =
-    (text ~ int4 ~ text ~ text ~ text ~ text ~ timestamp ~ timestamp.opt).map {
-      case code ~ number ~ destination ~ origin ~ terminal ~ status ~ scheduled ~ scheduled_departure =>
+    (text ~ int4 ~ text ~ text ~ text ~ text ~ int4 ~ timestamp ~ timestamp.opt).map {
+      case code ~ number ~ destination ~ origin ~ terminal ~ status ~ totalpassengers ~ scheduled ~ scheduled_departure  =>
         ArrivalTableData(
-          code, number, destination, origin, terminal, status, scheduled, scheduled_departure
+          code, number, destination, origin, terminal, status, totalpassengers, scheduled, scheduled_departure
         )
     }
 
 
   private def selectArrivalsForADate: Query[LocalDateTime ~ LocalDateTime, ArrivalTableData] =
     sql"""
-        SELECT code, number, destination, origin, terminal, status, scheduled, scheduled_departure
+        SELECT code, number, destination, origin, terminal, status, totalpassengers, scheduled, scheduled_departure
         FROM arrival WHERE scheduled > $timestamp and scheduled < $timestamp;
        """.query(decoder)
 
@@ -63,7 +64,7 @@ class ArrivalRepository[F[_] : Sync](val sessionPool: Resource[F, Session[F]]) e
   def getArrivalForOriginsAndDate(origins: List[String]): F[List[ArrivalTableData]] = {
     val query: Query[List[String] ~ LocalDateTime ~ LocalDateTime, ArrivalTableData] =
       sql"""
-        select code, number, destination, origin, terminal, status, scheduled, scheduled_departure
+        select code, number, destination, origin, terminal, status, totalpassengers, scheduled, scheduled_departure
         FROM arrival where origin in(${text.list(origins.size)})and scheduled_departure is NULL and scheduled > $timestamp and scheduled < $timestamp;
        """.query(decoder)
 

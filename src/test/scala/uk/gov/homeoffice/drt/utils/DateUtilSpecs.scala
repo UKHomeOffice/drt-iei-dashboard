@@ -7,32 +7,26 @@ import java.time.Month
 
 class DateUtilSpecs extends AsyncFlatSpec with Matchers {
 
-  import DateUtil._
-
-
   "Compare date check" should "be true for same dates and different time" in {
-    val date1 = DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toDate`("2018-11-23 21:35:00")
-    val date2 = DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toDate`("2018-11-23 22:35:00")
-
+    val date1 = DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toDate`("2018-11-23 21:35:00").withTimeAtStartOfDay()
+    val date2 = DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toDate`("2018-11-23 22:35:00").withTimeAtStartOfDay()
     date1 mustEqual date2
   }
 
   "Compare date check" should "be true for same dates and one no time" in {
-    val date1 = DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toDate`("2018-11-23 21:35:00")
-    val date2 = DateUtil.`yyyy-MM-dd_parse_toDate`("2018-11-23")
+    val date1 = DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toDate`("2018-11-23 21:35:00").withTimeAtStartOfDay()
+    val date2 = DateUtil.`yyyy-MM-dd_parse_toDate`("2018-11-23").withTimeAtStartOfDay()
 
     date1 mustEqual date2
 
   }
-
 
   "Compare date check" should "be false for different dates" in {
-    val date1 = DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toDate`("2018-11-23 21:35:00")
-    val date2 = DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toDate`("2018-11-24 22:35:00")
-    date1 mustEqual date2
+    val date1 = DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toDate`("2018-11-23 21:35:00").withTimeAtStartOfDay()
+    val date2 = DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toDate`("2018-11-24 22:35:00").withTimeAtStartOfDay()
+    date1 must not be date2
 
   }
-
 
   "Date format" should "give string of `yyyy-MM-dd HH:mm:ss` format" in {
     val date1 = DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toDate`("2018-11-23 21:35:00")

@@ -20,6 +20,7 @@ class ArrivalRepositoryStub[F[_] : Sync] extends ArrivalRepositoryI[F] {
         scheduled_departure = Some(DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toLocalDateTime`("2018-11-23 21:35:00")),
         status = "ACL Forecast",
         terminal = "T1",
+        totalPaxNumber = 10
       ),
       ArrivalTableData(
         scheduled = DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toLocalDateTime`("2018-12-21 21:35:00"),
@@ -30,6 +31,7 @@ class ArrivalRepositoryStub[F[_] : Sync] extends ArrivalRepositoryI[F] {
         scheduled_departure = Some(DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toLocalDateTime`("2018-11-23 21:35:00")),
         status = "ACL Forecast",
         terminal = "T1",
+        totalPaxNumber = 10
       ),
       ArrivalTableData(
         scheduled = DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toLocalDateTime`("2018-12-21 21:35:00"),
@@ -40,6 +42,7 @@ class ArrivalRepositoryStub[F[_] : Sync] extends ArrivalRepositoryI[F] {
         scheduled_departure = Some(DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toLocalDateTime`("2018-11-23 21:35:00")),
         status = "ACL Forecast",
         terminal = "T1",
+        totalPaxNumber = 10
       ),
       ArrivalTableData(
         scheduled = DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toLocalDateTime`("2019-12-21 21:35:00"),
@@ -50,6 +53,7 @@ class ArrivalRepositoryStub[F[_] : Sync] extends ArrivalRepositoryI[F] {
         scheduled_departure = Some(DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toLocalDateTime`("2018-11-23 21:35:00")),
         status = "ACL Forecast",
         terminal = "T1",
+        totalPaxNumber = 10
       ),
       ArrivalTableData(
         scheduled = DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toLocalDateTime`("2018-12-21 21:35:00"),
@@ -60,6 +64,7 @@ class ArrivalRepositoryStub[F[_] : Sync] extends ArrivalRepositoryI[F] {
         scheduled_departure = Some(DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toLocalDateTime`("2018-11-23 21:35:00")),
         status = "ACL Forecast",
         terminal = "T1",
+        totalPaxNumber = 10
       ),
       ArrivalTableData(
         scheduled = DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toLocalDateTime`("2018-12-21 21:35:00"),
@@ -70,6 +75,7 @@ class ArrivalRepositoryStub[F[_] : Sync] extends ArrivalRepositoryI[F] {
         scheduled_departure = Some(DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toLocalDateTime`("2018-11-23 21:35:00")),
         status = "ACL Forecast",
         terminal = "T1",
+        totalPaxNumber = 10
       ),
       ArrivalTableData(
         scheduled = DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toLocalDateTime`("2018-12-21 21:35:00"),
@@ -80,6 +86,7 @@ class ArrivalRepositoryStub[F[_] : Sync] extends ArrivalRepositoryI[F] {
         scheduled_departure = Some(DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toLocalDateTime`("2018-11-23 21:35:00")),
         status = "ACL Forecast",
         terminal = "T1",
+        totalPaxNumber = 10
       ),
       ArrivalTableData(
         scheduled = DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toLocalDateTime`("2018-12-21 21:35:00"),
@@ -90,6 +97,7 @@ class ArrivalRepositoryStub[F[_] : Sync] extends ArrivalRepositoryI[F] {
         scheduled_departure = Some(DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toLocalDateTime`("2018-11-23 21:35:00")),
         status = "ACL Forecast",
         terminal = "T1",
+        totalPaxNumber = 10
       ),
       ArrivalTableData(
         scheduled = DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toLocalDateTime`("2018-12-21 21:35:00"),
@@ -100,6 +108,7 @@ class ArrivalRepositoryStub[F[_] : Sync] extends ArrivalRepositoryI[F] {
         scheduled_departure = Some(DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toLocalDateTime`("2018-11-23 21:35:00")),
         status = "ACL Forecast",
         terminal = "T1",
+        totalPaxNumber = 10
       ),
       ArrivalTableData(
         scheduled = DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toLocalDateTime`("2018-12-21 21:35:00"),
@@ -110,6 +119,7 @@ class ArrivalRepositoryStub[F[_] : Sync] extends ArrivalRepositoryI[F] {
         scheduled_departure = Some(DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toLocalDateTime`("2018-11-23 21:35:00")),
         status = "ACL Forecast",
         terminal = "T1",
+        totalPaxNumber = 10
       ),
       ArrivalTableData(
         code = "BA6067",
@@ -119,7 +129,8 @@ class ArrivalRepositoryStub[F[_] : Sync] extends ArrivalRepositoryI[F] {
         status = "ACL Forecast",
         terminal = "T1",
         scheduled = DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toLocalDateTime`("2018-12-21 21:35:00"),
-        scheduled_departure = Some(DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toLocalDateTime`("2018-11-23 21:35:00"))
+        scheduled_departure = Some(DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toLocalDateTime`("2018-11-23 21:35:00")),
+        totalPaxNumber = 10
       ), ArrivalTableData(
         code = "BA6067",
         number = 6067,
@@ -129,6 +140,7 @@ class ArrivalRepositoryStub[F[_] : Sync] extends ArrivalRepositoryI[F] {
         terminal = "T1",
         scheduled = DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toLocalDateTime`("2018-12-21 21:35:00"),
         scheduled_departure = Some(DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toLocalDateTime`("2018-11-23 21:35:00")),
+        totalPaxNumber = 10
       ), ArrivalTableData(
         code = "BA6068",
         number = 6068,
@@ -138,6 +150,7 @@ class ArrivalRepositoryStub[F[_] : Sync] extends ArrivalRepositoryI[F] {
         terminal = "T1",
         scheduled = DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toLocalDateTime`("2018-12-22 21:35:00"),
         scheduled_departure = None,
+        totalPaxNumber = 10
       ), ArrivalTableData(
         code = "BA6069",
         number = 6069,
@@ -147,6 +160,7 @@ class ArrivalRepositoryStub[F[_] : Sync] extends ArrivalRepositoryI[F] {
         terminal = "T1",
         scheduled = DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toLocalDateTime`("2018-12-23 21:35:00"),
         scheduled_departure = None,
+        totalPaxNumber = 10
       )
     )
 
