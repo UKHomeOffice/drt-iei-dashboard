@@ -34,7 +34,7 @@ class FlightScheduledService[F[_] : Sync](arrivalsRepository: ArrivalRepositoryI
   }
 
   def getDisplayStatus(status: String, totalPaxNumber: Option[Int]): String = status match {
-    case _ if totalPaxNumber.isDefined && totalPaxNumber.getOrElse(-1) == 0 => "Freight"
+    case _ if totalPaxNumber.getOrElse(0) == 0  => "NoPaxInfo"
     case "ACL Forecast" | "Port Forecast" => "Forecast"
     case "CANCELLED" | "Cancelled" | "Canceled" => "Cancelled"
     case "Deleted / Removed Flight Record" => "Deleted"
