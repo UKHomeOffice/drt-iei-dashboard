@@ -17,7 +17,7 @@ case class ArrivalTableData(code: String,
                             origin: String,
                             terminal: String,
                             status: String,
-                            totalPaxNumber: Int,
+                            totalPaxNumber: Option[Int],
                             scheduled: LocalDateTime,
                             scheduled_departure: Option[LocalDateTime]
                            )
@@ -40,7 +40,7 @@ class ArrivalRepository[F[_] : Sync](val sessionPool: Resource[F, Session[F]]) e
   implicit val logger = Slf4jLogger.getLogger[F]
 
   val decoder: Decoder[ArrivalTableData] =
-    (text ~ int4 ~ text ~ text ~ text ~ text ~ int4 ~ timestamp ~ timestamp.opt).map {
+    (text ~ int4 ~ text ~ text ~ text ~ text ~ int4.opt ~ timestamp ~ timestamp.opt).map {
       case code ~ number ~ destination ~ origin ~ terminal ~ status ~ totalpassengers ~ scheduled ~ scheduled_departure  =>
         ArrivalTableData(
           code, number, destination, origin, terminal, status, totalpassengers, scheduled, scheduled_departure

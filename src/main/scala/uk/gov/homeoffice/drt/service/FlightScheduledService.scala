@@ -33,8 +33,8 @@ class FlightScheduledService[F[_] : Sync](arrivalsRepository: ArrivalRepositoryI
         a.arrivalsTableData.scheduled_departure.map(d => localDateTimeAccordingToTimezone(requestedDetails, d)))))
   }
 
-  def getDisplayStatus(status: String, totalPaxNumber: Int): String = status match {
-    case _ if totalPaxNumber == 0 => "Freight"
+  def getDisplayStatus(status: String, totalPaxNumber: Option[Int]): String = status match {
+    case _ if totalPaxNumber.isDefined && totalPaxNumber.getOrElse(-1) == 0 => "Freight"
     case "ACL Forecast" | "Port Forecast" => "Forecast"
     case "CANCELLED" | "Cancelled" | "Canceled" => "Cancelled"
     case "Deleted / Removed Flight Record" => "Deleted"
