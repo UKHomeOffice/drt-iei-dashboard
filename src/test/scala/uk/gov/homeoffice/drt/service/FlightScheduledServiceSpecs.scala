@@ -37,7 +37,7 @@ class FlightScheduledServiceSpecs extends AsyncFlatSpec with Matchers with Scala
     ))
 
     val arrivalTableData = flightScheduledService.getFlightsDetail(requestedDetails)
-    val actualResult = flightScheduledService.transformArrivals(requestedDetails, arrivalTableData).unsafeRunSync()
+    val actualResult = flightScheduledService.transformArrivalsFromArrivalTable(requestedDetails, arrivalTableData).unsafeRunSync()
 
     actualResult mustEqual expectedResult
 
@@ -61,7 +61,7 @@ class FlightScheduledServiceSpecs extends AsyncFlatSpec with Matchers with Scala
     ))
 
     val arrivalTableData = arrivalService.getFlightsDetail(requestedDetails)
-    val actualResult = arrivalService.transformArrivals(requestedDetails, arrivalTableData).unsafeRunSync()
+    val actualResult = arrivalService.transformArrivalsFromArrivalTable(requestedDetails, arrivalTableData).unsafeRunSync()
 
     expectedResult mustEqual actualResult
   }
@@ -83,7 +83,7 @@ class FlightScheduledServiceSpecs extends AsyncFlatSpec with Matchers with Scala
     ))
 
     val arrivalTableData = arrivalService.getFlightsDetail(requestedDetails)
-    val actualResult: Seq[Arrival] = arrivalService.transformArrivals(requestedDetails, arrivalTableData).unsafeRunSync()
+    val actualResult: Seq[Arrival] = arrivalService.transformArrivalsFromArrivalTable(requestedDetails, arrivalTableData).unsafeRunSync()
 
     val actualScheduleDate = actualResult.head.scheduledArrivalDate.toDateTime(DateTimeZone.forID("UTC"))
     val expectedResultScheduleDate = expectedResult.head.scheduledArrivalDate.toDateTime(DateTimeZone.forID("UTC"))

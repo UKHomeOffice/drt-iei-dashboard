@@ -24,7 +24,7 @@ trait DepartureRepositoryI[F[_]] {
 
   def insertDepartureData(ps: List[DepartureTableData]): F[List[Completion]]
 
-  def ignoreScheduledDepartureIfExist(arrivalTableData: ArrivalTableData): F[Option[DepartureTableData]]
+  def upsertScheduledDeparture(arrivalTableData: ArrivalTableData): F[Option[DepartureTableData]]
 
   def selectDepartureTableData(arrivalTableData: ArrivalTableData): F[List[DepartureTableData]]
 
@@ -74,7 +74,7 @@ class DepartureRepository[F[_] : Sync](val sessionPool: Resource[F, Session[F]])
     }
   }
 
-  def ignoreScheduledDepartureIfExist(arrivalTableData: ArrivalTableData): F[Option[DepartureTableData]] = {
+  def upsertScheduledDeparture(arrivalTableData: ArrivalTableData): F[Option[DepartureTableData]] = {
     val a: F[List[DepartureTableData]] = selectDepartureTableData(arrivalTableData)
     val insertDepartureData: F[Option[DepartureTableData]] = a.map { b =>
       if (b.nonEmpty) {

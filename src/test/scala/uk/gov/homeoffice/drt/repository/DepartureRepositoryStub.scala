@@ -21,7 +21,7 @@ class DepartureRepositoryStub[F[_] : Sync] extends DepartureRepositoryI[F] {
 
   override def insertDepartureData(ps: List[DepartureTableData]): F[List[Completion]] = ???
 
-  override def ignoreScheduledDepartureIfExist(arrivalTableData: ArrivalTableData): F[Option[DepartureTableData]] = ???
+  override def upsertScheduledDeparture(arrivalTableData: ArrivalTableData): F[Option[DepartureTableData]] = ???
 
   override def selectDepartureTableData(arrivalTableData: ArrivalTableData): F[List[DepartureTableData]] = ???
 

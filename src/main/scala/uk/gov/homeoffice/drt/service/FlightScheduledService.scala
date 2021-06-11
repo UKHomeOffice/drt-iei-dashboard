@@ -21,7 +21,7 @@ class FlightScheduledService[F[_] : Sync](arrivalsRepository: ArrivalRepositoryI
 
   }
 
-  def transformArrivals(requestedDetails: FlightsRequest, arrivalsTableData: F[List[ArrivalTableDataIndex]]): F[List[Arrival]] = {
+  def transformArrivalsFromArrivalTable(requestedDetails: FlightsRequest, arrivalsTableData: F[List[ArrivalTableDataIndex]]): F[List[Arrival]] = {
     arrivalsTableData.map(_.map(a =>
       model.Arrival((a.index + 1).toString,
         localDateTimeAccordingToTimezone(requestedDetails, a.arrivalsTableData.scheduled),
@@ -73,7 +73,7 @@ class FlightScheduledService[F[_] : Sync](arrivalsRepository: ArrivalRepositoryI
 
 
   def insertDepartureTableData(arrivalTableDataF: F[List[ArrivalTableData]]) = {
-    val insertDepartureTableDataF: F[List[DepartureTableData]] = arrivalTableDataF.flatMap(_.traverse(departureRepository.ignoreScheduledDepartureIfExist(_))).map(_.flatten)
+    val insertDepartureTableDataF: F[List[DepartureTableData]] = arrivalTableDataF.flatMap(_.traverse(departureRepository.upsertScheduledDeparture(_))).map(_.flatten)
     insertDepartureTableDataF.map(departureRepository.insertDepartureData(_)).flatten
   }
 

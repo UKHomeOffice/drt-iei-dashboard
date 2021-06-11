@@ -21,7 +21,7 @@ class CiriumService[F[_] : Sync](airlineConfig: AirlineConfig, client: Client[F]
 
   implicit val logger = Slf4jLogger.getLogger[F]
 
-  def process(arrivalTableData: ArrivalTableData): F[CiriumScheduledResponse] =
+  def fetchMissingDepartureTimes(arrivalTableData: ArrivalTableData): F[CiriumScheduledResponse] =
     Uri.fromString(s"$schedulerEndpoint${urlParams(arrivalTableData)}?appId=${airlineConfig.appId}&appKey=${airlineConfig.appKey}").liftTo[F].flatMap { uri =>
       GET(uri).flatMap { req =>
         client.run(req).use { r =>
@@ -39,7 +39,7 @@ class CiriumService[F[_] : Sync](airlineConfig: AirlineConfig, client: Client[F]
 
   def appendScheduledDeparture(arrivalTableDatas: F[List[ArrivalTableData]]): F[List[ArrivalTableData]] = {
     val amendArrivalTableDatas: F[List[ArrivalTableData]] = arrivalTableDatas.map(_.traverse { arrivalsTableData =>
-      process(arrivalsTableData).map { sd =>
+      fetchMissingDepartureTimes(arrivalsTableData).map { sd =>
         sd.scheduledFlights.headOption match {
           case Some(a) =>
             arrivalsTableData.copy(scheduled_departure = Option(DateUtil.`yyyy-MM-ddTHH:mm:ss.SSSZ_parse_toLocalDateTime`(a.departureTime)))
