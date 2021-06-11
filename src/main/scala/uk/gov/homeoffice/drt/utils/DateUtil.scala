@@ -1,5 +1,8 @@
 package uk.gov.homeoffice.drt.utils
 
+import org.joda.time.{DateTime, DateTimeZone}
+import org.joda.time.format.DateTimeFormat
+
 import java.text.SimpleDateFormat
 import java.time.format.DateTimeFormatter
 import java.time._
@@ -7,17 +10,15 @@ import java.util.Date
 
 object DateUtil {
 
-  val `yyyy-MM-dd HH:mm:ss_parse_toDate`: String => Date = date => new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date)
+  val `yyyy-MM-dd HH:mm:ss_parse_toDate`: String => DateTime = date => DateTime.parse(date, DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss"));
 
-  val `yyyy-MM-dd HH:mm_format_toString`: Date => String = date => new SimpleDateFormat("yyyy-MM-dd HH:mm").format(date)
+  val `yyyy-MM-dd HH:mm:ss_parse_toDate_withTimezone`: (String, String) => DateTime = (date, timeZone) => `yyyy-MM-dd HH:mm:ss_parse_toDate`(date).toDateTime(DateTimeZone.forID(timeZone));
+
+  val `yyyy-MM-dd HH:mm_format_toString`: DateTime => String = date => DateTimeFormat.forPattern("yyyy-MM-dd HH:mm").print(date);
 
   val `yyyy-MM-dd_format_toString`: Date => String = date => new SimpleDateFormat("yyyy-MM-dd").format(date)
 
-  val `yyyy-MM-dd_parse_toDate`: String => Date = date => new SimpleDateFormat("yyyy-MM-dd").parse(date)
-
-  val areEqual: (Date, Date) => Boolean = (date1, date2) =>
-    date1.toInstant().atZone(ZoneOffset.UTC).toLocalDate.
-      compareTo(date2.toInstant().atZone(ZoneOffset.UTC).toLocalDate) == 0
+  val `yyyy-MM-dd_parse_toDate`: String => DateTime = date => DateTime.parse(date, DateTimeFormat.forPattern("yyyy-MM-dd"));
 
   val `yyyy-MM-ddTHH:mm:ss.SSSZ_parse_toLocalDateTime`: String => LocalDateTime = dateString => LocalDateTime.parse(dateString, `yyyy-MM-ddTHH:mm:ss.SSSZ_LocalDateFormatter`)
 
@@ -34,11 +35,5 @@ object DateUtil {
   val `yyyy-MM-dd_parse_toLocalDate`: String => LocalDate = dateString => LocalDate.parse(dateString, `yyyy-MM-dd_LocalDateFormatter`);
 
   val `yyyy-MM-dd_formatLocalDate_toString`: LocalDate => String = date => `yyyy-MM-dd_LocalDateFormatter`.format(date)
-
-  val UTCTimeZoneConvertDate: LocalDateTime => Date = localDateTime => Date.from(localDateTime.atZone(ZoneId.of("UTC")).toInstant())
-
-  val `UTC+2TimeZoneConvertDate`: LocalDateTime => Date = localDateTime => Date.from(localDateTime.atZone(ZoneId.of("UTC+2")).toInstant())
-
-  val ZonedTimeDateToDate: ZonedDateTime => Date = zonedDateTime => Date.from(zonedDateTime.toInstant)
 
 }

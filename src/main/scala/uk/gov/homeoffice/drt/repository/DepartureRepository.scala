@@ -1,9 +1,9 @@
 package uk.gov.homeoffice.drt.repository
 
 import java.time.LocalDateTime
-
 import cats.effect.{Resource, Sync}
 import cats.syntax.all._
+import io.chrisdavenport.log4cats.Logger
 import io.chrisdavenport.log4cats.slf4j.Slf4jLogger
 import skunk._
 import skunk.codec.all.{int4, text, timestamp, varchar}
@@ -24,7 +24,7 @@ trait DepartureRepositoryI[F[_]] {
 
   def insertDepartureData(ps: List[DepartureTableData]): F[List[Completion]]
 
-  def ignoreScheduledDepartureIfExist(arrivalTableData: ArrivalTableData): F[Option[DepartureTableData]]
+  def upsertScheduledDeparture(arrivalTableData: ArrivalTableData): F[Option[DepartureTableData]]
 
   def selectDepartureTableData(arrivalTableData: ArrivalTableData): F[List[DepartureTableData]]
 
@@ -74,11 +74,11 @@ class DepartureRepository[F[_] : Sync](val sessionPool: Resource[F, Session[F]])
     }
   }
 
-  def ignoreScheduledDepartureIfExist(arrivalTableData: ArrivalTableData): F[Option[DepartureTableData]] = {
+  def upsertScheduledDeparture(arrivalTableData: ArrivalTableData): F[Option[DepartureTableData]] = {
     val a: F[List[DepartureTableData]] = selectDepartureTableData(arrivalTableData)
     val insertDepartureData: F[Option[DepartureTableData]] = a.map { b =>
       if (b.nonEmpty) {
-        logger.debug(s"$arrivalTableData already exists in DepartureTableData")
+        Logger[F].debug(s"$arrivalTableData already exists in DepartureTableData")
         None
       } else {
         Some(DepartureTableData(arrivalTableData.code, arrivalTableData.number, arrivalTableData.destination, arrivalTableData.origin, arrivalTableData.terminal, arrivalTableData.status, arrivalTableData.scheduled, arrivalTableData.scheduled_departure.get))
@@ -96,7 +96,8 @@ class DepartureRepository[F[_] : Sync](val sessionPool: Resource[F, Session[F]])
     ps.traverse { p =>
       sessionPool.use { session =>
         session.prepare(insertCommandDepartureData(p)).use(_.execute(p)).handleErrorWith {
-          case e => logger.warn(s"Error while inserting $p ${e.getMessage} $e") as
+          case e =>
+            Logger[F].warn(s"Error while inserting $p ${e.getMessage} $e") as
             Completion.Insert(0)
         }
       }

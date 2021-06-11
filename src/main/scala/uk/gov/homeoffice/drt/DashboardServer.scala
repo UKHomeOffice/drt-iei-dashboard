@@ -14,7 +14,7 @@ import skunk.Session
 import uk.gov.homeoffice.drt.api.{ArrivalRoutes, PublicRoutes}
 import uk.gov.homeoffice.drt.applicative.ArrivalFlights
 import uk.gov.homeoffice.drt.repository.{ArrivalRepository, DepartureRepository}
-import uk.gov.homeoffice.drt.service.{AirlineService, FlightScheduledService}
+import uk.gov.homeoffice.drt.service.FlightScheduledService
 import uk.gov.homeoffice.drt.utils.AirlineUtil
 
 import scala.concurrent.ExecutionContext.global
@@ -40,13 +40,10 @@ object DashboardServer {
 
       arrivalsService = new FlightScheduledService(new ArrivalRepository(session), new DepartureRepository(session))
 
-      airlineService = new AirlineService(client)
-
       arrivalFlightsAlg = ArrivalFlights.impl[F](arrivalsService)
 
       httpApp = middleware(
         PublicRoutes.dashboardRoutes[F]() <+>
-          PublicRoutes.airlineRoutes[F](cfg.airline, airlineService) <+>
           ArrivalRoutes.arrivalFlightsRoutes[F](arrivalFlightsAlg, cfg.api.permissions)
       ).orNotFound
 

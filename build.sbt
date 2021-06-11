@@ -28,7 +28,8 @@ lazy val root = (project in file("."))
       Libraries.fs2CronCore,
       Libraries.scalaCheck,
       Libraries.scalaTest,
-      Libraries.scalaTestPlus
+      Libraries.scalaTestPlus,
+      Libraries.joda
     ),
     dockerExposedPorts ++= Seq(9001),
     compile := ((compile in Compile) dependsOn buildReactApp).value

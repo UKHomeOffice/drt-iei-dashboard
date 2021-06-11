@@ -1,12 +1,15 @@
 package uk.gov.homeoffice.drt.service
 
 import cats.effect.{IO, Sync}
+import org.joda.time.{DateTime, DateTimeZone}
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 import uk.gov.homeoffice.drt.model.{Arrival, FlightsRequest}
 import uk.gov.homeoffice.drt.repository.{ArrivalRepositoryStub, DepartureRepositoryStub}
 import uk.gov.homeoffice.drt.utils.{AirlineUtil, DateUtil}
+
+import java.time.LocalDateTime
 
 class FlightScheduledServiceSpecs extends AsyncFlatSpec with Matchers with ScalaCheckDrivenPropertyChecks {
 
@@ -20,21 +23,21 @@ class FlightScheduledServiceSpecs extends AsyncFlatSpec with Matchers with Scala
 
     val flightScheduledService: FlightScheduledService[IO] = context
 
-    val requestedDetails = FlightsRequest("Euromed South", "Athens", "Greece", "2018-12-21", "UTC")
+    val requestedDetails = FlightsRequest("Euromed South", "Athens", "Greece", "2018-12-21", "UK")
 
     val expectedResult = List(Arrival(
       _id = "1",
-      scheduledArrivalDate = DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toDate`("2018-12-21 21:35:0"),
+      scheduledArrivalDate = DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toDate_withTimezone`("2018-12-21 21:35:0","Europe/London"),
       carrierName = "Eaglexpress Air",
       flightNumber = "EZX6062",
       arrivingAirport = "BRB",
       origin = "ATH",
       status = "Forecast",
-      scheduledDepartureTime = Some(DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toDate`("2018-11-23 21:35:00"))
+      scheduledDepartureTime = Some(DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toDate_withTimezone`("2018-11-23 21:35:00","Europe/London"))
     ))
 
     val arrivalTableData = flightScheduledService.getFlightsDetail(requestedDetails)
-    val actualResult = flightScheduledService.transformArrivals(requestedDetails, arrivalTableData).unsafeRunSync()
+    val actualResult = flightScheduledService.transformArrivalsFromArrivalTable(requestedDetails, arrivalTableData).unsafeRunSync()
 
     actualResult mustEqual expectedResult
 
@@ -48,19 +51,19 @@ class FlightScheduledServiceSpecs extends AsyncFlatSpec with Matchers with Scala
 
     val expectedResult = List(Arrival(
       _id = "1",
-      scheduledArrivalDate = DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toDate`("2018-12-21 21:35:0"),
+      scheduledArrivalDate = DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toDate_withTimezone`("2018-12-21 21:35:0", "UTC"),
       carrierName = "British Airways",
       flightNumber = "BA6067",
       arrivingAirport = "BRG",
       origin = "SOF",
       status = "Forecast",
-      scheduledDepartureTime = Some(DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toDate`("2018-11-23 21:35:00"))
+      scheduledDepartureTime = Some(DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toDate_withTimezone`("2018-11-23 21:35:00", "UTC"))
     ))
 
     val arrivalTableData = arrivalService.getFlightsDetail(requestedDetails)
-    val actualResult = arrivalService.transformArrivals(requestedDetails, arrivalTableData).unsafeRunSync()
+    val actualResult = arrivalService.transformArrivalsFromArrivalTable(requestedDetails, arrivalTableData).unsafeRunSync()
 
-    actualResult mustEqual expectedResult
+    expectedResult mustEqual actualResult
   }
 
   "Arrival" should "return arrival details without scheduled Departure date when departure time is not present in departure table and arrival table" in {
@@ -70,7 +73,7 @@ class FlightScheduledServiceSpecs extends AsyncFlatSpec with Matchers with Scala
 
     val expectedResult = List(Arrival(
       _id = "1",
-      scheduledArrivalDate = DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toDate`("2018-12-23 21:35:0"),
+      scheduledArrivalDate = DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toDate_withTimezone`("2018-12-23 21:35:0", "UTC"),
       carrierName = "British Airways",
       flightNumber = "BA6069",
       arrivingAirport = "BRG",
@@ -80,11 +83,12 @@ class FlightScheduledServiceSpecs extends AsyncFlatSpec with Matchers with Scala
     ))
 
     val arrivalTableData = arrivalService.getFlightsDetail(requestedDetails)
-    val actualResult = arrivalService.transformArrivals(requestedDetails, arrivalTableData).unsafeRunSync()
+    val actualResult: Seq[Arrival] = arrivalService.transformArrivalsFromArrivalTable(requestedDetails, arrivalTableData).unsafeRunSync()
 
-    actualResult mustEqual expectedResult
+    val actualScheduleDate = actualResult.head.scheduledArrivalDate.toDateTime(DateTimeZone.forID("UTC"))
+    val expectedResultScheduleDate = expectedResult.head.scheduledArrivalDate.toDateTime(DateTimeZone.forID("UTC"))
+    expectedResult mustEqual actualResult
   }
-
 
   "Arrival" should "give carrierName 'Ryanair' for flightNumber 'FR0012'" in {
     val arrivalService: FlightScheduledService[IO] = context
@@ -100,5 +104,22 @@ class FlightScheduledServiceSpecs extends AsyncFlatSpec with Matchers with Scala
 
     a mustEqual "Blue Air"
 
+  }
+
+
+  "scheduled dates" should "return date for request timezone" in {
+    val flightScheduledService: FlightScheduledService[IO] = context
+    val localtime = LocalDateTime.now()
+    val dateTime = new DateTime(localtime.getYear, localtime.getMonthValue, localtime.getDayOfMonth, localtime.getHour, localtime.getMinute, localtime.getSecond, DateTimeZone.UTC)
+
+    val ukDate: DateTime = flightScheduledService.localDateTimeAccordingToTimezone(FlightsRequest("", "", "", "", "UK"), localtime)
+    val utcDate: DateTime = flightScheduledService.localDateTimeAccordingToTimezone(FlightsRequest("", "", "", "", "UTC"), localtime)
+    val localToCountryNetherlandsDate: DateTime = flightScheduledService.localDateTimeAccordingToTimezone(FlightsRequest("", "", "Netherlands", "", "Local"), localtime)
+    val localToCountryItalyDate: DateTime = flightScheduledService.localDateTimeAccordingToTimezone(FlightsRequest("", "", "Italy", "", "Local"), localtime)
+
+    ukDate mustEqual dateTime.toDateTime(DateTimeZone.forID("Europe/London"))
+    utcDate mustEqual dateTime.toDateTime(DateTimeZone.forID("UTC"))
+    localToCountryNetherlandsDate mustEqual dateTime.toDateTime(DateTimeZone.forID("Europe/Amsterdam"))
+    localToCountryItalyDate mustEqual dateTime.toDateTime(DateTimeZone.forID("Europe/Rome"))
   }
 }

@@ -2,6 +2,7 @@ package uk.gov.homeoffice.drt.service
 
 import cats.effect.Sync
 import cats.syntax.all._
+import io.chrisdavenport.log4cats.Logger
 import io.chrisdavenport.log4cats.slf4j.Slf4jLogger
 import io.circe.syntax._
 import org.http4s.Method.GET
@@ -20,14 +21,14 @@ class CiriumService[F[_] : Sync](airlineConfig: AirlineConfig, client: Client[F]
 
   implicit val logger = Slf4jLogger.getLogger[F]
 
-  def process(arrivalTableData: ArrivalTableData): F[CiriumScheduledResponse] =
+  def fetchMissingDepartureTimes(arrivalTableData: ArrivalTableData): F[CiriumScheduledResponse] =
     Uri.fromString(s"$schedulerEndpoint${urlParams(arrivalTableData)}?appId=${airlineConfig.appId}&appKey=${airlineConfig.appKey}").liftTo[F].flatMap { uri =>
       GET(uri).flatMap { req =>
         client.run(req).use { r =>
           if (r.status == Status.Ok || r.status == Status.Conflict) {
             r.asJsonDecode[CiriumScheduledResponse]
           } else {
-            logger.warn(s"Response from cirium api for flight is ${r.status.reason}") >>
+            Logger[F].warn(s"Response from cirium api for flight is ${r.status.reason}") >>
             CiriumScheduledResponseError(
               Option(r.status.reason).getOrElse("unknown")
             ).raiseError[F, CiriumScheduledResponse]
@@ -38,7 +39,7 @@ class CiriumService[F[_] : Sync](airlineConfig: AirlineConfig, client: Client[F]
 
   def appendScheduledDeparture(arrivalTableDatas: F[List[ArrivalTableData]]): F[List[ArrivalTableData]] = {
     val amendArrivalTableDatas: F[List[ArrivalTableData]] = arrivalTableDatas.map(_.traverse { arrivalsTableData =>
-      process(arrivalsTableData).map { sd =>
+      fetchMissingDepartureTimes(arrivalsTableData).map { sd =>
         sd.scheduledFlights.headOption match {
           case Some(a) =>
             arrivalsTableData.copy(scheduled_departure = Option(DateUtil.`yyyy-MM-ddTHH:mm:ss.SSSZ_parse_toLocalDateTime`(a.departureTime)))
@@ -46,8 +47,8 @@ class CiriumService[F[_] : Sync](airlineConfig: AirlineConfig, client: Client[F]
         }
       }.handleErrorWith {
         case e: CiriumScheduledResponseError =>
-          logger.warn(s"Exception while calling cirium api ${e.getCause} ${e.getMessage}").as(arrivalsTableData)
-        case e => logger.warn(s"Error while calling cirium api ${e.getCause} ${e.getMessage}").as(arrivalsTableData)
+          Logger[F].warn(s"Exception while calling cirium api ${e.getCause} ${e.getMessage}").as(arrivalsTableData)
+        case e => Logger[F].warn(s"Error while calling cirium api ${e.getCause} ${e.getMessage}").as(arrivalsTableData)
       }
     }).flatten
     amendArrivalTableDatas.map(_.filter(_.scheduled_departure.isDefined))
