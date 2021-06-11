@@ -69,7 +69,7 @@ const useStyles = (theme: Theme) => createStyles(
                     backgroundColor: getHoverBackgroundColor(theme.palette.warning.main, theme.palette),
                 },
             },
-            '& .super-app-theme--NoPaxInfo': {
+            '& .super-app-theme--No_Pax_Info': {
                 backgroundColor: getBackgroundColor(theme.palette.info.dark, theme.palette),
                 '&:hover': {
                     backgroundColor: getHoverBackgroundColor(theme.palette.info.dark, theme.palette),
@@ -132,7 +132,7 @@ class FlightsTable extends React.Component<IProps, IState> {
     };
 
     public flightsEndPoint(region: string, post: string, country: string, filterDate: string, timezone: string) {
-        return "/flights/" + region + "/" + post + "/" + country + "/" + filterDate + "/" + timezone
+        return "http://localhost:9001/flights/" + region + "/" + post + "/" + country + "/" + filterDate + "/" + timezone
     }
 
     public getFlightsData(endPoint: string, handleResponse: (r: AxiosResponse) => void) {
