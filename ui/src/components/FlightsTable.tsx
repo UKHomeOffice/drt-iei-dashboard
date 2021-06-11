@@ -132,7 +132,7 @@ class FlightsTable extends React.Component<IProps, IState> {
     };
 
     public flightsEndPoint(region: string, post: string, country: string, filterDate: string, timezone: string) {
-        return "http://localhost:9001/flights/" + region + "/" + post + "/" + country + "/" + filterDate + "/" + timezone
+        return "/flights/" + region + "/" + post + "/" + country + "/" + filterDate + "/" + timezone
     }
 
     public getFlightsData(endPoint: string, handleResponse: (r: AxiosResponse) => void) {
