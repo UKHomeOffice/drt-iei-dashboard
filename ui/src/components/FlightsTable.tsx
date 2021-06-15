@@ -154,7 +154,7 @@ class FlightsTable extends React.Component<IProps, IState> {
         } else {
             return (
                 <div style={{height: 800, width: '100%'}} className={this.props.classes.root}>
-                    <DataGrid rows={this.state.arrivalRows as GridRowModel[]} columns={this.columnsHeaders}
+                    <DataGrid disableSelectionOnClick rows={this.state.arrivalRows as GridRowModel[]} columns={this.columnsHeaders}
                               getRowClassName={(params) => `super-app-theme--${params.getValue(params.id, 'status')}`}
                               pageSize={25}/>
                 </div>
