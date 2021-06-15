@@ -2,20 +2,27 @@ import React from 'react';
 import './App.css';
 import DatePicker from './components/DatePicker'
 import ErrorBoundary from './components/ErrorBoundary'
+import Grid from '@material-ui/core/Grid';
 
 
 function App() {
     return (
         <div className="App">
-            <div className="image-div">
-                <img src="favicon.png" alt="" className="image-homeOffice"/>
-                <span className="image-text">Home Office</span>
-            </div>
             <header className="App-header">
-                <h2>DRT IEI Dashboard</h2>
-                <ErrorBoundary>
-                    <DatePicker/>
-                </ErrorBoundary>
+            <Grid container>
+                <Grid item xs={12} sm={4}>
+                    <div className="image-div">
+                        <img src="favicon.png" alt="" className="image-homeOffice"/>
+                        <span className="image-text">Home Office</span>
+                    </div>
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                   <h3>DRT IEI Dashboard</h3>
+                </Grid>
+            </Grid>
+            <ErrorBoundary>
+                <DatePicker/>
+            </ErrorBoundary>
             </header>
         </div>
     );
