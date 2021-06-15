@@ -69,7 +69,7 @@ const useStyles = (theme: Theme) => createStyles(
                     backgroundColor: getHoverBackgroundColor(theme.palette.warning.main, theme.palette),
                 },
             },
-            '& .super-app-theme--NoPaxInfo': {
+            '& .super-app-theme--No_Pax_Info': {
                 backgroundColor: getBackgroundColor(theme.palette.info.dark, theme.palette),
                 '&:hover': {
                     backgroundColor: getHoverBackgroundColor(theme.palette.info.dark, theme.palette),
