@@ -23,6 +23,7 @@ object ArrivalRoutes {
       case req@GET -> Root / "flights" / region / post / departureCountry / filterDate / timezone :? params =>
         Try {
           val xAuthRoles: List[String] = req.headers.get(CaseInsensitiveString("X-Auth-Roles")).map(_.value.split(",").toList).getOrElse(List.empty)
+          val xAuthEmail: List[String] = req.headers.get(CaseInsensitiveString("X-Auth-Email")).map(_.value.split(",").toList).getOrElse(List.empty)
           val requiredPermissions: Boolean = xAuthRoles.exists(p => permissions.contains(p))
           if (requiredPermissions) {
             Logger[F].info(s"Request details $region $post $departureCountry $filterDate $timezone")
@@ -31,7 +32,7 @@ object ArrivalRoutes {
               resp <- Ok(arrivals)
             } yield resp
           } else {
-            Logger[F].warn(s"User logged in does not have valid permission to view the page.") >>
+            Logger[F].warn(s"User with email $xAuthEmail logged in does not have valid permission to view the page. Permissions $xAuthRoles") >>
               Response[F](Status.Forbidden)
                 .withEntity(s"You need appropriate permissions to view the page.")
                 .pure[F]

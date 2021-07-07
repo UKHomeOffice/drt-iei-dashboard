@@ -11,10 +11,10 @@ import org.http4s.implicits._
 import org.http4s.server.blaze.BlazeServerBuilder
 import org.http4s.server.middleware.{AutoSlash, CORS, Timeout}
 import skunk.Session
-import uk.gov.homeoffice.drt.api.{ArrivalRoutes, PublicRoutes}
+import uk.gov.homeoffice.drt.api.{ArrivalRoutes, EmailRoutes, PublicRoutes}
 import uk.gov.homeoffice.drt.applicative.ArrivalFlights
 import uk.gov.homeoffice.drt.repository.{ArrivalRepository, DepartureRepository}
-import uk.gov.homeoffice.drt.service.FlightScheduledService
+import uk.gov.homeoffice.drt.service.{FlightScheduledService, GovNotifyEmailService}
 import uk.gov.homeoffice.drt.utils.AirlineUtil
 
 import scala.concurrent.ExecutionContext.global
@@ -42,9 +42,12 @@ object DashboardServer {
 
       arrivalFlightsAlg = ArrivalFlights.impl[F](arrivalsService)
 
+      govNotifyEmail = new GovNotifyEmailService(cfg.govNotify.apiKey)
+
       httpApp = middleware(
         PublicRoutes.dashboardRoutes[F]() <+>
-          ArrivalRoutes.arrivalFlightsRoutes[F](arrivalFlightsAlg, cfg.api.permissions)
+          ArrivalRoutes.arrivalFlightsRoutes[F](arrivalFlightsAlg, cfg.api.permissions) <+>
+          EmailRoutes.requestPermission[F](govNotifyEmail, cfg.govNotify)
       ).orNotFound
 
       exitCode <- BlazeServerBuilder[F](global)

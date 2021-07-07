@@ -1,4 +1,5 @@
 import React, {Component, ErrorInfo, ReactNode} from "react";
+import AccessPermission from './AccessPermission';
 
 interface Props {
     children: ReactNode;
@@ -33,11 +34,11 @@ class ErrorBoundary extends Component<Props, State> {
 
     public render() {
         if (this.state.hasError) {
-            if (this.state.errorMessage.includes('status code 403'))
-                return <p>There is error while serving your request please check you got correct permissions to access
-                    the Dashboard.</p>
+            if (this.state.errorMessage.includes('status code 403') || this.state.errorMessage.includes('status code 404'))
+                return <AccessPermission/>
             else
-                return <p>Sorry, DRT IEI is having some issues right now. Please try again later or contact support</p>
+                return <p>Sorry, DRT IEI is having some issues right now. Please try again later or contact support at
+                    drtpoiseteam@homeoffice.gov.uk</p>
         }
         return this.props.children;
     }
