@@ -66,3 +66,13 @@
     padding: 20px 0 0px 0px;
     font-size: 20px;
 }
+
+.access-permission {
+    font-size: 20px;
+}
+
+.logout {
+    float: center;
+    font-size: 15px;
+    padding: 20px 0 0px 150px;
+}
