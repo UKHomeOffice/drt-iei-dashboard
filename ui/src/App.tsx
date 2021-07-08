@@ -4,8 +4,8 @@ import DatePicker from './components/DatePicker'
 import ErrorBoundary from './components/ErrorBoundary'
 import Grid from '@material-ui/core/Grid';
 
-
 function App() {
+    let logoutUrl = '/oauth/logout?redirect='+window.location.href;
     return (
         <div className="App">
             <header className="App-header">
@@ -21,7 +21,7 @@ function App() {
                     </Grid>
                     <Grid item xs={12} sm={4}>
                         <div className="logout">
-                            <a href="/oauth/logout">Logout</a>
+                            <a href={logoutUrl}>Logout</a>
                         </div>
                     </Grid>
                 </Grid>
