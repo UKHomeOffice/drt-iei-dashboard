@@ -29,6 +29,7 @@ lazy val root = (project in file("."))
       Libraries.scalaCheck,
       Libraries.scalaTest,
       Libraries.scalaTestPlus,
+      Libraries.scalaTestMockito,
       Libraries.joda,
       Libraries.govNotify
     ),

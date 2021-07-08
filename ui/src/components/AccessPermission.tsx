@@ -55,7 +55,7 @@ class AccessPermission extends React.Component<Props, State> {
             } else {
                 return (
                     <div className="access-permission">
-                        <span>You will receive email once you have permission.</span>
+                        <span>Thank you for request.You will receive an email once permission is granted.</span>
                     </div>
                 )
             }
@@ -64,7 +64,7 @@ class AccessPermission extends React.Component<Props, State> {
                 <div className="access-permission">
                     <br/>
                     <br/>
-                    <span>You may not have permission to access IEI Dashboard. Please submit request permission by pressing button below.</span>
+                    <span>You may not have permission to access IEI Dashboard.</span>
                     <br/>
                     <br/>
                     <Button variant="contained" onClick={this.handleClick} color="primary" disableElevation>Request
