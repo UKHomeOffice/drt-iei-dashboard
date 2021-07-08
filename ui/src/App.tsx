@@ -21,7 +21,7 @@ function App() {
                     </Grid>
                     <Grid item xs={12} sm={4}>
                         <div className="logout">
-                            <a href={logoutUrl}>Logout</a>
+                            <a href={logoutUrl}>Log out</a>
                         </div>
                     </Grid>
                 </Grid>

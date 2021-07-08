@@ -26,8 +26,8 @@ object ArrivalRoutes {
           val xAuthEmail: List[String] = req.headers.get(CaseInsensitiveString("X-Auth-Email")).map(_.value.split(",").toList).getOrElse(List.empty)
           val requiredPermissions: Boolean = xAuthRoles.exists(p => permissions.contains(p))
           if (requiredPermissions) {
-            Logger[F].info(s"Request details $region $post $departureCountry $filterDate $timezone")
             for {
+              _ <- Logger[F].info(s"User with email $xAuthEmail request details $region $post $departureCountry $filterDate $timezone")
               arrivals <- H.flights(FlightsRequest(region, post, departureCountry, filterDate, timezone))
               resp <- Ok(arrivals)
             } yield resp
