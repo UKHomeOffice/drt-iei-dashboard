@@ -167,7 +167,7 @@ class FlightsTable extends React.Component<IProps, IState> {
         }
 
         if (this.props.timezone !== prevProps.timezone) {
-            this.updateFlights();
+            this.updateFlightsWithoutPort();
         }
 
     }
