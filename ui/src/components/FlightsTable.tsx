@@ -9,7 +9,6 @@ import FormControl from '@material-ui/core/FormControl';
 import ListItemText from '@material-ui/core/ListItemText';
 import Select from '@material-ui/core/Select';
 import Checkbox from '@material-ui/core/Checkbox';
-import Chip from '@material-ui/core/Chip';
 import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
@@ -117,7 +116,7 @@ const useStyles = (theme: Theme) => createStyles(
 
 
 const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
+const ITEM_PADDING_TOP = 5;
 const MenuProps = {
     PaperProps: {
         style: {
@@ -182,23 +181,26 @@ class FlightsTable extends React.Component<IProps, IState> {
         this.getFlightsData(endpoint, this.updateFlightsData)
     }
 
-    public reqConfig: AxiosRequestConfig = {
-        headers: {'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json'}
-    };
+   private updateFlightsWithoutPort() {
+        let endpoint = this.flightsPortEndPoint(this.props.region, this.props.post, this.props.country, this.props.date, this.props.timezone);
+        this.getFlightsData(endpoint, this.updateFlightsDataWithoutPortData)
+    }
 
     private clearPortFilterFlights() {
         let endpoint = this.flightsEndPoint(this.props.region, this.props.post, this.props.country, this.props.date, this.props.timezone);
         this.getFlightsData(endpoint, this.updateFlightsData)
     }
 
+    public reqConfig: AxiosRequestConfig = {
+        headers: {'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json'}
+    };
+
     public flightsEndPoint(region: string, post: string, country: string, filterDate: string, timezone: string) {
-        console.log('......this.state.portName' + this.state.portName)
         return "/flights/" + region + "/" + post + "/" + country + "/" + filterDate + "/" + timezone;
     }
 
     public flightsPortEndPoint(region: string, post: string, country: string, filterDate: string, timezone: string) {
-        console.log('......this.state.portName' + this.state.portName)
-        return "/flights/" + region + "/" + post + "/" + country + "/" + filterDate + "/" + timezone + "?portList=" + this.state.portName
+        return this.flightsEndPoint(region,post,country,filterDate,timezone) + "?portList=" + this.state.portName
     }
 
     public getFlightsData(endPoint: string, handleResponse: (r: AxiosResponse) => void) {
@@ -214,6 +216,12 @@ class FlightsTable extends React.Component<IProps, IState> {
         let flightData = arrivalsData.data as FlightData[]
         let uniquePortData = this.uniqueArray(flightData.map(a => a.origin))
         this.setState({...this.state, portData: uniquePortData});
+        this.setState({...this.state, arrivalRows: arrivalRows});
+    }
+
+    updateFlightsDataWithoutPortData = (response: AxiosResponse) => {
+        let arrivalsData = response.data as ArrivalsData;
+        let arrivalRows = arrivalsData.data as GridRowModel[]
         this.setState({...this.state, arrivalRows: arrivalRows});
     }
 
@@ -264,13 +272,13 @@ class FlightsTable extends React.Component<IProps, IState> {
                             </Grid>
                             <Grid item xs={6} sm={2}>
                                 <Button variant="outlined" color="primary" onClick={() => {
-                                    this.updateFlights()
+                                    this.updateFlightsWithoutPort()
                                 }}>Ports Filter</Button>
                             </Grid>
-                            <Grid item xs={6} sm={2}>
+                            <Grid item xs={6} sm={1}>
                                 <Button variant="outlined" color="secondary" onClick={() => {
                                     this.clearFilter()
-                                }}>Clear Ports filter</Button>
+                                }}>Clear</Button>
                             </Grid>
                             <Grid item xs={6} sm={2}>
                             </Grid>
