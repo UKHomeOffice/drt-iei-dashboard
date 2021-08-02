@@ -25,10 +25,11 @@ object ArrivalRoutes {
           val xAuthRoles: List[String] = req.headers.get(CaseInsensitiveString("X-Auth-Roles")).map(_.value.split(",").toList).getOrElse(List.empty)
           val xAuthEmail: List[String] = req.headers.get(CaseInsensitiveString("X-Auth-Email")).map(_.value.split(",").toList).getOrElse(List.empty)
           val requiredPermissions: Boolean = xAuthRoles.exists(p => permissions.contains(p))
+          val portList = params.getOrElse("portList", Seq.empty[String]).toList.filter(_.nonEmpty).flatMap(_.split(","))
           if (requiredPermissions) {
             for {
-              _ <- Logger[F].info(s"User with email $xAuthEmail request details $region $post $departureCountry $filterDate $timezone")
-              arrivals <- H.flights(FlightsRequest(region, post, departureCountry, filterDate, timezone))
+              _ <- Logger[F].info(s"User with email $xAuthEmail request details $region $post $departureCountry ${portList.nonEmpty} $filterDate $timezone")
+              arrivals <- H.flights(FlightsRequest(region, post, departureCountry, portList, filterDate, timezone))
               resp <- Ok(arrivals)
             } yield resp
           } else {

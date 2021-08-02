@@ -3,7 +3,25 @@ import {DataGrid, GridRowModel, getThemePaletteMode} from '@material-ui/data-gri
 import axios, {AxiosRequestConfig, AxiosResponse} from "axios";
 import {withStyles, createStyles, createMuiTheme, darken, lighten, Theme} from '@material-ui/core/styles';
 import {WithStyles} from '@material-ui/core';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import ListItemText from '@material-ui/core/ListItemText';
+import Select from '@material-ui/core/Select';
+import Checkbox from '@material-ui/core/Checkbox';
+import Input from '@material-ui/core/Input';
+import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
 
+interface FlightData {
+    origin: string;
+    arrivalAirport: string;
+    flightNumber: string;
+    carrierName: string;
+    status: string;
+    scheduledArrivalDate: string;
+    scheduledDepartureTime: string;
+}
 
 interface ArrivalsData {
     data: GridRowModel[];
@@ -22,6 +40,8 @@ interface IState {
     hasError: boolean;
     errorMessage: string;
     currentTime: string;
+    portData: string[];
+    portName: string[];
 }
 
 const getBackgroundColor = (color: string, palette: any) => getThemePaletteMode(palette) === 'dark' ? darken(color, 0.6) : lighten(color, 0.6);
@@ -76,8 +96,35 @@ const useStyles = (theme: Theme) => createStyles(
                 },
             },
             defaultTheme
-        }
+        },
+        formControl: {
+            margin: theme.spacing(1),
+            minWidth: 150,
+            maxWidth: 300,
+        },
+        chips: {
+            display: 'flex',
+            flexWrap: 'wrap',
+        },
+        chip: {
+            margin: 2,
+        },
+        noLabel: {
+            marginTop: theme.spacing(3),
+        },
     });
+
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 5;
+const MenuProps = {
+    PaperProps: {
+        style: {
+            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+            width: 250,
+        },
+    },
+};
 
 class FlightsTable extends React.Component<IProps, IState> {
     private interval: any;
@@ -98,7 +145,9 @@ class FlightsTable extends React.Component<IProps, IState> {
             arrivalRows: [],
             hasError: false,
             errorMessage: '',
-            currentTime: new Date().toLocaleString()
+            currentTime: new Date().toLocaleString(),
+            portData: [],
+            portName: []
         }
     }
 
@@ -113,9 +162,14 @@ class FlightsTable extends React.Component<IProps, IState> {
 
     componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>, snapshot?: any) {
         console.log('FlightsTable componentDidUpdate...' + this.props.country + ' ' + this.props.post + ' ' + this.props.timezone + ' ' + this.state.currentTime)
-        if (this.props.date !== prevProps.date || this.props.country !== prevProps.country || this.props.post !== prevProps.post || this.props.region !== prevProps.region || this.props.timezone !== prevProps.timezone) {
-            this.updateFlights();
+        if (this.props.date !== prevProps.date || this.props.country !== prevProps.country || this.props.post !== prevProps.post || this.props.region !== prevProps.region) {
+            this.clearFilter();
         }
+
+        if (this.props.timezone !== prevProps.timezone) {
+            this.updateFlightsWithoutPort();
+        }
+
     }
 
     componentWillUnmount() {
@@ -123,6 +177,16 @@ class FlightsTable extends React.Component<IProps, IState> {
     }
 
     private updateFlights() {
+        let endpoint = this.flightsPortEndPoint(this.props.region, this.props.post, this.props.country, this.props.date, this.props.timezone);
+        this.getFlightsData(endpoint, this.updateFlightsData)
+    }
+
+   private updateFlightsWithoutPort() {
+        let endpoint = this.flightsPortEndPoint(this.props.region, this.props.post, this.props.country, this.props.date, this.props.timezone);
+        this.getFlightsData(endpoint, this.updateFlightsDataWithoutPortData)
+    }
+
+    private clearPortFilterFlights() {
         let endpoint = this.flightsEndPoint(this.props.region, this.props.post, this.props.country, this.props.date, this.props.timezone);
         this.getFlightsData(endpoint, this.updateFlightsData)
     }
@@ -132,7 +196,11 @@ class FlightsTable extends React.Component<IProps, IState> {
     };
 
     public flightsEndPoint(region: string, post: string, country: string, filterDate: string, timezone: string) {
-        return "/flights/" + region + "/" + post + "/" + country + "/" + filterDate + "/" + timezone
+        return "/flights/" + region + "/" + post + "/" + country + "/" + filterDate + "/" + timezone;
+    }
+
+    public flightsPortEndPoint(region: string, post: string, country: string, filterDate: string, timezone: string) {
+        return this.flightsEndPoint(region,post,country,filterDate,timezone) + "?portList=" + this.state.portName
     }
 
     public getFlightsData(endPoint: string, handleResponse: (r: AxiosResponse) => void) {
@@ -145,18 +213,83 @@ class FlightsTable extends React.Component<IProps, IState> {
     updateFlightsData = (response: AxiosResponse) => {
         let arrivalsData = response.data as ArrivalsData;
         let arrivalRows = arrivalsData.data as GridRowModel[]
+        let flightData = arrivalsData.data as FlightData[]
+        let uniquePortData = this.uniqueArray(flightData.map(a => a.origin))
+        this.setState({...this.state, portData: uniquePortData});
         this.setState({...this.state, arrivalRows: arrivalRows});
     }
+
+    updateFlightsDataWithoutPortData = (response: AxiosResponse) => {
+        let arrivalsData = response.data as ArrivalsData;
+        let arrivalRows = arrivalsData.data as GridRowModel[]
+        this.setState({...this.state, arrivalRows: arrivalRows});
+    }
+
+    handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+        this.setState({
+            portName: event.target.value as string[]
+        })
+    };
+
+    clearFilter() {
+        this.setState({portName: []});
+        this.clearPortFilterFlights();
+    }
+
+    uniqueArray(a: string[]) {
+        return Array.from(new Set(a));
+    };
 
     render() {
         if (this.state.hasError) {
             throw new Error(this.state.errorMessage);
         } else {
             return (
-                <div style={{height: 800, width: '100%'}} className={this.props.classes.root}>
-                    <DataGrid disableSelectionOnClick rows={this.state.arrivalRows as GridRowModel[]} columns={this.columnsHeaders}
-                              getRowClassName={(params) => `super-app-theme--${params.getValue(params.id, 'status')}`}
-                              pageSize={25}/>
+                <div>
+                    <div>
+                        <Grid container spacing={1}>
+                            <Grid item xs={6} sm={2}>
+                                <FormControl className={this.props.classes.formControl}>
+                                    <InputLabel id="demo-mutiple-checkbox-label">Departure Ports</InputLabel>
+                                    <Select
+                                        labelId="demo-mutiple-checkbox-label"
+                                        id="demo-mutiple-checkbox"
+                                        multiple
+                                        value={this.state.portName}
+                                        onChange={this.handleChange}
+                                        input={<Input/>}
+                                        renderValue={(selected) => (selected as string[]).join(', ')}
+                                        MenuProps={MenuProps}
+                                    >
+                                        {this.state.portData.map((name) => (
+                                            <MenuItem key={name} value={name}>
+                                                <Checkbox checked={this.state.portName.indexOf(name) > -1}/>
+                                                <ListItemText primary={name}/>
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                            </Grid>
+                            <Grid item xs={6} sm={2}>
+                                <Button variant="outlined" color="primary" onClick={() => {
+                                    this.updateFlightsWithoutPort()
+                                }}>Ports Filter</Button>
+                            </Grid>
+                            <Grid item xs={6} sm={1}>
+                                <Button variant="outlined" color="secondary" onClick={() => {
+                                    this.clearFilter()
+                                }}>Clear</Button>
+                            </Grid>
+                            <Grid item xs={6} sm={2}>
+                            </Grid>
+                        </Grid>
+                    </div>
+                    <div style={{height: 800, width: '100%'}} className={this.props.classes.root}>
+                        <DataGrid disableSelectionOnClick rows={this.state.arrivalRows as GridRowModel[]}
+                                  columns={this.columnsHeaders}
+                                  getRowClassName={(params) => `super-app-theme--${params.getValue(params.id, 'status')}`}
+                                  pageSize={25}/>
+                    </div>
                 </div>
             );
         }

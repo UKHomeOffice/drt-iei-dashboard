@@ -16,7 +16,12 @@ class FlightScheduledService[F[_] : Sync](arrivalsRepository: ArrivalRepositoryI
   def getFlightsDetail(requestedDetails: FlightsRequest): F[List[ArrivalTableDataIndex]] = {
     val requestedDate = `yyyy-MM-dd_parse_toLocalDate`(requestedDetails.date).atStartOfDay()
     val portList: List[Port] = DepartureAirport.getDeparturePortForCountry(requestedDetails.region, requestedDetails.post)(requestedDetails.country)
-    val arrivalFlights: F[List[ArrivalTableData]] = arrivalsRepository.findArrivalsForADate(requestedDate).map(_.filter(a => portList.map(_.code) contains a.origin))
+    val arrivalFlights: F[List[ArrivalTableData]] =
+      if (requestedDetails.portList.nonEmpty) {
+        arrivalsRepository.findArrivalsForADate(requestedDate).map(_.filter(a => requestedDetails.portList contains a.origin))
+      } else {
+        arrivalsRepository.findArrivalsForADate(requestedDate).map(_.filter(a => portList.map(_.code) contains a.origin))
+      }
     arrivalFlights.map(_.zipWithIndex.map(a => ArrivalTableDataIndex(a._1, a._2)))
 
   }
@@ -34,7 +39,7 @@ class FlightScheduledService[F[_] : Sync](arrivalsRepository: ArrivalRepositoryI
   }
 
   def getDisplayStatus(status: String, totalPaxNumber: Option[Int]): String = status match {
-    case _ if totalPaxNumber.getOrElse(0) == 0  => "No_Pax_Info"
+    case _ if totalPaxNumber.getOrElse(0) == 0 => "No_Pax_Info"
     case "ACL Forecast" | "Port Forecast" => "Forecast"
     case "CANCELLED" | "Cancelled" | "Canceled" => "Cancelled"
     case "Deleted / Removed Flight Record" => "Deleted"
