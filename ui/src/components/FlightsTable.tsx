@@ -10,8 +10,9 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Select from '@material-ui/core/Select';
 import Checkbox from '@material-ui/core/Checkbox';
 import Input from '@material-ui/core/Input';
-import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 interface FlightData {
     origin: string;
@@ -111,6 +112,12 @@ const useStyles = (theme: Theme) => createStyles(
         },
         noLabel: {
             marginTop: theme.spacing(3),
+        },
+        margin: {
+          margin: theme.spacing(1),
+        },
+        extendedIcon: {
+          marginRight: theme.spacing(1),
         },
     });
 
@@ -228,7 +235,7 @@ class FlightsTable extends React.Component<IProps, IState> {
     handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
         this.setState({
             portName: event.target.value as string[]
-        })
+        },() => this.updateFlightsWithoutPort())
     };
 
     clearFilter() {
@@ -248,7 +255,8 @@ class FlightsTable extends React.Component<IProps, IState> {
                 <div>
                     <div>
                         <Grid container spacing={1}>
-                            <Grid item xs={6} sm={2}>
+                            <Grid item xs={12} sm={4}/>
+                            <Grid item xs={12} sm={4}>
                                 <FormControl className={this.props.classes.formControl}>
                                     <InputLabel id="demo-mutiple-checkbox-label">Departure Ports</InputLabel>
                                     <Select
@@ -269,19 +277,11 @@ class FlightsTable extends React.Component<IProps, IState> {
                                         ))}
                                     </Select>
                                 </FormControl>
+                                <IconButton aria-label="delete" className={this.props.classes.margin} onClick={() => {this.clearFilter()}}>
+                                  <DeleteIcon fontSize="large" />
+                                </IconButton>
                             </Grid>
-                            <Grid item xs={6} sm={2}>
-                                <Button variant="outlined" color="primary" onClick={() => {
-                                    this.updateFlightsWithoutPort()
-                                }}>Ports Filter</Button>
-                            </Grid>
-                            <Grid item xs={6} sm={1}>
-                                <Button variant="outlined" color="secondary" onClick={() => {
-                                    this.clearFilter()
-                                }}>Clear</Button>
-                            </Grid>
-                            <Grid item xs={6} sm={2}>
-                            </Grid>
+                            <Grid item xs={12} sm={4}/>
                         </Grid>
                     </div>
                     <div style={{height: 800, width: '100%'}} className={this.props.classes.root}>
