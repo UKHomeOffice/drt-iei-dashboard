@@ -12,7 +12,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Input from '@material-ui/core/Input';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
-import DeleteIcon from '@material-ui/icons/Delete';
+import ClearIcon from '@material-ui/icons/Clear';
 
 interface FlightData {
     origin: string;
@@ -278,7 +278,7 @@ class FlightsTable extends React.Component<IProps, IState> {
                                     </Select>
                                 </FormControl>
                                 <IconButton aria-label="delete" className={this.props.classes.margin} onClick={() => {this.clearFilter()}}>
-                                  <DeleteIcon fontSize="large" />
+                                  <ClearIcon fontSize="large" />
                                 </IconButton>
                             </Grid>
                             <Grid item xs={12} sm={4}/>
