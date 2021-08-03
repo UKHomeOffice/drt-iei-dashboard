@@ -1,5 +1,5 @@
 import React from 'react';
-import {DataGrid, GridRowModel, getThemePaletteMode} from '@material-ui/data-grid';
+import {DataGrid, GridRowModel, getThemePaletteMode, GridToolbar} from '@material-ui/data-grid';
 import axios, {AxiosRequestConfig, AxiosResponse} from "axios";
 import {withStyles, createStyles, createMuiTheme, darken, lighten, Theme} from '@material-ui/core/styles';
 import {WithStyles} from '@material-ui/core';
@@ -107,8 +107,8 @@ const checkedIcon = <CheckBoxIcon fontSize="small"/>;
 class FlightsTable extends React.Component<IProps, IState> {
     private interval: any;
     columnsHeaders = [
-        {field: 'scheduledDepartureTime', headerName: 'Scheduled Departure', width: 200},
-        {field: 'origin', headerName: "Departure Airport", width: 150},
+        {field: 'scheduledDepartureTime', headerName: 'Scheduled Departure', width: 190},
+        {field: 'origin', headerName: "Departure Airport", width: 160},
         {field: 'flightNumber', headerName: 'Carrier Code', width: 150},
         {field: 'carrierName', headerName: 'Carrier Name', width: 150},
         {field: 'arrivalAirport', headerName: 'Arrival Airport', width: 150},
@@ -206,9 +206,9 @@ class FlightsTable extends React.Component<IProps, IState> {
     }
 
     handleChange = (event: React.ChangeEvent<{}>, value: string[]) => {
-            this.setState({
-                portName: value
-            }, () => this.updateFlightsWithoutPort())
+        this.setState({
+            portName: value
+        }, () => this.updateFlightsWithoutPort())
     };
 
     clearFilter() {
@@ -252,7 +252,7 @@ class FlightsTable extends React.Component<IProps, IState> {
                                     )}
                                     onChange={this.handleChange}
                                     value={this.state.portName}
-                                    style={{width: "85%",marginLeft:35}}
+                                    style={{width: "85%", marginLeft: 25}}
                                 />
                             </Grid>
                             <Grid item xs={12} sm={4}/>
@@ -260,7 +260,10 @@ class FlightsTable extends React.Component<IProps, IState> {
                     </div>
                     <br/>
                     <div style={{height: 800, width: '100%'}} className={this.props.classes.root}>
-                        <DataGrid disableSelectionOnClick rows={this.state.arrivalRows as GridRowModel[]}
+                        <DataGrid disableColumnMenu
+                                  components={{Toolbar: GridToolbar}}
+                                  disableSelectionOnClick
+                                  rows={this.state.arrivalRows as GridRowModel[]}
                                   columns={this.columnsHeaders}
                                   getRowClassName={(params) => `super-app-theme--${params.getValue(params.id, 'status')}`}
                                   pageSize={25}/>
