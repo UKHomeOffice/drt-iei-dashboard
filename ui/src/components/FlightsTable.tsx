@@ -156,17 +156,17 @@ class FlightsTable extends React.Component<IProps, IState> {
     }
 
     private updateFlights() {
-        let endpoint = this.flightsPortEndPoint(this.props.region, this.props.post, this.props.country, this.props.date, this.props.timezone);
+        const endpoint = this.flightsPortEndPoint(this.props.region, this.props.post, this.props.country, this.props.date, this.props.timezone);
         this.getFlightsData(endpoint, this.updateFlightsData)
     }
 
     private updateFlightsWithoutPort() {
-        let endpoint = this.flightsPortEndPoint(this.props.region, this.props.post, this.props.country, this.props.date, this.props.timezone);
+        const endpoint = this.flightsPortEndPoint(this.props.region, this.props.post, this.props.country, this.props.date, this.props.timezone);
         this.getFlightsData(endpoint, this.updateFlightsDataWithoutPortData)
     }
 
     private clearPortFilterFlights() {
-        let endpoint = this.flightsEndPoint(this.props.region, this.props.post, this.props.country, this.props.date, this.props.timezone);
+        const endpoint = this.flightsEndPoint(this.props.region, this.props.post, this.props.country, this.props.date, this.props.timezone);
         this.getFlightsData(endpoint, this.updateFlightsData)
     }
 
