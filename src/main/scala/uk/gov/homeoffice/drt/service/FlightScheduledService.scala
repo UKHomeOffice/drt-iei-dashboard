@@ -41,8 +41,7 @@ class FlightScheduledService[F[_] : Sync](arrivalsRepository: ArrivalRepositoryI
   def getDisplayStatus(status: String, totalPaxNumber: Option[Int]): String = status match {
     case _ if totalPaxNumber.getOrElse(0) == 0 => "No_Pax_Info"
     case "ACL Forecast" | "Port Forecast" => "Forecast"
-    case "CANCELLED" | "Cancelled" | "Canceled" => "Cancelled"
-    case "Deleted / Removed Flight Record" => "Deleted"
+    case "CANCELLED" | "Cancelled" | "Canceled" | "Deleted / Removed Flight Record" | "Deleted" => "Cancelled"
     case "DIVERTED" | "Diverted" | "Arrival diverted away from airport" | "Arrival is on block at a stand" | "On Approach" |
          "First Bag Delivered" | "Last Bag Delivered" | "Active" | "LANDED" | "Arrived" | "ARRIVED ON STAND" |
          "InApproach" | "Landed" | "ON APPROACH" | "Delayed" | "Zoned" | "Zoning" | "Final Approach" |
