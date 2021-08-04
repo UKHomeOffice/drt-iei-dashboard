@@ -165,7 +165,7 @@ export default class SearchFilters extends React.Component<IProps, IState> {
                             options={timezones}
                             getOptionLabel={(option) => option.timezone}
                             style={{width: 200}}
-                            renderInput={(params) => <TextField {...params} label="Departure Timezone"
+                            renderInput={(params) => <TextField {...params} label="Display Timezone"
                                                                 variant="outlined"/>}
                         />
                     </Grid>
