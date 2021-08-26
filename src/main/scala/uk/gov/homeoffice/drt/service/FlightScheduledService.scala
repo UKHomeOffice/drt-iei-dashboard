@@ -38,16 +38,17 @@ class FlightScheduledService[F[_] : Sync](arrivalsRepository: ArrivalRepositoryI
         a.arrivalsTableData.scheduled_departure.map(d => localDateTimeAccordingToTimezone(requestedDetails, d)))))
   }
 
-  def getDisplayStatus(status: String, totalPaxNumber: Option[Int]): String = status match {
+  def getDisplayStatus(status: String, totalPaxNumber: Option[Int]): String = status.toLowerCase match {
     case _ if totalPaxNumber.getOrElse(0) == 0 => "No_Pax_Info"
-    case "ACL Forecast" | "Port Forecast" => "Forecast"
-    case "CANCELLED" | "Cancelled" | "Canceled" | "Deleted / Removed Flight Record" | "Deleted" => "Cancelled"
-    case "DIVERTED" | "Diverted" | "Arrival diverted away from airport" | "Arrival is on block at a stand" | "On Approach" |
-         "First Bag Delivered" | "Last Bag Delivered" | "Active" | "LANDED" | "Arrived" | "ARRIVED ON STAND" |
-         "InApproach" | "Landed" | "ON APPROACH" | "Delayed" | "Zoned" | "Zoning" | "Final Approach" |
-         "EXPECTED" | "BAGGAGE IN HALL" | "Redirected" | "Airborne from preceding airport" |
-         "Flight is on schedule" | "LAST BAG DELIVERED" | "On Chocks" | "Finals" | "On Finals" => "Active"
-    case "Scheduled" | "Estimated" | "RESCHEDULED" | "Calculated" | "Operated" => "Scheduled"
+    case "acl forecast" | "port forecast" => "Forecast"
+    case "cancelled" | "canceled" | "deleted / removed flight record" | "deleted" => "Cancelled"
+    case "diverted" | "arrival diverted away from airport" | "arrival is on block at a stand" |
+         "on approach" | "first bag delivered" | "last bag delivered" | "active" |
+         "arrived" | "arrived on stand" | "inapproach" | "landed" |  "delayed" | "zoned" |
+         "zoning" | "final approach" | "expected" | "baggage in hall" | "redirected" |
+         "airborne from preceding airport" | "flight is on schedule" |  "on chocks" |
+         "finals" | "on finals" => "Active"
+    case "scheduled" | "estimated" | "rescheduled" | "calculated" | "operated" => "Scheduled"
     case _ => "Others"
 
   }
