@@ -40,14 +40,15 @@ class FlightScheduledService[F[_] : Sync](arrivalsRepository: ArrivalRepositoryI
 
   def getDisplayStatus(status: String, totalPaxNumber: Option[Int]): String = status.toLowerCase match {
     case _ if totalPaxNumber.getOrElse(0) == 0 => "No_Pax_Info"
+    case s if s.isEmpty => "Scheduled"
     case "acl forecast" | "port forecast" => "Forecast"
     case "cancelled" | "canceled" | "deleted / removed flight record" | "deleted" => "Cancelled"
     case "diverted" | "arrival diverted away from airport" | "arrival is on block at a stand" |
-         "on approach" | "first bag delivered" | "last bag delivered" | "active" |
-         "arrived" | "arrived on stand" | "inapproach" | "landed" |  "delayed" | "zoned" |
-         "zoning" | "final approach" | "expected" | "baggage in hall" | "redirected" |
-         "airborne from preceding airport" | "flight is on schedule" |  "on chocks" |
-         "finals" | "on finals" => "Active"
+      "on approach" | "first bag delivered" | "last bag delivered" | "active" |
+      "arrived" | "arrived on stand" | "inapproach" | "landed" |  "delayed" | "zoned" |
+      "zoning" | "final approach" | "expected" | "baggage in hall" | "redirected" |
+      "airborne from preceding airport" | "flight is on schedule" |  "on chocks" |
+      "finals" | "on finals" => "Active"
     case "scheduled" | "estimated" | "rescheduled" | "calculated" | "operated" => "Scheduled"
     case _ => "Others"
 
