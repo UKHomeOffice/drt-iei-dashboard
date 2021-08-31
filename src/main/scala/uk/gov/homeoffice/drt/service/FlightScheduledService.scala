@@ -54,12 +54,13 @@ class FlightScheduledService[F[_] : Sync](arrivalsRepository: ArrivalRepositoryI
   }
 
   def displayStatus(arrivalsTableData: ArrivalTableData) = {
-    (arrivalsTableData.estimated, arrivalsTableData.actualChox, arrivalsTableData.actual, arrivalsTableData.status) match {
+    (arrivalsTableData.estimated, arrivalsTableData.actualChox, arrivalsTableData.actual, arrivalsTableData.estimatedChox, arrivalsTableData.status) match {
       case _ if arrivalsTableData.totalPaxNumber.getOrElse(0) == 0 => "No_Pax_Info"
-      case (_, Some(_), _, _) => "Active"
-      case (_, _, Some(_), _) => "Active"
-      case (Some(_), _, _, _) => "Active"
-      case (_, _, _, s) => valueBaseStatus(s)
+      case (_, Some(_), _, _, _) => "Active"
+      case (_, _, Some(_), _, _) => "Active"
+      case (Some(_), _, _, _, _) => "Active"
+      case (_, _, _, Some(_), s) if s.isEmpty => "Scheduled"
+      case (_, _, _, _, s) => valueBaseStatus(s)
 
     }
   }

@@ -23,7 +23,7 @@ class FlightScheduledServiceSpecs extends AsyncFlatSpec with Matchers with Scala
 
     val flightScheduledService: FlightScheduledService[IO] = context
 
-    val requestedDetails = FlightsRequest("Euromed South", "Athens", "Greece",List.empty ,"2018-12-21", "UK")
+    val requestedDetails = FlightsRequest("Euromed South", "Athens", "Greece", List.empty, "2018-12-21", "UK")
 
     val expectedResult = List(Arrival(
       _id = "1",
@@ -100,7 +100,7 @@ class FlightScheduledServiceSpecs extends AsyncFlatSpec with Matchers with Scala
       flightNumber = "BA6067",
       arrivingAirport = "BRG",
       origin = "LCA",
-      status = "Forecast",
+      status = "Scheduled",
       scheduledDepartureTime = Some(DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toDate_withTimezone`("2018-11-21 23:35:00", "UTC"))
     ))
 
@@ -176,10 +176,10 @@ class FlightScheduledServiceSpecs extends AsyncFlatSpec with Matchers with Scala
     val localtime = LocalDateTime.now()
     val dateTime = new DateTime(localtime.getYear, localtime.getMonthValue, localtime.getDayOfMonth, localtime.getHour, localtime.getMinute, localtime.getSecond, DateTimeZone.UTC)
 
-    val ukDate: DateTime = flightScheduledService.localDateTimeAccordingToTimezone(FlightsRequest("", "", "",List.empty ,"", "UK"), localtime)
-    val utcDate: DateTime = flightScheduledService.localDateTimeAccordingToTimezone(FlightsRequest("", "", "",List.empty ,"", "UTC"), localtime)
-    val localToCountryNetherlandsDate: DateTime = flightScheduledService.localDateTimeAccordingToTimezone(FlightsRequest("", "", "Netherlands",List.empty, "", "Local"), localtime)
-    val localToCountryItalyDate: DateTime = flightScheduledService.localDateTimeAccordingToTimezone(FlightsRequest("", "", "Italy",List.empty, "", "Local"), localtime)
+    val ukDate: DateTime = flightScheduledService.localDateTimeAccordingToTimezone(FlightsRequest("", "", "", List.empty, "", "UK"), localtime)
+    val utcDate: DateTime = flightScheduledService.localDateTimeAccordingToTimezone(FlightsRequest("", "", "", List.empty, "", "UTC"), localtime)
+    val localToCountryNetherlandsDate: DateTime = flightScheduledService.localDateTimeAccordingToTimezone(FlightsRequest("", "", "Netherlands", List.empty, "", "Local"), localtime)
+    val localToCountryItalyDate: DateTime = flightScheduledService.localDateTimeAccordingToTimezone(FlightsRequest("", "", "Italy", List.empty, "", "Local"), localtime)
 
     ukDate mustEqual dateTime.toDateTime(DateTimeZone.forID("Europe/London"))
     utcDate mustEqual dateTime.toDateTime(DateTimeZone.forID("UTC"))

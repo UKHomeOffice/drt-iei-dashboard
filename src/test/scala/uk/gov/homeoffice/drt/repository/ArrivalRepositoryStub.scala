@@ -146,7 +146,7 @@ class ArrivalRepositoryStub[F[_] : Sync] extends ArrivalRepositoryI[F] {
         destination = "BRG",
         origin = "LCA",
         scheduled_departure = Some(DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toLocalDateTime`("2018-11-21 23:35:00")),
-        status = "ACL Forecast",
+        status = "",
         terminal = "T1",
         totalPaxNumber = Some(10),
         estimated = None,
