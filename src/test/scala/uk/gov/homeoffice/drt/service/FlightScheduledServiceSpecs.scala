@@ -88,7 +88,7 @@ class FlightScheduledServiceSpecs extends AsyncFlatSpec with Matchers with Scala
     expectedResult mustEqual actualResult
   }
 
-  "Arrival" should "return arrival flights for the requested details for Bulgaria and status Forecast when estimatedChox is present" in {
+  "Arrival" should "return arrival flights for the requested details for Bulgaria with status Scheduled when estimatedChox is present and arrival.status is empty" in {
     val arrivalService: FlightScheduledService[IO] = context
 
     val requestedDetails = FlightsRequest("Euromed South", "Athens", "Bulgaria", List("LCA"), "2018-12-21", "UTC")
