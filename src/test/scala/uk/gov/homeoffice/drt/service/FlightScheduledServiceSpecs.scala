@@ -56,7 +56,7 @@ class FlightScheduledServiceSpecs extends AsyncFlatSpec with Matchers with Scala
       flightNumber = "BA6067",
       arrivingAirport = "BRG",
       origin = "SOF",
-      status = "Forecast",
+      status = "Active",
       scheduledDepartureTime = Some(DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toDate_withTimezone`("2018-11-23 21:35:00", "UTC"))
     ))
 
@@ -78,7 +78,7 @@ class FlightScheduledServiceSpecs extends AsyncFlatSpec with Matchers with Scala
       flightNumber = "BA6067",
       arrivingAirport = "BRG",
       origin = "SOF",
-      status = "Forecast",
+      status = "Active",
       scheduledDepartureTime = Some(DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toDate_withTimezone`("2018-11-23 21:35:00", "UTC"))
     ))
 
@@ -88,7 +88,51 @@ class FlightScheduledServiceSpecs extends AsyncFlatSpec with Matchers with Scala
     expectedResult mustEqual actualResult
   }
 
-  "Arrival" should "return arrival details without scheduled Departure date when departure time is not present in departure table and arrival table" in {
+  "Arrival" should "return arrival flights for the requested details for Bulgaria and status Forecast when estimatedChox is present" in {
+    val arrivalService: FlightScheduledService[IO] = context
+
+    val requestedDetails = FlightsRequest("Euromed South", "Athens", "Bulgaria", List("LCA"), "2018-12-21", "UTC")
+
+    val expectedResult = List(Arrival(
+      _id = "1",
+      scheduledArrivalDate = DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toDate_withTimezone`("2018-12-21 21:35:0", "UTC"),
+      carrierName = "British Airways",
+      flightNumber = "BA6067",
+      arrivingAirport = "BRG",
+      origin = "LCA",
+      status = "Forecast",
+      scheduledDepartureTime = Some(DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toDate_withTimezone`("2018-11-21 23:35:00", "UTC"))
+    ))
+
+    val arrivalTableData = arrivalService.getFlightsDetail(requestedDetails)
+    val actualResult = arrivalService.transformArrivalsFromArrivalTable(requestedDetails, arrivalTableData).unsafeRunSync()
+
+    expectedResult mustEqual actualResult
+  }
+
+  "Arrival" should "return arrival details and arrival table and active status when actualChox time details are present" in {
+    val arrivalService: FlightScheduledService[IO] = context
+
+    val requestedDetails = FlightsRequest("Euromed South", "Athens", "Moldova", List.empty, "2018-12-22", "UTC")
+
+    val expectedResult = List(Arrival(
+      _id = "1",
+      scheduledArrivalDate = DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toDate_withTimezone`("2018-12-22 21:35:0", "UTC"),
+      carrierName = "British Airways",
+      flightNumber = "BA6068",
+      arrivingAirport = "BRG",
+      origin = "KIV",
+      status = "Active",
+      scheduledDepartureTime = None
+    ))
+
+    val arrivalTableData = arrivalService.getFlightsDetail(requestedDetails)
+    val actualResult: Seq[Arrival] = arrivalService.transformArrivalsFromArrivalTable(requestedDetails, arrivalTableData).unsafeRunSync()
+
+    expectedResult mustEqual actualResult
+  }
+
+  "Arrival" should "return arrival details and active status when actual time details are present" in {
     val arrivalService: FlightScheduledService[IO] = context
 
     val requestedDetails = FlightsRequest("Euromed South", "Athens", "Moldova", List.empty, "2018-12-23", "UTC")
@@ -100,15 +144,13 @@ class FlightScheduledServiceSpecs extends AsyncFlatSpec with Matchers with Scala
       flightNumber = "BA6069",
       arrivingAirport = "BRG",
       origin = "KIV",
-      status = "Forecast",
+      status = "Active",
       scheduledDepartureTime = None
     ))
 
     val arrivalTableData = arrivalService.getFlightsDetail(requestedDetails)
     val actualResult: Seq[Arrival] = arrivalService.transformArrivalsFromArrivalTable(requestedDetails, arrivalTableData).unsafeRunSync()
 
-    val actualScheduleDate = actualResult.head.scheduledArrivalDate.toDateTime(DateTimeZone.forID("UTC"))
-    val expectedResultScheduleDate = expectedResult.head.scheduledArrivalDate.toDateTime(DateTimeZone.forID("UTC"))
     expectedResult mustEqual actualResult
   }
 

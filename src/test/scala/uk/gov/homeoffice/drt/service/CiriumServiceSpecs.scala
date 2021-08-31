@@ -46,7 +46,12 @@ class CiriumServiceSpecs extends AsyncFlatSpec with Matchers with ScalaCheckDriv
       terminal = "T1",
       scheduled = DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toLocalDateTime`("2018-12-23 21:35:00"),
       scheduled_departure = None,
-      totalPaxNumber = Some(10)
+      totalPaxNumber = Some(10),
+      estimated = None,
+      actual = None,
+      estimatedChox = None,
+      actualChox = None,
+      pcp = None
     ))
 
     val expectedArrivalTableData = List(ArrivalTableData(
@@ -58,7 +63,12 @@ class CiriumServiceSpecs extends AsyncFlatSpec with Matchers with ScalaCheckDriv
       terminal = "T1",
       scheduled = DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toLocalDateTime`("2018-12-23 21:35:00"),
       scheduled_departure = Some(DateUtil.`yyyy-MM-dd HH:mm:ss_parse_toLocalDateTime`("2018-12-23 17:35:00")),
-      totalPaxNumber = Some(10)
+      totalPaxNumber = Some(10),
+      estimated = None,
+      actual = None,
+      estimatedChox = None,
+      actualChox = None,
+      pcp = None
     ))
 
     val result: List[ArrivalTableData] = ciriumService.appendScheduledDeparture(requestedArrivalTableData.pure[IO]).unsafeRunSync()
