@@ -18,9 +18,9 @@ class FlightScheduledService[F[_] : Sync](arrivalsRepository: ArrivalRepositoryI
     val portList: List[Port] = DepartureAirport.getDeparturePortForCountry(requestedDetails.region, requestedDetails.post)(requestedDetails.country)
     val arrivalFlights: F[List[ArrivalTableData]] =
       if (requestedDetails.portList.nonEmpty) {
-        arrivalsRepository.findArrivalsForADate(requestedDate).map(_.filter(a => requestedDetails.portList contains a.origin))
+        arrivalsRepository.findArrivalsForADate(requestedDetails.portList, requestedDate)
       } else {
-        arrivalsRepository.findArrivalsForADate(requestedDate).map(_.filter(a => portList.map(_.code) contains a.origin))
+        arrivalsRepository.findArrivalsForADate(portList.map(_.code), requestedDate)
       }
     arrivalFlights.map(_.zipWithIndex.map(a => ArrivalTableDataIndex(a._1, a._2)))
 
@@ -34,24 +34,34 @@ class FlightScheduledService[F[_] : Sync](arrivalsRepository: ArrivalRepositoryI
         a.arrivalsTableData.code.toString,
         a.arrivalsTableData.destination,
         a.arrivalsTableData.origin,
-        getDisplayStatus(a.arrivalsTableData.status, a.arrivalsTableData.totalPaxNumber),
+        displayStatus(a.arrivalsTableData),
         a.arrivalsTableData.scheduled_departure.map(d => localDateTimeAccordingToTimezone(requestedDetails, d)))))
   }
 
-  def getDisplayStatus(status: String, totalPaxNumber: Option[Int]): String = status.toLowerCase match {
-    case _ if totalPaxNumber.getOrElse(0) == 0 => "No_Pax_Info"
-    case s if s.isEmpty => "Scheduled"
+  def valueBaseStatus(status: String): String = status.toLowerCase match {
     case "acl forecast" | "port forecast" => "Forecast"
     case "cancelled" | "canceled" | "deleted / removed flight record" | "deleted" => "Cancelled"
     case "diverted" | "arrival diverted away from airport" | "arrival is on block at a stand" |
-      "on approach" | "first bag delivered" | "last bag delivered" | "active" |
-      "arrived" | "arrived on stand" | "inapproach" | "landed" |  "delayed" | "zoned" |
-      "zoning" | "final approach" | "expected" | "baggage in hall" | "redirected" |
-      "airborne from preceding airport" | "flight is on schedule" |  "on chocks" |
-      "finals" | "on finals" => "Active"
+         "on approach" | "first bag delivered" | "last bag delivered" | "active" |
+         "arrived" | "arrived on stand" | "inapproach" | "landed" | "delayed" | "zoned" |
+         "zoning" | "final approach" | "expected" | "baggage in hall" | "redirected" |
+         "airborne from preceding airport" | "flight is on schedule" | "on chocks" |
+         "finals" | "on finals" => "Active"
     case "scheduled" | "estimated" | "rescheduled" | "calculated" | "operated" => "Scheduled"
     case _ => "Others"
 
+
+  }
+
+  def displayStatus(arrivalsTableData: ArrivalTableData) = {
+    (arrivalsTableData.estimated, arrivalsTableData.actualChox, arrivalsTableData.actual, arrivalsTableData.status) match {
+      case _ if arrivalsTableData.totalPaxNumber.getOrElse(0) == 0 => "No_Pax_Info"
+      case (_, Some(_), _, _) => "Active"
+      case (_, _, Some(_), _) => "Active"
+      case (Some(_), _, _, _) => "Active"
+      case (_, _, _, s) => valueBaseStatus(s)
+
+    }
   }
 
   def localDateTimeAccordingToTimezone(requestedDetails: FlightsRequest, localtime: LocalDateTime): DateTime = {

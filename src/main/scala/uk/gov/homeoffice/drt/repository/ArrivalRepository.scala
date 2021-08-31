@@ -19,6 +19,11 @@ case class ArrivalTableData(code: String,
                             status: String,
                             totalPaxNumber: Option[Int],
                             scheduled: LocalDateTime,
+                            estimated: Option[LocalDateTime],
+                            actual: Option[LocalDateTime],
+                            estimatedChox: Option[LocalDateTime],
+                            actualChox: Option[LocalDateTime],
+                            pcp: Option[LocalDateTime],
                             scheduled_departure: Option[LocalDateTime]
                            )
 
@@ -27,7 +32,7 @@ trait ArrivalRepositoryI[F[_]] {
 
   def sessionPool: Resource[F, Session[F]]
 
-  def findArrivalsForADate(queryDate: LocalDateTime): F[List[ArrivalTableData]]
+  def findArrivalsForADate(origins: List[String], queryDate: LocalDateTime): F[List[ArrivalTableData]]
 
   def getArrivalForOriginsAndDate(origins: List[String]): F[List[ArrivalTableData]]
 
@@ -40,32 +45,32 @@ class ArrivalRepository[F[_] : Sync](val sessionPool: Resource[F, Session[F]]) e
   implicit val logger = Slf4jLogger.getLogger[F]
 
   val decoder: Decoder[ArrivalTableData] =
-    (text ~ int4 ~ text ~ text ~ text ~ text ~ int4.opt ~ timestamp ~ timestamp.opt).map {
-      case code ~ number ~ destination ~ origin ~ terminal ~ status ~ totalpassengers ~ scheduled ~ scheduled_departure  =>
+    (text ~ int4 ~ text ~ text ~ text ~ text ~ int4.opt ~ timestamp ~ timestamp.opt ~ timestamp.opt ~ timestamp.opt ~ timestamp.opt ~ timestamp.opt ~ timestamp.opt).map {
+      case code ~ number ~ destination ~ origin ~ terminal ~ status ~ totalpassengers ~ scheduled ~ estimated ~ actual ~ estimatedchox ~ actualchox ~ pcp ~ scheduled_departure =>
         ArrivalTableData(
-          code, number, destination, origin, terminal, status, totalpassengers, scheduled, scheduled_departure
+          code, number, destination, origin, terminal, status, totalpassengers, scheduled, estimated, actual, estimatedchox, actualchox, pcp, scheduled_departure
         )
     }
 
 
-  private def selectArrivalsForADate: Query[LocalDateTime ~ LocalDateTime, ArrivalTableData] =
+  private def selectArrivalsForADate(origins: List[String]): Query[List[String] ~ LocalDateTime ~ LocalDateTime, ArrivalTableData] =
     sql"""
-        SELECT code, number, destination, origin, terminal, status, totalpassengers, scheduled, scheduled_departure
-        FROM arrival WHERE scheduled > $timestamp and scheduled < $timestamp;
+        SELECT code, number, destination, origin, terminal, status, totalpassengers, scheduled, estimated , actual , estimatedchox , actualchox , pcp ,scheduled_departure
+        FROM arrival WHERE origin in(${text.list(origins.size)}) and scheduled > $timestamp and scheduled < $timestamp;
        """.query(decoder)
 
-  def findArrivalsForADate(queryDate: LocalDateTime): F[List[ArrivalTableData]] =
+  def findArrivalsForADate(origins: List[String], queryDate: LocalDateTime): F[List[ArrivalTableData]] =
     sessionPool.use { session =>
-      session.prepare(selectArrivalsForADate).use { ps =>
-        ps.stream(queryDate ~ queryDate.plusDays(1), 1024).compile.toList
+      session.prepare(selectArrivalsForADate(origins)).use { ps =>
+        ps.stream(origins ~ queryDate ~ queryDate.plusDays(1), 1024).compile.toList
       }
     }
 
   def getArrivalForOriginsAndDate(origins: List[String]): F[List[ArrivalTableData]] = {
     val query: Query[List[String] ~ LocalDateTime ~ LocalDateTime, ArrivalTableData] =
       sql"""
-        select code, number, destination, origin, terminal, status, totalpassengers, scheduled, scheduled_departure
-        FROM arrival where origin in(${text.list(origins.size)})and scheduled_departure is NULL and scheduled > $timestamp and scheduled < $timestamp;
+        select code, number, destination, origin, terminal, status, totalpassengers, scheduled, estimated , actual , estimatedchox , actualchox , pcp ,scheduled_departure
+        FROM arrival where origin in(${text.list(origins.size)}) and scheduled_departure is NULL and scheduled > $timestamp and scheduled < $timestamp;
        """.query(decoder)
 
     val currentDate: LocalDateTime = LocalDate.now().atStartOfDay()
@@ -89,18 +94,18 @@ class ArrivalRepository[F[_] : Sync](val sessionPool: Resource[F, Session[F]]) e
 
     val arrivalsWithDeparture = arrivals.filter(_.scheduled_departure.isDefined)
     Logger[F].info(s"Updating arrival departure call for size ${arrivalsWithDeparture.size}") >>
-    sessionPool.use { session =>
-      session.prepare(updateStatus).use { ps =>
-        arrivalsWithDeparture.traverse { arrival =>
-          Logger[F].info(s"Updating arrival departure scheduled for arrival $arrival") >>
-            ps.execute(arrival.scheduled_departure.get ~ arrival.scheduled ~ arrival.code ~ arrival.number ~ arrival.destination ~ arrival.origin)
-              .handleErrorWith {
-                case e => Logger[F].info(s"Error while updating $arrival ${e.getMessage} $e") as
-                  Completion.Update(0)
-              }
+      sessionPool.use { session =>
+        session.prepare(updateStatus).use { ps =>
+          arrivalsWithDeparture.traverse { arrival =>
+            Logger[F].info(s"Updating arrival departure scheduled for arrival $arrival") >>
+              ps.execute(arrival.scheduled_departure.get ~ arrival.scheduled ~ arrival.code ~ arrival.number ~ arrival.destination ~ arrival.origin)
+                .handleErrorWith {
+                  case e => Logger[F].info(s"Error while updating $arrival ${e.getMessage} $e") as
+                    Completion.Update(0)
+                }
+          }
         }
       }
-    }
   }
 
 
