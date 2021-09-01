@@ -53,15 +53,15 @@ class ArrivalRepository[F[_] : Sync](val sessionPool: Resource[F, Session[F]]) e
     }
 
 
-  private def selectArrivalsForOriginsAndADate(origins: List[String]): Query[List[String] ~ LocalDateTime ~ LocalDateTime, ArrivalTableData] =
+  private def selectArrivalsForOriginsAndADate(originsSize: Int): Query[List[String] ~ LocalDateTime ~ LocalDateTime, ArrivalTableData] =
     sql"""
         SELECT code, number, destination, origin, terminal, status, totalpassengers, scheduled, estimated , actual , estimatedchox , actualchox , pcp ,scheduled_departure
-        FROM arrival WHERE origin in(${text.list(origins.size)}) and scheduled > $timestamp and scheduled < $timestamp;
+        FROM arrival WHERE origin in(${text.list(originsSize)}) and scheduled > $timestamp and scheduled < $timestamp;
        """.query(decoder)
 
   def findArrivalsForOriginAndADate(origins: List[String], queryDate: LocalDateTime): F[List[ArrivalTableData]] =
     sessionPool.use { session =>
-      session.prepare(selectArrivalsForOriginsAndADate(origins)).use { ps =>
+      session.prepare(selectArrivalsForOriginsAndADate(origins.size)).use { ps =>
         ps.stream(origins ~ queryDate ~ queryDate.plusDays(1), 1024).compile.toList
       }
     }
