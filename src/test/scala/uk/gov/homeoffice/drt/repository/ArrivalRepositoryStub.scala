@@ -237,11 +237,11 @@ class ArrivalRepositoryStub[F[_] : Sync] extends ArrivalRepositoryI[F] {
 
   override def sessionPool: Resource[F, Session[F]] = ???
 
-  override def findArrivalsForADate(origins: List[String], queryDate: LocalDateTime): F[List[ArrivalTableData]] = {
+  override def findArrivalsForOriginAndADate(origins: List[String], queryDate: LocalDateTime): F[List[ArrivalTableData]] = {
     arrivalMap.filter(a => a.scheduled.toLocalDate == queryDate.toLocalDate && origins.contains(a.origin)).pure[F]
   }
 
-  override def getArrivalForOriginsAndDate(origins: List[String]): F[List[ArrivalTableData]] = ???
+  override def getArrivalForOriginsWithin3Days(origins: List[String]): F[List[ArrivalTableData]] = ???
 
   override def updateDepartureDate(arrivals: List[ArrivalTableData]): F[List[Completion]] = ???
 

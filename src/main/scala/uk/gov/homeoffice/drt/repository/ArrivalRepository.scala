@@ -32,9 +32,9 @@ trait ArrivalRepositoryI[F[_]] {
 
   def sessionPool: Resource[F, Session[F]]
 
-  def findArrivalsForADate(origins: List[String], queryDate: LocalDateTime): F[List[ArrivalTableData]]
+  def findArrivalsForOriginAndADate(origins: List[String], queryDate: LocalDateTime): F[List[ArrivalTableData]]
 
-  def getArrivalForOriginsAndDate(origins: List[String]): F[List[ArrivalTableData]]
+  def getArrivalForOriginsWithin3Days(origins: List[String]): F[List[ArrivalTableData]]
 
   def updateDepartureDate(arrivals: List[ArrivalTableData]): F[List[Completion]]
 
@@ -53,20 +53,20 @@ class ArrivalRepository[F[_] : Sync](val sessionPool: Resource[F, Session[F]]) e
     }
 
 
-  private def selectArrivalsForADate(origins: List[String]): Query[List[String] ~ LocalDateTime ~ LocalDateTime, ArrivalTableData] =
+  private def selectArrivalsForOriginsAndADate(origins: List[String]): Query[List[String] ~ LocalDateTime ~ LocalDateTime, ArrivalTableData] =
     sql"""
         SELECT code, number, destination, origin, terminal, status, totalpassengers, scheduled, estimated , actual , estimatedchox , actualchox , pcp ,scheduled_departure
         FROM arrival WHERE origin in(${text.list(origins.size)}) and scheduled > $timestamp and scheduled < $timestamp;
        """.query(decoder)
 
-  def findArrivalsForADate(origins: List[String], queryDate: LocalDateTime): F[List[ArrivalTableData]] =
+  def findArrivalsForOriginAndADate(origins: List[String], queryDate: LocalDateTime): F[List[ArrivalTableData]] =
     sessionPool.use { session =>
-      session.prepare(selectArrivalsForADate(origins)).use { ps =>
+      session.prepare(selectArrivalsForOriginsAndADate(origins)).use { ps =>
         ps.stream(origins ~ queryDate ~ queryDate.plusDays(1), 1024).compile.toList
       }
     }
 
-  def getArrivalForOriginsAndDate(origins: List[String]): F[List[ArrivalTableData]] = {
+  def getArrivalForOriginsWithin3Days(origins: List[String]): F[List[ArrivalTableData]] = {
     val query: Query[List[String] ~ LocalDateTime ~ LocalDateTime, ArrivalTableData] =
       sql"""
         select code, number, destination, origin, terminal, status, totalpassengers, scheduled, estimated , actual , estimatedchox , actualchox , pcp ,scheduled_departure

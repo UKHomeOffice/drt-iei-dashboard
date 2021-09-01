@@ -18,9 +18,9 @@ class FlightScheduledService[F[_] : Sync](arrivalsRepository: ArrivalRepositoryI
     val portList: List[Port] = DepartureAirport.getDeparturePortForCountry(requestedDetails.region, requestedDetails.post)(requestedDetails.country)
     val arrivalFlights: F[List[ArrivalTableData]] =
       if (requestedDetails.portList.nonEmpty) {
-        arrivalsRepository.findArrivalsForADate(requestedDetails.portList, requestedDate)
+        arrivalsRepository.findArrivalsForOriginAndADate(requestedDetails.portList, requestedDate)
       } else {
-        arrivalsRepository.findArrivalsForADate(portList.map(_.code), requestedDate)
+        arrivalsRepository.findArrivalsForOriginAndADate(portList.map(_.code), requestedDate)
       }
     arrivalFlights.map(_.zipWithIndex.map(a => ArrivalTableDataIndex(a._1, a._2)))
 
@@ -38,7 +38,7 @@ class FlightScheduledService[F[_] : Sync](arrivalsRepository: ArrivalRepositoryI
         a.arrivalsTableData.scheduled_departure.map(d => localDateTimeAccordingToTimezone(requestedDetails, d)))))
   }
 
-  def valueBaseStatus(status: String): String = status.toLowerCase match {
+  def displayStatusBasedOnStatusValue(status: String): String = status.toLowerCase match {
     case "acl forecast" | "port forecast" => "Forecast"
     case "cancelled" | "canceled" | "deleted / removed flight record" | "deleted" => "Cancelled"
     case "diverted" | "arrival diverted away from airport" | "arrival is on block at a stand" |
@@ -60,7 +60,7 @@ class FlightScheduledService[F[_] : Sync](arrivalsRepository: ArrivalRepositoryI
       case (_, _, Some(_), _, _) => "Active"
       case (Some(_), _, _, _, _) => "Active"
       case (_, _, _, Some(_), s) if s.isEmpty => "Scheduled"
-      case (_, _, _, _, s) => valueBaseStatus(s)
+      case (_, _, _, _, s) => displayStatusBasedOnStatusValue(s)
 
     }
   }
@@ -83,7 +83,7 @@ class FlightScheduledService[F[_] : Sync](arrivalsRepository: ArrivalRepositoryI
 
 
   def getScheduledDeparture: F[List[ArrivalTableData]] = {
-    arrivalsRepository.getArrivalForOriginsAndDate(allPortsCodes)
+    arrivalsRepository.getArrivalForOriginsWithin3Days(allPortsCodes)
   }
 
   val allPortsCodes: List[String] = DepartureAirport.getDeparturePortForCountry("All", "All")("All").map(_.code)
