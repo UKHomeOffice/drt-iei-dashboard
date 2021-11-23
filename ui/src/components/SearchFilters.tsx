@@ -293,8 +293,8 @@ const madridCountries = [
 const albaniaCountries = [
     {country: 'Albania'},
     {country: 'Serbia'},
-    {country: 'North Macedonia'},
-    {country: 'Bosnia'},
+    {country: 'Macedonia'},
+    {country: 'Bosnia and Herzegovina'},
     {country: 'Kosovo'},
     {country: 'Montenegro'},
     {country: 'All'}
