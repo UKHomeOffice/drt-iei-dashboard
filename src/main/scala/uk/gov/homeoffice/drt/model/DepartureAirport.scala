@@ -50,7 +50,7 @@ object DepartureAirport {
 
   def albaniaDeparturePortForCountry(implicit country: String): List[Port] = {
     country.toLowerCase match {
-      case "all" => List("Albania", "Serbia", "North Macedonia", "Bosnia", "Kosovo", "Montenegro").flatMap(AirportUtil.getPortListForCountry(_))
+      case "all" => List("Albania", "Serbia", "Macedonia", "Bosnia and Herzegovina", "Kosovo", "Montenegro").flatMap(AirportUtil.getPortListForCountry(_))
       case _ => AirportUtil.getPortListForCountry
     }
   }
