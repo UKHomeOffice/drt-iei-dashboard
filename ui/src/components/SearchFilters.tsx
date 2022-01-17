@@ -80,6 +80,9 @@ export default class SearchFilters extends React.Component<IProps, IState> {
                 case 'Albania':
                     postCountries = albaniaCountries;
                     break;
+                case 'Dublin':
+                    postCountries = dublinCountries;
+                    break;
                 case 'All':
                     postCountries = allCountries;
                     break;
@@ -199,82 +202,84 @@ const nonLocalTimezones = [
 
 const euromedNorthPost = [
     {post: 'Benelux'},
-    {post: 'Warsaw'},
     {post: 'Berlin'},
     {post: 'Paris'},
+    {post: 'Warsaw'},
     {post: 'All'}
 ]
 
 const euromedSouthPost = [
     {post: 'Athens'},
-    {post: 'Rome'},
-    {post: 'Madrid'},
     {post: 'Albania'},
+    {post: 'Dublin'},
+    {post: 'Madrid'},
+    {post: 'Rome'},
     {post: 'All'}
 ]
 
 const allPosts = [
     {post: 'Athens'},
-    {post: 'Benelux'},
-    {post: 'Warsaw'},
-    {post: 'Berlin'},
-    {post: 'Paris'},
-    {post: 'Rome'},
-    {post: 'Madrid'},
     {post: 'Albania'},
+    {post: 'Benelux'},
+    {post: 'Berlin'},
+    {post: 'Dublin'},
+    {post: 'Paris'},
+    {post: 'Madrid'},
+    {post: 'Rome'},
+    {post: 'Warsaw'},
     {post: 'All'}
 ]
 
 const athensCountries = [
-    {country: 'Greece'},
-    {country: 'Cyprus'},
-    {country: 'Croatia'},
-    {country: 'Slovenia'},
     {country: 'Bulgaria'},
-    {country: 'Romania'},
+    {country: 'Croatia'},
+    {country: 'Cyprus'},
+    {country: 'Greece'},
     {country: 'Moldova'},
+    {country: 'Romania'},
+    {country: 'Slovenia'},
     {country: 'All'}
 ]
 
 const beneluxCountries = [
-    {country: 'Netherlands'},
     {country: 'Belgium'},
     {country: 'Luxembourg'},
+    {country: 'Netherlands'},
     {country: 'All'}
 ]
 
 const warsawCountries = [
-    {country: 'Poland'},
+    {country: 'Belarus'},
     {country: 'Czech Republic'},
+    {country: 'Estonia'},
+    {country: 'Iceland'},
+    {country: 'Lithuania'},
+    {country: 'Latvia'},
+    {country: 'Poland'},
+    {country: 'Russia'},
     {country: 'Slovakia'},
     {country: 'Ukraine'},
-    {country: 'Russia'},
-    {country: 'Belarus'},
-    {country: 'Latvia'},
-    {country: 'Estonia'},
-    {country: 'Lithuania'},
-    {country: 'Iceland'},
     {country: 'All'}
 ]
 
 const berlinCountries = [
-    {country: 'Germany'},
     {country: 'Austria'},
-    {country: 'Switzerland'},
-    {country: 'Liechenstein'},
-    {country: 'Finland'},
     {country: 'Denmark'},
+    {country: 'Finland'},
+    {country: 'Germany'},
+    {country: 'Liechenstein'},
     {country: 'Norway'},
+    {country: 'Switzerland'},
     {country: 'Sweden'},
     {country: 'All'}
 ]
 
 const parisCountries = [
-    {country: 'France'},
-    {country: 'Tunisia'},
-    {country: 'Morocco'},
     {country: 'Algeria'},
     {country: 'Basel Mulhouse'},
+    {country: 'France'},
+    {country: 'Morocco'},
+    {country: 'Tunisia'},
     {country: 'All'}
 ]
 
@@ -285,66 +290,70 @@ const romeCountries = [
 ]
 
 const madridCountries = [
-    {country: 'Spain'},
     {country: 'Portugual'},
+    {country: 'Spain'},
     {country: 'All'}
 ]
 
 const albaniaCountries = [
     {country: 'Albania'},
-    {country: 'Serbia'},
-    {country: 'Macedonia'},
     {country: 'Bosnia and Herzegovina'},
     {country: 'Kosovo'},
+    {country: 'Macedonia'},
     {country: 'Montenegro'},
+    {country: 'Serbia'},
     {country: 'All'}
 ]
 
+const dublinCountries = [
+    {country: 'Ireland'}
+]
 const allCountries = [
-    {country: 'Netherlands'},
-    {country: 'Belgium'},
-    {country: 'Luxembourg'},
-    {country: 'Poland'},
-    {country: 'Czech Republic'},
-    {country: 'Slovakia'},
-    {country: 'Ukraine'},
-    {country: 'Russia'},
+    {country: 'All'},
+    {country: 'Albania'},
+    {country: 'Algeria'},
+    {country: 'Austria'},
+    {country: 'Basel Mulhouse'},
     {country: 'Belarus'},
-    {country: 'Latvia'},
+    {country: 'Belgium'},
+    {country: 'Bosnia'},
+    {country: 'Bulgaria'},
+    {country: 'Croatia'},
+    {country: 'Cyprus'},
+    {country: 'Czech Republic'},
+    {country: 'Denmark'},
     {country: 'Estonia'},
+    {country: 'Finland'},
+    {country: 'France'},
+    {country: 'Germany'},
+    {country: 'Greece'},
+    {country: 'Italy'},
+    {country: 'Ireland'},
+    {country: 'Latvia'},
     {country: 'Lithuania'},
     {country: 'Iceland'},
-    {country: 'Germany'},
-    {country: 'Austria'},
-    {country: 'Switzerland'},
-    {country: 'Liechenstein'},
-    {country: 'Finland'},
-    {country: 'Denmark'},
-    {country: 'Norway'},
-    {country: 'Sweden'},
-    {country: 'France'},
-    {country: 'Tunisia'},
-    {country: 'Morocco'},
-    {country: 'Algeria'},
-    {country: 'Basel Mulhouse'},
-    {country: 'Italy'},
-    {country: 'Malta'},
-    {country: 'Greece'},
-    {country: 'Cyprus'},
-    {country: 'Croatia'},
-    {country: 'Slovenia'},
-    {country: 'Bulgaria'},
-    {country: 'Romania'},
-    {country: 'Moldova'},
-    {country: 'Spain'},
-    {country: 'Portugual'},
-    {country: 'Albania'},
-    {country: 'Serbia'},
-    {country: 'North Macedonia'},
-    {country: 'Bosnia'},
     {country: 'Kosovo'},
+    {country: 'Liechenstein'},
+    {country: 'Luxembourg'},
+    {country: 'Malta'},
+    {country: 'Moldova'},
     {country: 'Montenegro'},
-    {country: 'All'}
+    {country: 'Morocco'},
+    {country: 'Netherlands'},
+    {country: 'Norway'},
+    {country: 'North Macedonia'},
+    {country: 'Poland'},
+    {country: 'Portugual'},
+    {country: 'Romania'},
+    {country: 'Russia'},
+    {country: 'Serbia'},
+    {country: 'Slovakia'},
+    {country: 'Slovenia'},
+    {country: 'Spain'},
+    {country: 'Switzerland'},
+    {country: 'Sweden'},
+    {country: 'Tunisia'},
+    {country: 'Ukraine'}
 ];
 
 let regionPosts = allPosts

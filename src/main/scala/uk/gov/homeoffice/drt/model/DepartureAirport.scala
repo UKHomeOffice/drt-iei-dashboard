@@ -62,6 +62,13 @@ object DepartureAirport {
     }
   }
 
+  def dublinDeparturePortsForCountry(implicit country: String): List[Port] = {
+    country.toLowerCase match {
+      case "all" => List("Ireland").flatMap(AirportUtil.getPortListForCountry(_))
+      case _ => AirportUtil.getPortListForCountry
+    }
+  }
+
   def getDeparturePortForCountry(region: String, post: String)(implicit country: String): List[Port] = {
     (region.toLowerCase, post.toLowerCase) match {
       case (_, "benelux") => beneluxDeparturePortForCountry
@@ -72,6 +79,7 @@ object DepartureAirport {
       case (_, "athens") => athensDeparturePortsForCountry
       case (_, "madrid") => madridDeparturePortForCountry
       case (_, "albania") => albaniaDeparturePortForCountry
+      case (_, "dublin") => dublinDeparturePortsForCountry
       case ("euromed north", "all") => beneluxDeparturePortForCountry ::: warsawDeparturePortForCountry ::: berlinDeparturePortForCountry ::: parisDeparturePortForCountry
       case ("euromed south", "all") => romeDeparturePortForCountry ::: athensDeparturePortsForCountry ::: madridDeparturePortForCountry ::: albaniaDeparturePortForCountry
       case ("all", "all") => beneluxDeparturePortForCountry ::: warsawDeparturePortForCountry ::: berlinDeparturePortForCountry :::
