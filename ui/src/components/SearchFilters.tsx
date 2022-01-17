@@ -201,36 +201,37 @@ const nonLocalTimezones = [
 ]
 
 const euromedNorthPost = [
+    {post: 'All'}
     {post: 'Benelux'},
     {post: 'Berlin'},
     {post: 'Paris'},
     {post: 'Warsaw'},
-    {post: 'All'}
 ]
 
 const euromedSouthPost = [
+    {post: 'All'}
     {post: 'Athens'},
     {post: 'Albania'},
     {post: 'Dublin'},
     {post: 'Madrid'},
     {post: 'Rome'},
-    {post: 'All'}
 ]
 
 const allPosts = [
+    {post: 'All'}
     {post: 'Athens'},
     {post: 'Albania'},
     {post: 'Benelux'},
     {post: 'Berlin'},
     {post: 'Dublin'},
-    {post: 'Paris'},
     {post: 'Madrid'},
+    {post: 'Paris'},
     {post: 'Rome'},
     {post: 'Warsaw'},
-    {post: 'All'}
 ]
 
 const athensCountries = [
+    {country: 'All'}
     {country: 'Bulgaria'},
     {country: 'Croatia'},
     {country: 'Cyprus'},
@@ -238,71 +239,70 @@ const athensCountries = [
     {country: 'Moldova'},
     {country: 'Romania'},
     {country: 'Slovenia'},
-    {country: 'All'}
 ]
 
 const beneluxCountries = [
+    {country: 'All'}
     {country: 'Belgium'},
     {country: 'Luxembourg'},
     {country: 'Netherlands'},
-    {country: 'All'}
 ]
 
 const warsawCountries = [
+    {country: 'All'}
     {country: 'Belarus'},
     {country: 'Czech Republic'},
     {country: 'Estonia'},
     {country: 'Iceland'},
-    {country: 'Lithuania'},
     {country: 'Latvia'},
+    {country: 'Lithuania'},
     {country: 'Poland'},
     {country: 'Russia'},
     {country: 'Slovakia'},
     {country: 'Ukraine'},
-    {country: 'All'}
 ]
 
 const berlinCountries = [
+    {country: 'All'}
     {country: 'Austria'},
     {country: 'Denmark'},
     {country: 'Finland'},
     {country: 'Germany'},
     {country: 'Liechenstein'},
     {country: 'Norway'},
-    {country: 'Switzerland'},
     {country: 'Sweden'},
-    {country: 'All'}
+    {country: 'Switzerland'},
 ]
 
 const parisCountries = [
+    {country: 'All'}
     {country: 'Algeria'},
     {country: 'Basel Mulhouse'},
     {country: 'France'},
     {country: 'Morocco'},
     {country: 'Tunisia'},
-    {country: 'All'}
 ]
 
 const romeCountries = [
+    {country: 'All'}
     {country: 'Italy'},
     {country: 'Malta'},
-    {country: 'All'}
 ]
 
 const madridCountries = [
+    {country: 'All'}
     {country: 'Portugual'},
     {country: 'Spain'},
-    {country: 'All'}
 ]
 
 const albaniaCountries = [
+    {country: 'All'}
     {country: 'Albania'},
     {country: 'Bosnia and Herzegovina'},
     {country: 'Kosovo'},
     {country: 'Macedonia'},
     {country: 'Montenegro'},
     {country: 'Serbia'},
-    {country: 'All'}
 ]
 
 const dublinCountries = [
@@ -327,12 +327,12 @@ const allCountries = [
     {country: 'France'},
     {country: 'Germany'},
     {country: 'Greece'},
-    {country: 'Italy'},
+    {country: 'Iceland'},
     {country: 'Ireland'},
+    {country: 'Italy'},
+    {country: 'Kosovo'},
     {country: 'Latvia'},
     {country: 'Lithuania'},
-    {country: 'Iceland'},
-    {country: 'Kosovo'},
     {country: 'Liechenstein'},
     {country: 'Luxembourg'},
     {country: 'Malta'},
