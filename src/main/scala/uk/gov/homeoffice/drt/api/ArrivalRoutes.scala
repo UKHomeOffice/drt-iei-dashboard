@@ -9,9 +9,8 @@ import org.http4s.util.CaseInsensitiveString
 import org.http4s.{HttpRoutes, Response, Status}
 import uk.gov.homeoffice.drt.applicative.ArrivalFlights
 import uk.gov.homeoffice.drt.coders.ArrivalCoder._
-import uk.gov.homeoffice.drt.model.FlightsRequest
+import uk.gov.homeoffice.drt.model.{Arrivals, FlightsRequest}
 
-import scala.util.{Failure, Success, Try}
 
 object ArrivalRoutes {
 
@@ -21,30 +20,27 @@ object ArrivalRoutes {
     import dsl._
     HttpRoutes.of[F] {
       case req@GET -> Root / "flights" / region / post / departureCountry / filterDate / timezone :? params =>
-        Try {
-          val xAuthRoles: List[String] = req.headers.get(CaseInsensitiveString("X-Auth-Roles")).map(_.value.split(",").toList).getOrElse(List.empty)
-          val xAuthEmail: List[String] = req.headers.get(CaseInsensitiveString("X-Auth-Email")).map(_.value.split(",").toList).getOrElse(List.empty)
-          val requiredPermissions: Boolean = xAuthRoles.exists(p => permissions.contains(p))
-          val portList = params.getOrElse("portList", Seq.empty[String]).toList.filter(_.nonEmpty).flatMap(_.split(","))
-          if (requiredPermissions) {
-            for {
-              _ <- Logger[F].info(s"User with email $xAuthEmail request details $region $post $departureCountry ${portList.nonEmpty} $filterDate $timezone")
-              arrivals <- H.flights(FlightsRequest(region, post, departureCountry, portList, filterDate, timezone))
-              resp <- Ok(arrivals)
-            } yield resp
-          } else {
-            Logger[F].warn(s"User with email $xAuthEmail logged in does not have valid permission to view the page. Permissions $xAuthRoles") >>
-              Response[F](Status.Forbidden)
-                .withEntity(s"You need appropriate permissions to view the page.")
-                .pure[F]
-          }
-        } match {
-          case Success(r) => r
-          case Failure(e) =>
-            Logger[F].error(s"Error while request $e") >>
-              Response[F](Status.BadRequest)
-                .withEntity(s"Bad Request : ${e.getMessage}")
-                .pure[F]
+        val xAuthRoles: List[String] = req.headers.get(CaseInsensitiveString("X-Auth-Roles")).map(_.value.split(",").toList).getOrElse(List.empty)
+        val xAuthEmail: List[String] = req.headers.get(CaseInsensitiveString("X-Auth-Email")).map(_.value.split(",").toList).getOrElse(List.empty)
+        val requiredPermissions: Boolean = xAuthRoles.exists(p => permissions.contains(p))
+        val portList = params.getOrElse("portList", Seq.empty[String]).toList.filter(_.nonEmpty).flatMap(_.split(","))
+        val requestString = s"user with email ${xAuthEmail.mkString} request details $region $post $departureCountry ${portList.nonEmpty} $filterDate $timezone"
+        if (requiredPermissions) {
+          for {
+            _ <- Logger[F].info(requestString)
+            arrivals <- H.flights(FlightsRequest(region, post, departureCountry, portList, filterDate, timezone))
+              .recoverWith {
+                case e: Throwable =>
+                  Logger[F].warn(s"Error while $requestString : ${e.printStackTrace()}") >>
+                    Arrivals(data = List.empty).pure[F]
+              }
+            resp <- Ok(arrivals)
+          } yield resp
+        } else {
+          Logger[F].warn(s"User with email ${xAuthEmail.mkString} logged in does not have valid permission to view the page. Permissions ${xAuthRoles.mkString}") >>
+            Response[F](Status.Forbidden)
+              .withEntity(s"You need appropriate permissions to view the page.")
+              .pure[F]
         }
     }
   }

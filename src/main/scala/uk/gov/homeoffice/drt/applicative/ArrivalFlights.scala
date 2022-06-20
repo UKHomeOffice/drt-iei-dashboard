@@ -5,6 +5,8 @@ import cats.{Applicative, Monad}
 import uk.gov.homeoffice.drt.model.{ArrivalTableDataIndex, Arrivals, FlightsRequest}
 import uk.gov.homeoffice.drt.service.FlightScheduledService
 
+import scala.util.Try
+
 
 trait ArrivalFlights[F[_]] {
   def flights(n: FlightsRequest)(implicit monad: Monad[F]): F[Arrivals]

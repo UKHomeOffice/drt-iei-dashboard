@@ -6,6 +6,48 @@ case class Port(code: String, name: String)
 
 object DepartureAirport {
 
+  def guangdongProvinceDeparturePortForCountry(implicit country: String): List[Port] = {
+    country.toLowerCase match {
+      case "all" => List("China", "Hong Kong", "Taiwan", "Macau", "Mongolia", "Philippines", "Japan", "Korea", "Brunei", "South Korea", "Australia", "New Zealand", "Fiji").flatMap(AirportUtil.getPortListForCountry(_))
+      case _ => AirportUtil.getPortListForCountry
+    }
+  }
+
+  def newDelhiDeparturePortForCountry(implicit country: String) = {
+    country.toLowerCase match {
+      case "all" => List("India", "Afghanistan", "Bhutan", "Burma", "Cambodia", "Laos", "Thailand", "Myanmar", "Vietnam").flatMap(AirportUtil.getPortListForCountry(_))
+      case _ => AirportUtil.getPortListForCountry
+    }
+  }
+
+  def dubaiDeparturePortForCountry(implicit country: String) = {
+    country.toLowerCase match {
+      case "all" => List("United Arab Emirates", "Afghanistan", "Oman", "Yemen", "Iran").flatMap(AirportUtil.getPortListForCountry(_))
+      case _ => AirportUtil.getPortListForCountry
+    }
+  }
+
+  def istanbulDeparturePortForCountry(implicit country: String) = {
+    country.toLowerCase match {
+      case "all" => List("Armenia", "Georgia", "Kazakhstan", "Turkey", "Turkmenistan", "Uzbekistan", "Azerbaijan", "Iraq", "Jordan", "Lebanon", "Syria").flatMap(AirportUtil.getPortListForCountry(_))
+      case _ => AirportUtil.getPortListForCountry
+    }
+  }
+
+  def dohaDeparturePortForCountry(implicit country: String) = {
+    country.toLowerCase match {
+      case "all" => List("Qatar", "Bahrain", "Kuwait", "Saudi Arabia").flatMap(AirportUtil.getPortListForCountry(_))
+      case _ => AirportUtil.getPortListForCountry
+    }
+  }
+
+  def africaDeparturePortForCountry(implicit country: String) = {
+    country.toLowerCase match {
+      case "all" => List("Cameroon", "Central African Republic", "Equatorial Guinea", "Nigeria").flatMap(AirportUtil.getPortListForCountry(_))
+      case _ => AirportUtil.getPortListForCountry
+    }
+  }
+
   def beneluxDeparturePortForCountry(implicit country: String): List[Port] = {
     country.toLowerCase match {
       case "all" => List("Netherlands", "Belgium", "Luxembourg").flatMap(AirportUtil.getPortListForCountry(_))
@@ -43,7 +85,7 @@ object DepartureAirport {
 
   def madridDeparturePortForCountry(implicit country: String): List[Port] = {
     country.toLowerCase match {
-      case "all" => List("Spain", "Portugual").flatMap(AirportUtil.getPortListForCountry(_))
+      case "all" => List("Spain", "Portugal").flatMap(AirportUtil.getPortListForCountry(_))
       case _ => AirportUtil.getPortListForCountry
     }
   }
@@ -80,11 +122,25 @@ object DepartureAirport {
       case (_, "madrid") => madridDeparturePortForCountry
       case (_, "albania") => albaniaDeparturePortForCountry
       case (_, "dublin") => dublinDeparturePortsForCountry
+      case (_, "guangdong province") => guangdongProvinceDeparturePortForCountry
+      case (_, "new delhi") => newDelhiDeparturePortForCountry
+      case (_, "dubai") => dubaiDeparturePortForCountry
+      case (_, "istanbul") => istanbulDeparturePortForCountry
+      case (_, "doha") => dohaDeparturePortForCountry
+      case (_, "africa") => africaDeparturePortForCountry
       case ("euromed north", "all") => beneluxDeparturePortForCountry ::: warsawDeparturePortForCountry ::: berlinDeparturePortForCountry ::: parisDeparturePortForCountry
       case ("euromed south", "all") => romeDeparturePortForCountry ::: athensDeparturePortsForCountry ::: madridDeparturePortForCountry ::: albaniaDeparturePortForCountry
+      case ("china", "all") => guangdongProvinceDeparturePortForCountry
+      case ("india", "all") => newDelhiDeparturePortForCountry
+      case ("dubai", "all") => dubaiDeparturePortForCountry
+      case ("istanbul", "all") => istanbulDeparturePortForCountry
+      case ("doha", "all") => dohaDeparturePortForCountry
+      case ("africa", "all") => africaDeparturePortForCountry
       case ("all", "all") => beneluxDeparturePortForCountry ::: warsawDeparturePortForCountry ::: berlinDeparturePortForCountry :::
         parisDeparturePortForCountry ::: romeDeparturePortForCountry ::: athensDeparturePortsForCountry :::
-        madridDeparturePortForCountry ::: albaniaDeparturePortForCountry
+        madridDeparturePortForCountry ::: guangdongProvinceDeparturePortForCountry ::: newDelhiDeparturePortForCountry ::: dubaiDeparturePortForCountry :::
+        istanbulDeparturePortForCountry ::: dohaDeparturePortForCountry ::: africaDeparturePortForCountry
+
       case _ => List.empty
 
     }
