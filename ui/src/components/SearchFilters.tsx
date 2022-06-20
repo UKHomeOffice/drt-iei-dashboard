@@ -37,6 +37,22 @@ export default class SearchFilters extends React.Component<IProps, IState> {
             this.setState({post: 'All'});
             this.setState({timezone: 'UTC'});
             switch (this.state.region) {
+                case 'Africa' :
+                    regionPosts = africaPost;
+                    console.log("It is a africaPost.");
+                    break;
+                case 'China' :
+                    regionPosts = chinaPost;
+                    console.log("It is a chinaPost.");
+                    break;
+                case 'Doha' :
+                    regionPosts = dohaPost;
+                    console.log("It is a dohaPost.");
+                    break;
+                case 'Dubai' :
+                    regionPosts = dubaiPost;
+                    console.log("It is a dubaiPost.");
+                    break;
                 case 'Euromed North' :
                     regionPosts = euromedNorthPost;
                     console.log("It is a euromedNorthPost.");
@@ -45,29 +61,13 @@ export default class SearchFilters extends React.Component<IProps, IState> {
                     regionPosts = euromedSouthPost;
                     console.log("It is a euromedSouthPost.");
                     break;
-                case 'China' :
-                    regionPosts = chinaPost;
-                    console.log("It is a chinaPost.");
-                    break;
                 case 'India' :
                     regionPosts = indiaPost;
                     console.log("It is a indiaPost.");
                     break;
-                case 'Dubai' :
-                    regionPosts = dubaiPost;
-                    console.log("It is a dubaiPost.");
-                    break;
                 case 'Istanbul' :
                     regionPosts = istanbulPost;
                     console.log("It is a istanbulPost.");
-                    break;
-                case 'Doha' :
-                    regionPosts = dohaPost;
-                    console.log("It is a dohaPost.");
-                    break;
-                case 'Africa' :
-                    regionPosts = africaPost;
-                    console.log("It is a africaPost.");
                     break;
                 case 'All' :
                     regionPosts = allPosts;
@@ -80,17 +80,44 @@ export default class SearchFilters extends React.Component<IProps, IState> {
             this.setState({country: 'All'});
             this.setState({timezone: 'UTC'});
             switch (this.state.post) {
+                case 'Africa':
+                    postCountries = africaCountries;
+                    break;
+                case 'Albania':
+                    postCountries = albaniaCountries;
+                    break;
+                case 'All':
+                    postCountries = allCountries;
+                    break;
                 case 'Athens' :
                     postCountries = athensCountries;
                     break;
                 case 'Benelux':
                     postCountries = beneluxCountries;
                     break;
-                case 'Warsaw':
-                    postCountries = warsawCountries;
-                    break;
                 case 'Berlin':
                     postCountries = berlinCountries;
+                    break;
+                case 'Dublin':
+                    postCountries = dublinCountries;
+                    break;
+                case 'Doha':
+                    postCountries = dohaCountries;
+                    break;
+                case 'Dubai':
+                    postCountries = dubaiCountries;
+                    break;
+                case 'Guangdong Province':
+                    postCountries = guangdongProvinceCountries;
+                    break;
+                case 'Istanbul':
+                    postCountries = istanbulCountries;
+                    break;
+                case 'Madrid':
+                    postCountries = madridCountries;
+                    break;
+                case 'New Delhi':
+                    postCountries = newDelhiCountries;
                     break;
                 case 'Paris':
                     postCountries = parisCountries;
@@ -98,35 +125,8 @@ export default class SearchFilters extends React.Component<IProps, IState> {
                 case 'Rome':
                     postCountries = romeCountries;
                     break;
-                case 'Madrid':
-                    postCountries = madridCountries;
-                    break;
-                case 'Albania':
-                    postCountries = albaniaCountries;
-                    break;
-                case 'Dublin':
-                    postCountries = dublinCountries;
-                    break;
-                case 'Guangdong Province':
-                    postCountries = guangdongProvinceCountries;
-                    break;
-                case 'New Delhi':
-                    postCountries = newDelhiCountries;
-                    break;
-                case 'Dubai':
-                    postCountries = dubaiCountries;
-                    break;
-                case 'Istanbul':
-                    postCountries = istanbulCountries;
-                    break;
-                case 'Doha':
-                    postCountries = dohaCountries;
-                    break;
-                case 'Africa':
-                    postCountries = africaCountries;
-                    break;
-                case 'All':
-                    postCountries = allCountries;
+                case 'Warsaw':
+                    postCountries = warsawCountries;
                     break;
                 default:
                     postCountries = allCountries;
@@ -225,15 +225,15 @@ export default class SearchFilters extends React.Component<IProps, IState> {
 }
 
 const regions = [
+    {region: 'All'},
+    {region: 'Africa'},
+    {region: 'China'},
+    {region: 'Doha'},
+    {region: 'Dubai'},
     {region: 'Euromed North'},
     {region: 'Euromed South'},
-    {region: 'China'},
     {region: 'India'},
-    {region: 'Dubai'},
-    {region: 'Istanbul'},
-    {region: 'Doha'},
-    {region: 'Africa'},
-    {region: 'All'}
+    {region: 'Istanbul'}
 
 ]
 
@@ -297,21 +297,21 @@ const africaPost = [
 
 const allPosts = [
     {post: 'All'},
-    {post: 'Athens'},
+    {post: 'Africa'},
     {post: 'Albania'},
+    {post: 'Athens'},
     {post: 'Benelux'},
     {post: 'Berlin'},
+    {post: 'Doha'},
     {post: 'Dublin'},
-    {post: 'Madrid'},
-    {post: 'Paris'},
-    {post: 'Rome'},
-    {post: 'Warsaw'},
-    {post: 'Guangdong Province'},
-    {post: 'New Delhi'},
     {post: 'Dubai'},
     {post: 'Istanbul'},
-    {post: 'Doha'},
-    {post: 'Africa'}
+    {post: 'Guangdong Province'},
+    {post: 'Madrid'},
+    {post: 'New Delhi'},
+    {post: 'Paris'},
+    {post: 'Rome'},
+    {post: 'Warsaw'}
 ]
 
 const athensCountries = [
@@ -389,38 +389,38 @@ const albaniaCountries = [
 
 const guangdongProvinceCountries = [
     {country: 'All'},
+    {country: 'Australia'},
+    {country: 'Brunei'},
     {country: 'China'},
+    {country: 'Fiji'},
     {country: 'Hong Kong'},
-    {country: 'Taiwan'},
+    {country: 'Japan'},
     {country: 'Macau'},
     {country: 'Mongolia'},
-    {country: 'Philippines'},
-    {country: 'Japan'},
-    {country: 'North Korea'},
-    {country: 'Brunei'},
-    {country: 'South Korea'},
-    {country: 'Australia'},
     {country: 'New Zealand'},
-    {country: 'Fiji'}
+    {country: 'North Korea'},
+    {country: 'Philippines'},
+    {country: 'South Korea'},
+    {country: 'Taiwan'}
 ]
 
 const newDelhiCountries = [
     {country: 'All'},
-    {country: 'India'},
     {country: 'Afghanistan'},
     {country: 'Bhutan'},
     {country: 'Burma'},
     {country: 'Cambodia'},
+    {country: 'India'},
     {country: 'Laos'},
-    {country: 'Thailand'},
     {country: 'Myanmar'},
+    {country: 'Thailand'},
     {country: 'Vietnam'}
 ]
 
 const dubaiCountries = [
-    {country: 'United Arab Emirates'},
     {country: 'Afghanistan'},
     {country: 'Oman'},
+    {country: 'United Arab Emirates'},
     {country: 'Yemen'}
 ]
 
@@ -429,23 +429,23 @@ const dublinCountries = [
 ]
 
 const istanbulCountries = [
-    {country:'Armenia'},
+    {country: 'Armenia'},
+    {country: 'Azerbaijan'},
     {country: 'Georgia'},
     {country: 'Kazakhstan'},
-    {country: 'Turkey'},
-    {country: 'Turkmenistan'},
-    {country: 'Uzbekistan'},
-    {country: 'Azerbaijan'},
-    {country: 'Iraq'},
-    {country: 'Jordan'},
     {country: 'Lebanon'},
+    {country: 'Jordan'},
+    {country: 'Iraq'},
+    {country: 'Uzbekistan'},
+    {country: 'Turkmenistan'},
+    {country: 'Turkey'},
     {country: 'Syria'}
 ]
 
 const dohaCountries = [
-    {country: 'Qatar'},
     {country: 'Bahrain'},
     {country: 'Kuwait'},
+    {country: 'Qatar'},
     {country: 'Saudi Arabia'}
 ]
 
@@ -460,38 +460,68 @@ const allCountries = [
     {country: 'All'},
     {country: 'Albania'},
     {country: 'Algeria'},
+    {country: 'Afghanistan'},
+    {country: 'Armenia'},
     {country: 'Austria'},
-    {country: 'Basel Mulhouse'},
+    {country: 'Australia'},
+    {country: 'Azerbaijan'},
+    {country: 'Bahrain'},
     {country: 'Belarus'},
     {country: 'Belgium'},
+    {country: 'Bhutan'},
     {country: 'Bosnia'},
     {country: 'Bulgaria'},
+    {country: 'Brunei'},
+    {country: 'Burma'},
+    {country: 'Cambodia'},
+    {country: 'Cameroon'},
+    {country: 'Central African Republic'},
+    {country: 'China'},
     {country: 'Croatia'},
     {country: 'Cyprus'},
     {country: 'Czech Republic'},
     {country: 'Denmark'},
+    {country: 'Equatorial Guinea'} ,
     {country: 'Estonia'},
     {country: 'Finland'},
+    {country: 'Fiji'},
     {country: 'France'},
+    {country: 'Georgia'},
     {country: 'Germany'},
     {country: 'Greece'},
+    {country: 'Hong Kong'},
     {country: 'Iceland'},
     {country: 'Ireland'},
     {country: 'Italy'},
+    {country: 'Iraq'},
+    {country: 'Japan'},
+    {country: 'Jordan'},
+    {country: 'Kazakhstan'},
     {country: 'Kosovo'},
+    {country: 'Kuwait'},
+    {country: 'Laos'},
     {country: 'Latvia'},
+    {country: 'Lebanon'},
     {country: 'Lithuania'},
-    {country: 'Liechenstein'},
     {country: 'Luxembourg'},
+    {country: 'Macau'},
     {country: 'Malta'},
     {country: 'Moldova'},
     {country: 'Montenegro'},
     {country: 'Morocco'},
+    {country: 'Mongolia'},
+    {country: 'Myanmar'},
+    {country: 'Nigeria'},
+    {country: 'New Zealand'},
     {country: 'Netherlands'},
+    {country: 'North Korea'},
     {country: 'Norway'},
     {country: 'North Macedonia'},
+    {country: 'Oman'},
+    {country: 'Philippines'},
     {country: 'Poland'},
     {country: 'Portugal'},
+    {country: 'Qatar'},
     {country: 'Romania'},
     {country: 'Russia'},
     {country: 'Serbia'},
@@ -501,50 +531,18 @@ const allCountries = [
     {country: 'Switzerland'},
     {country: 'Sweden'},
     {country: 'Tunisia'},
-    {country: 'Ukraine'},
-    {country: 'China'},
-    {country: 'Hong Kong'},
     {country: 'Taiwan'},
-    {country: 'Macau'},
-    {country: 'Mongolia'},
-    {country: 'Philippines'},
-    {country: 'Japan'},
-    {country: 'North Korea'},
-    {country: 'Brunei'},
-    {country: 'South Korea'},
-    {country: 'Australia'},
-    {country: 'New Zealand'},
-    {country: 'Fiji'},
-    {country: 'Afghanistan'},
-    {country: 'Bhutan'},
-    {country: 'Burma'},
-    {country: 'Cambodia'},
-    {country: 'Laos'},
     {country: 'Thailand'},
-    {country: 'Myanmar'},
-    {country: 'Vietnam'},
-    {country: 'United Arab Emirates'},
-    {country: 'Oman'},
-    {country: 'Yemen'},
-    {country: 'Armenia'},
-    {country: 'Georgia'},
-    {country: 'Kazakhstan'},
     {country: 'Turkey'},
     {country: 'Turkmenistan'},
-    {country: 'Uzbekistan'},
-    {country: 'Azerbaijan'},
-    {country: 'Iraq'},
-    {country: 'Jordan'},
-    {country: 'Lebanon'},
-    {country: 'Syria'},
-    {country: 'Qatar'},
-    {country: 'Bahrain'},
-    {country: 'Kuwait'},
     {country: 'Saudi Arabia'},
-    {country: 'Cameroon'},
-    {country: 'Central African Republic'},
-    {country: 'Equatorial Guinea'} ,
-    {country: 'Nigeria'}
+    {country: 'South Korea'},
+    {country: 'Syria'},
+    {country: 'Ukraine'},
+    {country: 'United Arab Emirates'},
+    {country: 'Uzbekistan'},
+    {country: 'Vietnam'},
+    {country: 'Yemen'},
    ]
 
 let regionPosts = allPosts
