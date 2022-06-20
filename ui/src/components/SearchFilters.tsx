@@ -352,7 +352,6 @@ const berlinCountries = [
     {country: 'Denmark'},
     {country: 'Finland'},
     {country: 'Germany'},
-    {country: 'Liechenstein'},
     {country: 'Norway'},
     {country: 'Sweden'},
     {country: 'Switzerland'}
@@ -361,7 +360,6 @@ const berlinCountries = [
 const parisCountries = [
     {country: 'All'},
     {country: 'Algeria'},
-    {country: 'Basel Mulhouse'},
     {country: 'France'},
     {country: 'Morocco'},
     {country: 'Tunisia'}
@@ -398,7 +396,7 @@ const guangdongProvinceCountries = [
     {country: 'Mongolia'},
     {country: 'Philippines'},
     {country: 'Japan'},
-    {country: 'Korea'},
+    {country: 'North Korea'},
     {country: 'Brunei'},
     {country: 'South Korea'},
     {country: 'Australia'},
@@ -511,7 +509,7 @@ const allCountries = [
     {country: 'Mongolia'},
     {country: 'Philippines'},
     {country: 'Japan'},
-    {country: 'Korea'},
+    {country: 'North Korea'},
     {country: 'Brunei'},
     {country: 'South Korea'},
     {country: 'Australia'},
@@ -528,7 +526,7 @@ const allCountries = [
     {country: 'United Arab Emirates'},
     {country: 'Oman'},
     {country: 'Yemen'},
-    {country:'Armenia'},
+    {country: 'Armenia'},
     {country: 'Georgia'},
     {country: 'Kazakhstan'},
     {country: 'Turkey'},

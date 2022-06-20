@@ -8,7 +8,7 @@ object DepartureAirport {
 
   def guangdongProvinceDeparturePortForCountry(implicit country: String): List[Port] = {
     country.toLowerCase match {
-      case "all" => List("China", "Hong Kong", "Taiwan", "Macau", "Mongolia", "Philippines", "Japan", "Korea", "Brunei", "South Korea", "Australia", "New Zealand", "Fiji").flatMap(AirportUtil.getPortListForCountry(_))
+      case "all" => List("China", "Hong Kong", "Taiwan", "Macau", "Mongolia", "Philippines", "Japan", "North Korea", "Brunei", "South Korea", "Australia", "New Zealand", "Fiji").flatMap(AirportUtil.getPortListForCountry(_))
       case _ => AirportUtil.getPortListForCountry
     }
   }
