@@ -108,6 +108,7 @@ const checkedIcon = <CheckBoxIcon fontSize="small"/>;
 
 class FlightsTable extends React.Component<IProps, IState> {
     private interval: any;
+    private progressInterval : any;
     columnsHeaders = [
         {field: 'scheduledDepartureTime', headerName: 'Scheduled Departure', width: 190},
         {field: 'origin', headerName: "Departure Airport", width: 160},
@@ -139,6 +140,15 @@ class FlightsTable extends React.Component<IProps, IState> {
                 currentTime: new Date().toLocaleString()
             })
         }, 60000);
+
+        this.progressInterval = setInterval(() => {
+           if(this.state.progress !== 100) {
+                this.setState({
+                    progress: this.state.progress + Math.random() * 10
+                })
+            }
+        }, 500);
+
         this.updateFlights();
     }
 
@@ -157,6 +167,7 @@ class FlightsTable extends React.Component<IProps, IState> {
 
     componentWillUnmount() {
         clearInterval(this.interval);
+        clearInterval(this.progressInterval);
     }
 
     private updateFlights() {
