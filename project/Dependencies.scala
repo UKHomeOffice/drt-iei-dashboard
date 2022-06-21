@@ -31,7 +31,7 @@ object Dependencies {
     val logstashLogbackEncoder = "6.5"
     val fs2CronCore = "0.2.2"
     val jodaTimeVersion = "2.9.4"
-    val govNotifyVersion = "3.17.0-RELEASE"
+    val govNotifyVersion = "3.17.3-RELEASE"
     
   }
 
