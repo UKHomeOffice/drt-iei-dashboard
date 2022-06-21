@@ -9,7 +9,8 @@ import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
-
+import Box from '@material-ui/core/Box';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 interface FlightData {
     origin: string;
@@ -41,6 +42,7 @@ interface IState {
     portData: string[];
     portName: string[];
     flightData: FlightData[];
+    progress: number;
 }
 
 const getBackgroundColor = (color: string, palette: any) => getThemePaletteMode(palette) === 'dark' ? darken(color, 0.6) : lighten(color, 0.6);
@@ -126,7 +128,8 @@ class FlightsTable extends React.Component<IProps, IState> {
             currentTime: new Date().toLocaleString(),
             flightData: [],
             portData: [],
-            portName: []
+            portName: [],
+            progress: 0,
         }
     }
 
@@ -146,6 +149,7 @@ class FlightsTable extends React.Component<IProps, IState> {
         }
 
         if (this.props.timezone !== prevProps.timezone) {
+            this.setState({ progress: 0 });
             this.updateFlightsWithoutPort();
         }
 
@@ -197,22 +201,26 @@ class FlightsTable extends React.Component<IProps, IState> {
         this.setState({...this.state, flightData: flightData});
         this.setState({...this.state, portData: uniquePortData});
         this.setState({...this.state, arrivalRows: arrivalRows});
+        this.setState({...this.state, progress: 100});
     }
 
     updateFlightsDataWithoutPortData = (response: AxiosResponse) => {
         let arrivalsData = response.data as ArrivalsData;
         let arrivalRows = arrivalsData.data as GridRowModel[]
         this.setState({...this.state, arrivalRows: arrivalRows});
+        this.setState({...this.state, progress: 100});
     }
 
     handleChange = (event: React.ChangeEvent<{}>, value: string[]) => {
         this.setState({
+            progress: 0 ,
             portName: value
         }, () => this.updateFlightsWithoutPort())
     };
 
     clearFilter() {
         this.setState({portName: []});
+        this.setState({progress: 0});
         this.clearPortFilterFlights();
     }
 
@@ -258,6 +266,10 @@ class FlightsTable extends React.Component<IProps, IState> {
                             <Grid item xs={12} sm={4}/>
                         </Grid>
                     </div>
+                    <br/>
+                    <Box style={{ width: '100%' }}>
+                      <LinearProgress variant="determinate" value={this.state.progress} />
+                    </Box>
                     <br/>
                     <div style={{height: 800, width: '100%'}} className={this.props.classes.root}>
                         <DataGrid disableColumnMenu
