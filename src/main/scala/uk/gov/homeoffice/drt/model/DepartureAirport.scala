@@ -113,7 +113,6 @@ object DepartureAirport {
 
   def getDeparturePortForCountry(region: String, post: String)(implicit country: String): List[Port] = {
     (region.toLowerCase, post.toLowerCase) match {
-      case (_, "africa") => africaDeparturePortForCountry
       case (_, "albania") => albaniaDeparturePortForCountry
       case (_, "athens") => athensDeparturePortsForCountry
       case (_, "benelux") => beneluxDeparturePortForCountry
@@ -123,6 +122,7 @@ object DepartureAirport {
       case (_, "dublin") => dublinDeparturePortsForCountry
       case (_, "guangdong province") => guangdongProvinceDeparturePortForCountry
       case (_, "istanbul") => istanbulDeparturePortForCountry
+      case (_, "lagos") => africaDeparturePortForCountry
       case (_, "madrid") => madridDeparturePortForCountry
       case (_, "new delhi") => newDelhiDeparturePortForCountry
       case (_, "paris") => parisDeparturePortForCountry

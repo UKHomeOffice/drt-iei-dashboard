@@ -39,7 +39,7 @@ export default class SearchFilters extends React.Component<IProps, IState> {
             switch (this.state.region) {
                 case 'Africa' :
                     regionPosts = africaPost;
-                    this.setState({post: 'Africa'});
+                    this.setState({post: 'Lagos'});
                     console.log("It is a africaPost.");
                     break;
                 case 'China' :
@@ -75,9 +75,6 @@ export default class SearchFilters extends React.Component<IProps, IState> {
             this.setState({country: 'All'});
             this.setState({timezone: 'UTC'});
             switch (this.state.post) {
-                case 'Africa':
-                    postCountries = africaCountries;
-                    break;
                 case 'Albania':
                     postCountries = albaniaCountries;
                     break;
@@ -107,6 +104,9 @@ export default class SearchFilters extends React.Component<IProps, IState> {
                     break;
                 case 'Istanbul':
                     postCountries = istanbulCountries;
+                    break;
+                case 'Lagos':
+                    postCountries = africaCountries;
                     break;
                 case 'Madrid':
                     postCountries = madridCountries;
@@ -274,12 +274,11 @@ const middleEastPost = [
 ]
 
 const africaPost = [
-    {post: 'Africa'}
+    {post: 'Lagos'}
 ]
 
 const allPosts = [
     {post: 'All'},
-    {post: 'Africa'},
     {post: 'Albania'},
     {post: 'Athens'},
     {post: 'Benelux'},
@@ -287,8 +286,9 @@ const allPosts = [
     {post: 'Doha'},
     {post: 'Dublin'},
     {post: 'Dubai'},
-    {post: 'Istanbul'},
     {post: 'Guangdong Province'},
+    {post: 'Istanbul'},
+    {post: 'Lagos'},
     {post: 'Madrid'},
     {post: 'New Delhi'},
     {post: 'Paris'},
