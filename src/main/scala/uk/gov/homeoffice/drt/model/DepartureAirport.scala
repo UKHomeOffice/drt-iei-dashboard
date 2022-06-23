@@ -130,12 +130,10 @@ object DepartureAirport {
       case (_, "warsaw") => warsawDeparturePortForCountry
       case ("africa", "all") => africaDeparturePortForCountry
       case ("china", "all") => guangdongProvinceDeparturePortForCountry
-      case ("doha", "all") => dohaDeparturePortForCountry
       case ("euromed north", "all") => beneluxDeparturePortForCountry ::: warsawDeparturePortForCountry ::: berlinDeparturePortForCountry ::: parisDeparturePortForCountry
       case ("euromed south", "all") => romeDeparturePortForCountry ::: athensDeparturePortsForCountry ::: madridDeparturePortForCountry ::: albaniaDeparturePortForCountry
-      case ("dubai", "all") => dubaiDeparturePortForCountry
       case ("india", "all") => newDelhiDeparturePortForCountry
-      case ("istanbul", "all") => istanbulDeparturePortForCountry
+      case ("middle east", "all") => dubaiDeparturePortForCountry ::: istanbulDeparturePortForCountry :::dohaDeparturePortForCountry
       case ("all", "all") => beneluxDeparturePortForCountry ::: warsawDeparturePortForCountry ::: berlinDeparturePortForCountry :::
         parisDeparturePortForCountry ::: romeDeparturePortForCountry ::: athensDeparturePortsForCountry :::
         madridDeparturePortForCountry ::: guangdongProvinceDeparturePortForCountry ::: newDelhiDeparturePortForCountry ::: dubaiDeparturePortForCountry :::

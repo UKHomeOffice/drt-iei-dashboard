@@ -39,19 +39,13 @@ export default class SearchFilters extends React.Component<IProps, IState> {
             switch (this.state.region) {
                 case 'Africa' :
                     regionPosts = africaPost;
+                    this.setState({post: 'Africa'});
                     console.log("It is a africaPost.");
                     break;
                 case 'China' :
                     regionPosts = chinaPost;
+                    this.setState({post: 'Guangdong Province'});
                     console.log("It is a chinaPost.");
-                    break;
-                case 'Doha' :
-                    regionPosts = dohaPost;
-                    console.log("It is a dohaPost.");
-                    break;
-                case 'Dubai' :
-                    regionPosts = dubaiPost;
-                    console.log("It is a dubaiPost.");
                     break;
                 case 'Euromed North' :
                     regionPosts = euromedNorthPost;
@@ -63,10 +57,11 @@ export default class SearchFilters extends React.Component<IProps, IState> {
                     break;
                 case 'India' :
                     regionPosts = indiaPost;
+                    this.setState({post: 'New Delhi'});
                     console.log("It is a indiaPost.");
                     break;
-                case 'Istanbul' :
-                    regionPosts = istanbulPost;
+                case 'Middle East' :
+                    regionPosts = middleEastPost;
                     console.log("It is a istanbulPost.");
                     break;
                 case 'All' :
@@ -228,12 +223,10 @@ const regions = [
     {region: 'All'},
     {region: 'Africa'},
     {region: 'China'},
-    {region: 'Doha'},
-    {region: 'Dubai'},
     {region: 'Euromed North'},
     {region: 'Euromed South'},
     {region: 'India'},
-    {region: 'Istanbul'}
+    {region: 'Middle East'},
 
 ]
 
@@ -266,32 +259,21 @@ const euromedSouthPost = [
 ]
 
 const chinaPost = [
-    {post: 'All'},
     {post: 'Guangdong Province'}
 ]
 
 const indiaPost = [
-    {post: 'All'},
     {post: 'New Delhi'}
 ]
 
-const dubaiPost = [
+const middleEastPost = [
     {post: 'All'},
-    {post: 'Dubai'}
-]
-
-const istanbulPost = [
-    {post: 'All'},
+    {post: 'Doha'},
+    {post: 'Dubai'},
     {post: 'Istanbul'}
 ]
 
-const dohaPost = [
-    {post: 'All'},
-    {post: 'Doha'}
-]
-
 const africaPost = [
-    {post: 'All'},
     {post: 'Africa'}
 ]
 
