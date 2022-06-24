@@ -11,6 +11,7 @@ import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import Box from '@material-ui/core/Box';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import { isValidRequest } from "./ValidDataCheck";
 
 interface FlightData {
     origin: string;
@@ -155,7 +156,9 @@ class FlightsTable extends React.Component<IProps, IState> {
     componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>, snapshot?: any) {
         console.log('FlightsTable componentDidUpdate...' + this.props.country + ' ' + this.props.post + ' ' + this.props.timezone + ' ' + this.state.currentTime)
         if (this.props.date !== prevProps.date || this.props.country !== prevProps.country || this.props.post !== prevProps.post || this.props.region !== prevProps.region) {
-            this.clearFilter();
+            if(isValidRequest(this.props.region,this.props.post)) {
+                 this.clearFilter();
+            }
         }
 
         if (this.props.timezone !== prevProps.timezone) {

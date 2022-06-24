@@ -120,25 +120,21 @@ object DepartureAirport {
       case (_, "doha") => dohaDeparturePortForCountry
       case (_, "dubai") => dubaiDeparturePortForCountry
       case (_, "dublin") => dublinDeparturePortsForCountry
-      case (_, "guangdong province") => guangdongProvinceDeparturePortForCountry
       case (_, "istanbul") => istanbulDeparturePortForCountry
-      case (_, "lagos") => africaDeparturePortForCountry
       case (_, "madrid") => madridDeparturePortForCountry
-      case (_, "new delhi") => newDelhiDeparturePortForCountry
       case (_, "paris") => parisDeparturePortForCountry
       case (_, "rome") => romeDeparturePortForCountry
       case (_, "warsaw") => warsawDeparturePortForCountry
-      case ("africa", "all") => africaDeparturePortForCountry
-      case ("china", "all") => guangdongProvinceDeparturePortForCountry
-      case ("euromed north", "all") => beneluxDeparturePortForCountry ::: warsawDeparturePortForCountry ::: berlinDeparturePortForCountry ::: parisDeparturePortForCountry
-      case ("euromed south", "all") => romeDeparturePortForCountry ::: athensDeparturePortsForCountry ::: madridDeparturePortForCountry ::: albaniaDeparturePortForCountry
-      case ("india", "all") => newDelhiDeparturePortForCountry
-      case ("middle east", "all") => dubaiDeparturePortForCountry ::: istanbulDeparturePortForCountry :::dohaDeparturePortForCountry
-      case ("all", "all") => beneluxDeparturePortForCountry ::: warsawDeparturePortForCountry ::: berlinDeparturePortForCountry :::
+      case ("africa", _) => africaDeparturePortForCountry
+      case ("china", _) => guangdongProvinceDeparturePortForCountry
+      case ("euromed north", _) => beneluxDeparturePortForCountry ::: warsawDeparturePortForCountry ::: berlinDeparturePortForCountry ::: parisDeparturePortForCountry
+      case ("euromed south", _) => romeDeparturePortForCountry ::: athensDeparturePortsForCountry ::: madridDeparturePortForCountry ::: albaniaDeparturePortForCountry
+      case ("india", _) => newDelhiDeparturePortForCountry
+      case ("middle east", _) => dubaiDeparturePortForCountry ::: istanbulDeparturePortForCountry :::dohaDeparturePortForCountry
+      case ("all", _) => beneluxDeparturePortForCountry ::: warsawDeparturePortForCountry ::: berlinDeparturePortForCountry :::
         parisDeparturePortForCountry ::: romeDeparturePortForCountry ::: athensDeparturePortsForCountry :::
         madridDeparturePortForCountry ::: guangdongProvinceDeparturePortForCountry ::: newDelhiDeparturePortForCountry ::: dubaiDeparturePortForCountry :::
         istanbulDeparturePortForCountry ::: dohaDeparturePortForCountry ::: africaDeparturePortForCountry
-
       case _ => List.empty
 
     }

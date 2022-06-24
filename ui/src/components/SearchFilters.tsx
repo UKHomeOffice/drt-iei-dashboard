@@ -3,6 +3,10 @@ import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import FlightsTable from './FlightsTable'
 import Grid from '@material-ui/core/Grid';
+import { regions, allTimezones, nonLocalTimezones, euromedNorthPost, euromedSouthPost, chinaPost, indiaPost,
+middleEastPost ,africaPost, allPosts, athensCountries, beneluxCountries, warsawCountries, berlinCountries,
+parisCountries, romeCountries, madridCountries, albaniaCountries, guangdongProvinceCountries, newDelhiCountries,
+dubaiCountries, dublinCountries, istanbulCountries, dohaCountries, africaCountries, allCountries } from "./RegionPortData";
 
 interface IState {
     date: string;
@@ -32,46 +36,50 @@ export default class SearchFilters extends React.Component<IProps, IState> {
     }
 
     componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>, snapshot?: any) {
-        console.log("this.state.region" + this.state.region);
-        if (this.state.region !== prevState.region) {
-            this.setState({post: 'All'});
+        console.log("this.state.region " + this.state.region);
+        if (this.state !== prevState && this.state.region !== prevState.region) {
             this.setState({timezone: 'UTC'});
             switch (this.state.region) {
                 case 'Africa' :
-                    regionPosts = africaPost;
                     this.setState({post: 'Lagos'});
+                    regionPosts = africaPost;
                     console.log("It is a africaPost.");
                     break;
                 case 'China' :
-                    regionPosts = chinaPost;
                     this.setState({post: 'Guangdong Province'});
+                    regionPosts = chinaPost;
                     console.log("It is a chinaPost.");
                     break;
                 case 'Euromed North' :
+                    this.setState({post: 'All'});
                     regionPosts = euromedNorthPost;
                     console.log("It is a euromedNorthPost.");
                     break;
                 case 'Euromed South' :
+                    this.setState({post: 'All'});
                     regionPosts = euromedSouthPost;
                     console.log("It is a euromedSouthPost.");
                     break;
                 case 'India' :
-                    regionPosts = indiaPost;
                     this.setState({post: 'New Delhi'});
+                    regionPosts = indiaPost;
                     console.log("It is a indiaPost.");
                     break;
                 case 'Middle East' :
+                    this.setState({post: 'All'});
                     regionPosts = middleEastPost;
                     console.log("It is a istanbulPost.");
                     break;
                 case 'All' :
+                    this.setState({post: 'All'});
                     regionPosts = allPosts;
                     console.log("It is a allPosts.");
                     break;
             }
         }
 
-        if (this.state.post !== prevState.post) {
+        if (this.state !== prevState && this.state.post !== prevState.post) {
+           console.log("this.state.post " + this.state.post);
             this.setState({country: 'All'});
             this.setState({timezone: 'UTC'});
             switch (this.state.post) {
@@ -218,314 +226,6 @@ export default class SearchFilters extends React.Component<IProps, IState> {
     }
 
 }
-
-const regions = [
-    {region: 'All'},
-    {region: 'Africa'},
-    {region: 'China'},
-    {region: 'Euromed North'},
-    {region: 'Euromed South'},
-    {region: 'India'},
-    {region: 'Middle East'},
-
-]
-
-const allTimezones = [
-    {timezone: 'UK'},
-    {timezone: 'UTC'},
-    {timezone: 'Local'}
-]
-
-const nonLocalTimezones = [
-    {timezone: 'UK'},
-    {timezone: 'UTC'}
-]
-
-const euromedNorthPost = [
-    {post: 'All'},
-    {post: 'Benelux'},
-    {post: 'Berlin'},
-    {post: 'Paris'},
-    {post: 'Warsaw'}
-]
-
-const euromedSouthPost = [
-    {post: 'All'},
-    {post: 'Athens'},
-    {post: 'Albania'},
-    {post: 'Dublin'},
-    {post: 'Madrid'},
-    {post: 'Rome'}
-]
-
-const chinaPost = [
-    {post: 'Guangdong Province'}
-]
-
-const indiaPost = [
-    {post: 'New Delhi'}
-]
-
-const middleEastPost = [
-    {post: 'All'},
-    {post: 'Doha'},
-    {post: 'Dubai'},
-    {post: 'Istanbul'}
-]
-
-const africaPost = [
-    {post: 'Lagos'}
-]
-
-const allPosts = [
-    {post: 'All'},
-    {post: 'Albania'},
-    {post: 'Athens'},
-    {post: 'Benelux'},
-    {post: 'Berlin'},
-    {post: 'Doha'},
-    {post: 'Dublin'},
-    {post: 'Dubai'},
-    {post: 'Guangdong Province'},
-    {post: 'Istanbul'},
-    {post: 'Lagos'},
-    {post: 'Madrid'},
-    {post: 'New Delhi'},
-    {post: 'Paris'},
-    {post: 'Rome'},
-    {post: 'Warsaw'}
-]
-
-const athensCountries = [
-    {country: 'All'},
-    {country: 'Bulgaria'},
-    {country: 'Croatia'},
-    {country: 'Cyprus'},
-    {country: 'Greece'},
-    {country: 'Moldova'},
-    {country: 'Romania'},
-    {country: 'Slovenia'}
-]
-
-const beneluxCountries = [
-    {country: 'All'},
-    {country: 'Belgium'},
-    {country: 'Luxembourg'},
-    {country: 'Netherlands'}
-]
-
-const warsawCountries = [
-    {country: 'All'},
-    {country: 'Belarus'},
-    {country: 'Czech Republic'},
-    {country: 'Estonia'},
-    {country: 'Iceland'},
-    {country: 'Latvia'},
-    {country: 'Lithuania'},
-    {country: 'Poland'},
-    {country: 'Russia'},
-    {country: 'Slovakia'},
-    {country: 'Ukraine'}
-]
-
-const berlinCountries = [
-    {country: 'All'},
-    {country: 'Austria'},
-    {country: 'Denmark'},
-    {country: 'Finland'},
-    {country: 'Germany'},
-    {country: 'Norway'},
-    {country: 'Sweden'},
-    {country: 'Switzerland'}
-]
-
-const parisCountries = [
-    {country: 'All'},
-    {country: 'Algeria'},
-    {country: 'France'},
-    {country: 'Morocco'},
-    {country: 'Tunisia'}
-]
-
-const romeCountries = [
-    {country: 'All'},
-    {country: 'Italy'},
-    {country: 'Malta'}
-]
-
-const madridCountries = [
-    {country: 'All'},
-    {country: 'Portugal'},
-    {country: 'Spain'}
-]
-
-const albaniaCountries = [
-    {country: 'All'},
-    {country: 'Albania'},
-    {country: 'Bosnia and Herzegovina'},
-    {country: 'Kosovo'},
-    {country: 'Macedonia'},
-    {country: 'Montenegro'},
-    {country: 'Serbia'}
-]
-
-const guangdongProvinceCountries = [
-    {country: 'All'},
-    {country: 'Australia'},
-    {country: 'Brunei'},
-    {country: 'China'},
-    {country: 'Fiji'},
-    {country: 'Hong Kong'},
-    {country: 'Japan'},
-    {country: 'Macau'},
-    {country: 'Mongolia'},
-    {country: 'New Zealand'},
-    {country: 'North Korea'},
-    {country: 'Philippines'},
-    {country: 'South Korea'},
-    {country: 'Taiwan'}
-]
-
-const newDelhiCountries = [
-    {country: 'All'},
-    {country: 'Afghanistan'},
-    {country: 'Bhutan'},
-    {country: 'Burma'},
-    {country: 'Cambodia'},
-    {country: 'India'},
-    {country: 'Laos'},
-    {country: 'Myanmar'},
-    {country: 'Thailand'},
-    {country: 'Vietnam'}
-]
-
-const dubaiCountries = [
-    {country: 'Afghanistan'},
-    {country: 'Oman'},
-    {country: 'United Arab Emirates'},
-    {country: 'Yemen'}
-]
-
-const dublinCountries = [
-    {country: 'Ireland'}
-]
-
-const istanbulCountries = [
-    {country: 'Armenia'},
-    {country: 'Azerbaijan'},
-    {country: 'Georgia'},
-    {country: 'Kazakhstan'},
-    {country: 'Lebanon'},
-    {country: 'Jordan'},
-    {country: 'Iraq'},
-    {country: 'Uzbekistan'},
-    {country: 'Turkmenistan'},
-    {country: 'Turkey'},
-    {country: 'Syria'}
-]
-
-const dohaCountries = [
-    {country: 'Bahrain'},
-    {country: 'Kuwait'},
-    {country: 'Qatar'},
-    {country: 'Saudi Arabia'}
-]
-
-const africaCountries = [
-    {country: 'Cameroon'},
-    {country: 'Central African Republic'},
-    {country: 'Equatorial Guinea'} ,
-    {country: 'Nigeria'}
-]
-
-const allCountries = [
-    {country: 'All'},
-    {country: 'Albania'},
-    {country: 'Algeria'},
-    {country: 'Afghanistan'},
-    {country: 'Armenia'},
-    {country: 'Austria'},
-    {country: 'Australia'},
-    {country: 'Azerbaijan'},
-    {country: 'Bahrain'},
-    {country: 'Belarus'},
-    {country: 'Belgium'},
-    {country: 'Bhutan'},
-    {country: 'Bosnia'},
-    {country: 'Bulgaria'},
-    {country: 'Brunei'},
-    {country: 'Burma'},
-    {country: 'Cambodia'},
-    {country: 'Cameroon'},
-    {country: 'Central African Republic'},
-    {country: 'China'},
-    {country: 'Croatia'},
-    {country: 'Cyprus'},
-    {country: 'Czech Republic'},
-    {country: 'Denmark'},
-    {country: 'Equatorial Guinea'} ,
-    {country: 'Estonia'},
-    {country: 'Finland'},
-    {country: 'Fiji'},
-    {country: 'France'},
-    {country: 'Georgia'},
-    {country: 'Germany'},
-    {country: 'Greece'},
-    {country: 'Hong Kong'},
-    {country: 'Iceland'},
-    {country: 'Ireland'},
-    {country: 'Italy'},
-    {country: 'Iraq'},
-    {country: 'Japan'},
-    {country: 'Jordan'},
-    {country: 'Kazakhstan'},
-    {country: 'Kosovo'},
-    {country: 'Kuwait'},
-    {country: 'Laos'},
-    {country: 'Latvia'},
-    {country: 'Lebanon'},
-    {country: 'Lithuania'},
-    {country: 'Luxembourg'},
-    {country: 'Macau'},
-    {country: 'Malta'},
-    {country: 'Moldova'},
-    {country: 'Montenegro'},
-    {country: 'Morocco'},
-    {country: 'Mongolia'},
-    {country: 'Myanmar'},
-    {country: 'Nigeria'},
-    {country: 'New Zealand'},
-    {country: 'Netherlands'},
-    {country: 'North Korea'},
-    {country: 'Norway'},
-    {country: 'North Macedonia'},
-    {country: 'Oman'},
-    {country: 'Philippines'},
-    {country: 'Poland'},
-    {country: 'Portugal'},
-    {country: 'Qatar'},
-    {country: 'Romania'},
-    {country: 'Russia'},
-    {country: 'Serbia'},
-    {country: 'Slovakia'},
-    {country: 'Slovenia'},
-    {country: 'Spain'},
-    {country: 'Switzerland'},
-    {country: 'Sweden'},
-    {country: 'Tunisia'},
-    {country: 'Taiwan'},
-    {country: 'Thailand'},
-    {country: 'Turkey'},
-    {country: 'Turkmenistan'},
-    {country: 'Saudi Arabia'},
-    {country: 'South Korea'},
-    {country: 'Syria'},
-    {country: 'Ukraine'},
-    {country: 'United Arab Emirates'},
-    {country: 'Uzbekistan'},
-    {country: 'Vietnam'},
-    {country: 'Yemen'},
-   ]
 
 let regionPosts = allPosts
 let postCountries = allCountries
