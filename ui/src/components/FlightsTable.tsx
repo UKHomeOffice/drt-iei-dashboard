@@ -148,7 +148,7 @@ class FlightsTable extends React.Component<IProps, IState> {
                     progress: this.state.progress + Math.random() * 10
                 })
             }
-        }, 500);
+        }, 100);
 
         this.updateFlights();
     }

@@ -44,8 +44,8 @@ object AppEnvironment {
     ).parMapN(PostgreSQLConfig)
 
   val httpClientConfig: ConfigValue[HttpClientConfig] = (
-    env("HTTP_CLIENT_CONNECTION_TIMEOUT_SECONDS").as[Int].default(10),
-    env("HTTP_CLIENT_REQUEST_TIMEOUT_SECONDS").as[Int].default(10)
+    env("HTTP_CLIENT_CONNECTION_TIMEOUT_SECONDS").as[Int].default(180),
+    env("HTTP_CLIENT_REQUEST_TIMEOUT_SECONDS").as[Int].default(180)
     ).parMapN { (connectTimeout, requestTimeout) =>
     HttpClientConfig(connectTimeout seconds, requestTimeout seconds)
   }
