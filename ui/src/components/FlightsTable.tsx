@@ -149,7 +149,7 @@ class FlightsTable extends React.Component<IProps, IState> {
                 })
                console.log('progressInterval this.state.progress' + this.state.progress);
             }
-        }, 100);
+        }, 500);
 
         this.updateFlights();
     }
@@ -157,7 +157,7 @@ class FlightsTable extends React.Component<IProps, IState> {
     componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>, snapshot?: any) {
         console.log('FlightsTable componentDidUpdate...' + this.props.country + ' ' + this.props.post + ' ' + this.props.timezone + ' ' + this.state.currentTime)
         if (this.props.date !== prevProps.date || this.props.country !== prevProps.country || this.props.post !== prevProps.post || this.props.region !== prevProps.region) {
-            if(isValidRequest(this.props.region,this.props.post) && this.state.progress === 100) {
+            if(isValidRequest(this.props.region,this.props.post) && (this.state.progress > 500) || this.state.progress === 100) {
                  this.clearFilter();
             }
         }
