@@ -44,6 +44,7 @@ interface IState {
     portName: string[];
     flightData: FlightData[];
     progress: number;
+    inProgress: boolean;
 }
 
 const getBackgroundColor = (color: string, palette: any) => getThemePaletteMode(palette) === 'dark' ? darken(color, 0.6) : lighten(color, 0.6);
@@ -132,6 +133,7 @@ class FlightsTable extends React.Component<IProps, IState> {
             portData: [],
             portName: [],
             progress: 0,
+            inProgress: true
         }
     }
 
@@ -144,9 +146,15 @@ class FlightsTable extends React.Component<IProps, IState> {
 
         this.progressInterval = setInterval(() => {
            if(this.state.progress !== 100) {
-                this.setState({
-                    progress: this.state.progress + Math.random() * 10
-                })
+             if(this.state.inProgress &&  this.state.progress > 100) {
+                    this.setState({
+                        progress: 0
+                    })
+               } else {
+                   this.setState({
+                        progress: this.state.progress + Math.random() * 10
+                    })
+               }
                console.log('progressInterval this.state.progress' + this.state.progress);
             }
         }, 500);
@@ -155,9 +163,9 @@ class FlightsTable extends React.Component<IProps, IState> {
     }
 
     componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>, snapshot?: any) {
-        console.log('FlightsTable componentDidUpdate...' + this.props.country + ' ' + this.props.post + ' ' + this.props.timezone + ' ' + this.state.currentTime)
+        console.log('FlightsTable componentDidUpdate...' + this.state.progress + ' ' +  this.props.country + ' ' + this.props.post + ' ' + this.props.timezone + ' ' + this.state.currentTime)
         if (this.props.date !== prevProps.date || this.props.country !== prevProps.country || this.props.post !== prevProps.post || this.props.region !== prevProps.region) {
-            if(isValidRequest(this.props.region,this.props.post) && (this.state.progress > 500) || this.state.progress === 100) {
+            if(isValidRequest(this.props.region,this.props.post) && !this.state.inProgress) {
                  this.clearFilter();
             }
         }
@@ -202,6 +210,7 @@ class FlightsTable extends React.Component<IProps, IState> {
     }
 
     public getFlightsData(endPoint: string, handleResponse: (r: AxiosResponse) => void) {
+    console.log('getFlightsData ' + endPoint);
         axios
             .get(endPoint, this.reqConfig)
             .then(response => handleResponse(response))
@@ -221,6 +230,7 @@ class FlightsTable extends React.Component<IProps, IState> {
         this.setState({...this.state, portData: uniquePortData});
         this.setState({...this.state, arrivalRows: arrivalRows});
         this.setState({...this.state, progress: 100});
+        this.setState({...this.state, inProgress: false});
     }
 
     updateFlightsDataWithoutPortData = (response: AxiosResponse) => {
@@ -228,6 +238,7 @@ class FlightsTable extends React.Component<IProps, IState> {
         let arrivalRows = arrivalsData.data as GridRowModel[]
         this.setState({...this.state, arrivalRows: arrivalRows});
         this.setState({...this.state, progress: 100});
+        this.setState({...this.state, inProgress: false});
     }
 
     handleChange = (event: React.ChangeEvent<{}>, value: string[]) => {
@@ -238,6 +249,7 @@ class FlightsTable extends React.Component<IProps, IState> {
     };
 
     clearFilter() {
+        this.setState({inProgress: true});
         this.setState({portName: []});
         this.setState({progress: 0});
         this.clearPortFilterFlights();
