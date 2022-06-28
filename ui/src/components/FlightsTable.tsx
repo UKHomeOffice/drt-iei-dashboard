@@ -189,7 +189,7 @@ class FlightsTable extends React.Component<IProps, IState> {
     }
 
     public reqConfig: AxiosRequestConfig = {
-        headers: {'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json'}
+        headers: {'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json','timeout':180000}
     };
 
     public flightsEndPoint(region: string, post: string, country: string, filterDate: string, timezone: string) {
@@ -204,7 +204,11 @@ class FlightsTable extends React.Component<IProps, IState> {
         axios
             .get(endPoint, this.reqConfig)
             .then(response => handleResponse(response))
-            .catch(t => this.setState(() => ({hasError: true, errorMessage: t})))
+            .catch ((e) => {
+                console.log('error while response' + e);
+                this.setState(() => ({hasError: true, errorMessage: e}))
+                }
+            )
     }
 
     updateFlightsData = (response: AxiosResponse) => {
