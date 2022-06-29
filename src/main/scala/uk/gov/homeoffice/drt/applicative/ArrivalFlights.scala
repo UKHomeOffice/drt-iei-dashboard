@@ -1,14 +1,12 @@
 package uk.gov.homeoffice.drt.applicative
 
+import cats.Monad
 import cats.effect.Sync
 import cats.syntax.all._
-import cats.{Applicative, Monad}
 import io.chrisdavenport.log4cats.Logger
 import io.chrisdavenport.log4cats.slf4j.Slf4jLogger
 import uk.gov.homeoffice.drt.model.{ArrivalTableDataIndex, Arrivals, FlightsRequest}
 import uk.gov.homeoffice.drt.service.FlightScheduledService
-
-import java.util.Date
 
 trait ArrivalFlights[F[_]] {
   def flights(n: FlightsRequest)(implicit monad: Monad[F]): F[Arrivals]

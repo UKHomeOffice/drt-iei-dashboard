@@ -20,12 +20,13 @@ object ArrivalRoutes {
     import dsl._
     HttpRoutes.of[F] {
       case req@GET -> Root / "flights" / region / post / departureCountry / filterDate / timezone :? params =>
+        val startTime = System.currentTimeMillis
         val xAuthRoles: List[String] = req.headers.get(CaseInsensitiveString("X-Auth-Roles")).map(_.value.split(",").toList).getOrElse(List.empty)
         val xAuthEmail: List[String] = req.headers.get(CaseInsensitiveString("X-Auth-Email")).map(_.value.split(",").toList).getOrElse(List.empty)
         val requiredPermissions: Boolean = xAuthRoles.exists(p => permissions.contains(p))
         val portList = params.getOrElse("portList", Seq.empty[String]).toList.filter(_.nonEmpty).flatMap(_.split(","))
         val requestString = s"user with email ${xAuthEmail.mkString} request details $region $post $departureCountry ${portList.nonEmpty} $filterDate $timezone"
-        if (requiredPermissions) {
+        if (requiredPermissions)  {
           for {
             _ <- Logger[F].info(requestString)
             arrivals <- H.flights(FlightsRequest(region, post, departureCountry, portList, filterDate, timezone))
@@ -34,6 +35,7 @@ object ArrivalRoutes {
                   Logger[F].warn(s"Error while $requestString : ${e.printStackTrace()}") >>
                     Arrivals(data = List.empty).pure[F]
               }
+           _ <- Logger[F].warn(s"Time to get arrivals at route for flightsRequest $requestString is ${System.currentTimeMillis-startTime} milliseconds")
             resp <- Ok(arrivals)
           } yield resp
         } else {
