@@ -240,6 +240,7 @@ class FlightsTable extends React.Component<IProps, IState> {
              return <Box style={{ width: '100%' }}>
                      <div style= {{height: 100}}/>
                      <CircularProgress/>
+                     <div style= {{height: 600}}/>
                     </Box>
         } else {
              return <div style={{height: 800, width: '100%'}} className={this.props.classes.root}>
