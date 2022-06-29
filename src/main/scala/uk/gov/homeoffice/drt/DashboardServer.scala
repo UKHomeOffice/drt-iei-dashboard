@@ -29,7 +29,7 @@ object DashboardServer {
       } andThen { http: HttpRoutes[F] =>
         CORS(http, CORS.DefaultCORSConfig)
       } andThen { http: HttpRoutes[F] =>
-        Timeout(600.seconds)(http)
+        Timeout(60.seconds)(http)
       }
     }
 
