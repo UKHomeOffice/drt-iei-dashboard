@@ -10,7 +10,7 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import Box from '@material-ui/core/Box';
-import LinearProgress from '@material-ui/core/LinearProgress';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { isValidRequest } from "./ValidDataCheck";
 
 interface FlightData {
@@ -238,8 +238,8 @@ class FlightsTable extends React.Component<IProps, IState> {
     determineDisplay(){
         if(this.state.inProgress){
              return <Box style={{ width: '100%' }}>
-                     <LinearProgress/>
-                     <div style= {{height: 800}}/>
+                     <div style= {{height: 100}}/>
+                     <CircularProgress/>
                     </Box>
         } else {
              return <div style={{height: 800, width: '100%'}} className={this.props.classes.root}>
