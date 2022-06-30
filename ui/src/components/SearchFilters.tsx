@@ -3,10 +3,11 @@ import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import FlightsTable from './FlightsTable'
 import Grid from '@material-ui/core/Grid';
-import { regions, allTimezones, nonLocalTimezones, euromedNorthPost, euromedSouthPost, chinaPost, indiaPost,
-middleEastPost ,africaPost, allPosts, athensCountries, beneluxCountries, warsawCountries, berlinCountries,
-parisCountries, romeCountries, madridCountries, albaniaCountries, guangdongProvinceCountries, newDelhiCountries,
-dubaiCountries, dublinCountries, istanbulCountries, dohaCountries, africaCountries, allCountries } from "./RegionPortData";
+import { regions, allTimezones, nonLocalTimezones, asiaPacificPost, africaPost, euromedNorthPost,
+euromedSouthPost,  middleEastAndPakistanPost, southAndSouthEastAsiaPost,westernBalkansPost,  allPosts,
+athensCountries, bangkokCountries, beijingCountries, beneluxCountries, hanoiCountries, warsawCountries, berlinCountries,
+parisCountries, romeCountries, madridCountries, tiranaCountries, newDelhiCountries,lagosCountries,
+dubaiCountries, dublinCountries, istanbulCountries,islamabadCountries, dohaCountries, allCountries } from "./RegionPortData";
 
 interface IState {
     date: string;
@@ -45,10 +46,10 @@ export default class SearchFilters extends React.Component<IProps, IState> {
                     regionPosts = africaPost;
                     console.log("It is a africaPost.");
                     break;
-                case 'China' :
-                    this.setState({post: 'Guangdong Province'});
-                    regionPosts = chinaPost;
-                    console.log("It is a chinaPost.");
+                case 'Asia Pacific' :
+                    this.setState({post: 'All'});
+                    regionPosts = asiaPacificPost;
+                    console.log("It is a asiaPacificPost.");
                     break;
                 case 'Euromed North' :
                     this.setState({post: 'All'});
@@ -60,15 +61,20 @@ export default class SearchFilters extends React.Component<IProps, IState> {
                     regionPosts = euromedSouthPost;
                     console.log("It is a euromedSouthPost.");
                     break;
-                case 'India' :
-                    this.setState({post: 'New Delhi'});
-                    regionPosts = indiaPost;
-                    console.log("It is a indiaPost.");
-                    break;
-                case 'Middle East' :
+                case 'South and South East Asia' :
                     this.setState({post: 'All'});
-                    regionPosts = middleEastPost;
-                    console.log("It is a istanbulPost.");
+                    regionPosts = southAndSouthEastAsiaPost;
+                    console.log("It is a South and South East Asia.");
+                    break;
+                case 'Middle East and Pakistan' :
+                    this.setState({post: 'All'});
+                    regionPosts = middleEastAndPakistanPost;
+                    console.log("It is a Middle East and Pakistan.");
+                    break;
+                case 'Western Balkans' :
+                    this.setState({post: 'Tirana'});
+                    regionPosts = westernBalkansPost;
+                    console.log("Western Balkans");
                     break;
                 case 'All' :
                     this.setState({post: 'All'});
@@ -83,14 +89,17 @@ export default class SearchFilters extends React.Component<IProps, IState> {
             this.setState({country: 'All'});
             this.setState({timezone: 'UTC'});
             switch (this.state.post) {
-                case 'Albania':
-                    postCountries = albaniaCountries;
-                    break;
                 case 'All':
                     postCountries = allCountries;
                     break;
                 case 'Athens' :
                     postCountries = athensCountries;
+                    break;
+                case 'Bangkok':
+                    postCountries = bangkokCountries;
+                    break;
+                case 'Beijing':
+                    postCountries = beijingCountries;
                     break;
                 case 'Benelux':
                     postCountries = beneluxCountries;
@@ -107,14 +116,17 @@ export default class SearchFilters extends React.Component<IProps, IState> {
                 case 'Dubai':
                     postCountries = dubaiCountries;
                     break;
-                case 'Guangdong Province':
-                    postCountries = guangdongProvinceCountries;
+                case 'Hanoi':
+                    postCountries = hanoiCountries;
                     break;
                 case 'Istanbul':
                     postCountries = istanbulCountries;
                     break;
+                case 'Islamabad':
+                    postCountries = islamabadCountries;
+                    break;
                 case 'Lagos':
-                    postCountries = africaCountries;
+                    postCountries = lagosCountries;
                     break;
                 case 'Madrid':
                     postCountries = madridCountries;
@@ -127,6 +139,9 @@ export default class SearchFilters extends React.Component<IProps, IState> {
                     break;
                 case 'Rome':
                     postCountries = romeCountries;
+                    break;
+                case 'Tirana':
+                    postCountries = tiranaCountries;
                     break;
                 case 'Warsaw':
                     postCountries = warsawCountries;

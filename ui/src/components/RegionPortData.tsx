@@ -1,11 +1,12 @@
 export const regions = [
     {region: 'All'},
     {region: 'Africa'},
-    {region: 'China'},
+    {region: 'Asia Pacific'},
     {region: 'Euromed North'},
     {region: 'Euromed South'},
-    {region: 'India'},
-    {region: 'Middle East'},
+    {region: 'Middle East and Pakistan'},
+    {region: 'South and South East Asia'},
+    {region: 'Western Balkans'}
 ]
 
 export const allTimezones = [
@@ -19,6 +20,12 @@ export const nonLocalTimezones = [
     {timezone: 'UTC'}
 ]
 
+export const asiaPacificPost = [
+    {post: 'All'},
+    {post: 'Beijing'},
+    {post: 'Bangkok'},
+]
+
 export const euromedNorthPost = [
     {post: 'All'},
     {post: 'Benelux'},
@@ -30,47 +37,51 @@ export const euromedNorthPost = [
 export const euromedSouthPost = [
     {post: 'All'},
     {post: 'Athens'},
-    {post: 'Albania'},
     {post: 'Dublin'},
     {post: 'Madrid'},
     {post: 'Rome'}
 ]
 
-export const chinaPost = [
-    {post: 'Guangdong Province'}
+export const westernBalkansPost = [
+    {post: 'Tirana'},
 ]
 
-export const indiaPost = [
-    {post: 'New Delhi'}
-]
-
-export const middleEastPost = [
+export const middleEastAndPakistanPost = [
     {post: 'All'},
     {post: 'Doha'},
     {post: 'Dubai'},
-    {post: 'Istanbul'}
+    {post: 'Istanbul'},
+    {post: 'Islamabad'}
 ]
 
+export const southAndSouthEastAsiaPost = [
+    {post: 'All'},
+    {post: 'Hanoi'},
+    {post: 'New Delhi'}
+]
 export const africaPost = [
     {post: 'Lagos'}
 ]
 
 export const allPosts = [
     {post: 'All'},
-    {post: 'Albania'},
     {post: 'Athens'},
+    {post: 'Bangkok'},
     {post: 'Benelux'},
+    {post: 'Beijing'},
     {post: 'Berlin'},
     {post: 'Doha'},
     {post: 'Dublin'},
     {post: 'Dubai'},
-    {post: 'Guangdong Province'},
+    {post: 'Hanoi'},
+    {post: 'Islamabad'},
     {post: 'Istanbul'},
     {post: 'Lagos'},
     {post: 'Madrid'},
     {post: 'New Delhi'},
     {post: 'Paris'},
     {post: 'Rome'},
+    {post: 'Tirana'},
     {post: 'Warsaw'}
 ]
 
@@ -137,7 +148,7 @@ export const madridCountries = [
     {country: 'Spain'}
 ]
 
-export const albaniaCountries = [
+export const tiranaCountries = [
     {country: 'All'},
     {country: 'Albania'},
     {country: 'Bosnia and Herzegovina'},
@@ -147,7 +158,14 @@ export const albaniaCountries = [
     {country: 'Serbia'}
 ]
 
-export const guangdongProvinceCountries = [
+export const bangkokCountries = [
+    {country: 'All'},
+    {country: 'Cambodia'},
+    {country: 'Myanmar'},
+    {country: 'Thailand'}
+]
+
+export const beijingCountries = [
     {country: 'All'},
     {country: 'Australia'},
     {country: 'Brunei'},
@@ -169,16 +187,12 @@ export const newDelhiCountries = [
     {country: 'Afghanistan'},
     {country: 'Bhutan'},
     {country: 'Burma'},
-    {country: 'Cambodia'},
-    {country: 'India'},
-    {country: 'Laos'},
-    {country: 'Myanmar'},
-    {country: 'Thailand'},
-    {country: 'Vietnam'}
+    {country: 'India'}
 ]
 
 export const dubaiCountries = [
     {country: 'Afghanistan'},
+    {country: 'Iran'},
     {country: 'Oman'},
     {country: 'United Arab Emirates'},
     {country: 'Yemen'}
@@ -186,6 +200,11 @@ export const dubaiCountries = [
 
 export const dublinCountries = [
     {country: 'Ireland'}
+]
+
+export const hanoiCountries = [
+    {country: 'Laos'},
+    {country: 'Vietnam'}
 ]
 
 export const istanbulCountries = [
@@ -202,6 +221,9 @@ export const istanbulCountries = [
     {country: 'Syria'}
 ]
 
+export const islamabadCountries = [
+    {country: 'Pakistan'}
+]
 export const dohaCountries = [
     {country: 'Bahrain'},
     {country: 'Kuwait'},
@@ -209,7 +231,7 @@ export const dohaCountries = [
     {country: 'Saudi Arabia'}
 ]
 
-export const africaCountries = [
+export const lagosCountries = [
     {country: 'Cameroon'},
     {country: 'Central African Republic'},
     {country: 'Equatorial Guinea'} ,
@@ -254,6 +276,7 @@ export const allCountries = [
     {country: 'Ireland'},
     {country: 'Italy'},
     {country: 'Iraq'},
+    {country: 'Iran'},
     {country: 'Japan'},
     {country: 'Jordan'},
     {country: 'Kazakhstan'},
@@ -278,6 +301,7 @@ export const allCountries = [
     {country: 'Norway'},
     {country: 'North Macedonia'},
     {country: 'Oman'},
+    {country: 'Pakistan'},
     {country: 'Philippines'},
     {country: 'Poland'},
     {country: 'Portugal'},

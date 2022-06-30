@@ -13,7 +13,7 @@ object DepartureAirport {
     }
   }
 
-  def albaniaDeparturePortForCountry(implicit country: String): List[Port] = {
+  def tiranaDeparturePortForCountry(implicit country: String): List[Port] = {
     country.toLowerCase match {
       case "all" => List("Albania", "Serbia", "Macedonia", "Bosnia and Herzegovina", "Kosovo", "Montenegro").flatMap(AirportUtil.getPortListForCountry(_))
       case _ => AirportUtil.getPortListForCountry
@@ -23,6 +23,13 @@ object DepartureAirport {
   def athensDeparturePortsForCountry(implicit country: String): List[Port] = {
     country.toLowerCase match {
       case "all" => List("Greece", "Cyprus", "Croatia", "Slovenia", "Bulgaria", "Romania", "Moldova").flatMap(AirportUtil.getPortListForCountry(_))
+      case _ => AirportUtil.getPortListForCountry
+    }
+  }
+
+  def bangkokDeparturePortForCountry(implicit country: String): List[Port] = {
+    country.toLowerCase match {
+      case "all" => List("Cambodia", "Myanmar", "Thailand").flatMap(AirportUtil.getPortListForCountry(_))
       case _ => AirportUtil.getPortListForCountry
     }
   }
@@ -62,9 +69,16 @@ object DepartureAirport {
     }
   }
 
-  def guangdongProvinceDeparturePortForCountry(implicit country: String): List[Port] = {
+  def beijingDeparturePortForCountry(implicit country: String): List[Port] = {
     country.toLowerCase match {
       case "all" => List("China", "Hong Kong", "Taiwan", "Macau", "Mongolia", "Philippines", "Japan", "North Korea", "Brunei", "South Korea", "Australia", "New Zealand", "Fiji").flatMap(AirportUtil.getPortListForCountry(_))
+      case _ => AirportUtil.getPortListForCountry
+    }
+  }
+
+  def hanoiDeparturePortForCountry(implicit country: String) = {
+    country.toLowerCase match {
+      case "all" => List("Laos", "Vietnam").flatMap(AirportUtil.getPortListForCountry(_))
       case _ => AirportUtil.getPortListForCountry
     }
   }
@@ -72,6 +86,13 @@ object DepartureAirport {
   def istanbulDeparturePortForCountry(implicit country: String) = {
     country.toLowerCase match {
       case "all" => List("Armenia", "Georgia", "Kazakhstan", "Turkey", "Turkmenistan", "Uzbekistan", "Azerbaijan", "Iraq", "Jordan", "Lebanon", "Syria").flatMap(AirportUtil.getPortListForCountry(_))
+      case _ => AirportUtil.getPortListForCountry
+    }
+  }
+
+  def islamabadDeparturePortForCountry(implicit country: String) = {
+    country.toLowerCase match {
+      case "all" => List("Pakistan").flatMap(AirportUtil.getPortListForCountry(_))
       case _ => AirportUtil.getPortListForCountry
     }
   }
@@ -85,7 +106,7 @@ object DepartureAirport {
 
   def newDelhiDeparturePortForCountry(implicit country: String) = {
     country.toLowerCase match {
-      case "all" => List("India", "Afghanistan", "Bhutan", "Burma", "Cambodia", "Laos", "Thailand", "Myanmar", "Vietnam").flatMap(AirportUtil.getPortListForCountry(_))
+      case "all" => List("India", "Afghanistan", "Bhutan", "Burma").flatMap(AirportUtil.getPortListForCountry(_))
       case _ => AirportUtil.getPortListForCountry
     }
   }
@@ -111,29 +132,35 @@ object DepartureAirport {
     }
   }
 
+
   def getDeparturePortForCountry(region: String, post: String)(implicit country: String): List[Port] = {
     (region.toLowerCase, post.toLowerCase) match {
-      case (_, "albania") => albaniaDeparturePortForCountry
       case (_, "athens") => athensDeparturePortsForCountry
       case (_, "benelux") => beneluxDeparturePortForCountry
+      case (_, "bangkok") => bangkokDeparturePortForCountry
       case (_, "berlin") => berlinDeparturePortForCountry
+      case (_, "beijing") => beijingDeparturePortForCountry
       case (_, "doha") => dohaDeparturePortForCountry
       case (_, "dubai") => dubaiDeparturePortForCountry
       case (_, "dublin") => dublinDeparturePortsForCountry
+      case (_, "hanoi") => hanoiDeparturePortForCountry
       case (_, "istanbul") => istanbulDeparturePortForCountry
+      case (_, "islamabad") => islamabadDeparturePortForCountry
       case (_, "madrid") => madridDeparturePortForCountry
+      case (_, "new delhi") => newDelhiDeparturePortForCountry
       case (_, "paris") => parisDeparturePortForCountry
       case (_, "rome") => romeDeparturePortForCountry
       case (_, "warsaw") => warsawDeparturePortForCountry
+      case ("asia pacific", _) => beijingDeparturePortForCountry ::: bangkokDeparturePortForCountry
       case ("africa", _) => africaDeparturePortForCountry
-      case ("china", _) => guangdongProvinceDeparturePortForCountry
       case ("euromed north", _) => beneluxDeparturePortForCountry ::: warsawDeparturePortForCountry ::: berlinDeparturePortForCountry ::: parisDeparturePortForCountry
-      case ("euromed south", _) => romeDeparturePortForCountry ::: athensDeparturePortsForCountry ::: madridDeparturePortForCountry ::: albaniaDeparturePortForCountry
-      case ("india", _) => newDelhiDeparturePortForCountry
-      case ("middle east", _) => dubaiDeparturePortForCountry ::: istanbulDeparturePortForCountry :::dohaDeparturePortForCountry
+      case ("euromed south", _) => romeDeparturePortForCountry ::: athensDeparturePortsForCountry ::: madridDeparturePortForCountry
+      case ("south & south east asia", _) => newDelhiDeparturePortForCountry
+      case ("middle east and pakistan", _) => dubaiDeparturePortForCountry ::: istanbulDeparturePortForCountry ::: dohaDeparturePortForCountry ::: islamabadDeparturePortForCountry
+      case ("western balkans", _) => tiranaDeparturePortForCountry
       case ("all", _) => beneluxDeparturePortForCountry ::: warsawDeparturePortForCountry ::: berlinDeparturePortForCountry :::
         parisDeparturePortForCountry ::: romeDeparturePortForCountry ::: athensDeparturePortsForCountry :::
-        madridDeparturePortForCountry ::: guangdongProvinceDeparturePortForCountry ::: newDelhiDeparturePortForCountry ::: dubaiDeparturePortForCountry :::
+        madridDeparturePortForCountry ::: beijingDeparturePortForCountry ::: newDelhiDeparturePortForCountry ::: dubaiDeparturePortForCountry :::
         istanbulDeparturePortForCountry ::: dohaDeparturePortForCountry ::: africaDeparturePortForCountry
       case _ => List.empty
 

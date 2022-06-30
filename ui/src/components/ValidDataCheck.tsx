@@ -9,6 +9,8 @@ function isNotValidMiddleEastPost(post: string) : boolean   {
                 return false;
             case 'Istanbul':
                 return false;
+            case 'Islamabad':
+                return false;
             default:
                 return true;
         }
@@ -50,20 +52,48 @@ function isNotValidMiddleEastPost(post: string) : boolean   {
          }
   }
 
+   function isNotValidAsiaPacificPost(post: string) : boolean {
+           switch (post) {
+               case 'All':
+                   return false;
+               case 'Beijing':
+                    return false;
+               case 'Bangkok':
+                   return false;
+               default:
+                   return true;
+           }
+    }
+
+       function isNotValidSouthAndSouthEastAsiaPost(post: string) : boolean {
+               switch (post) {
+                   case 'All':
+                       return false;
+                   case 'Hanoi':
+                        return false;
+                   case 'New Delhi':
+                       return false;
+                   default:
+                       return true;
+               }
+        }
+
 export function isValidRequest(region: string , post : string) : boolean {
 
         console.log('isValidRequest region = ' + region + ' post = ' + post);
-        if(region === 'China' && post !== 'Guangdong Province') {
-            return false;
-        } else if(region === 'India' && post !== 'New Delhi') {
+        if(region === 'Asia Pacific' && isNotValidAsiaPacificPost(post)) {
             return false;
         } else if(region === 'Africa' && post !== 'Lagos') {
             return false;
-        } else if(region === 'Middle East' && isNotValidMiddleEastPost(post)){
+        } else if(region === 'Middle East and Pakistan' && isNotValidMiddleEastPost(post)){
             return false;
         } else if(region === 'Euromed North' && isNotValidEuromedNorthPost(post)){
             return false;
         } else if(region === 'Euromed South' && isNotValidEuromedSouthPost(post)){
+            return false;
+        } else if(region === 'Western Balkans' && post !== 'Tirana') {
+            return false;
+        } else if(region === 'South and South East Asia' && isNotValidSouthAndSouthEastAsiaPost(post)) {
             return false;
         } else {
             return true;
