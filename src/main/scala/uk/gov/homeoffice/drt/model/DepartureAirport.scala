@@ -6,7 +6,7 @@ case class Port(code: String, name: String)
 
 object DepartureAirport {
 
-  def africaDeparturePortForCountry(implicit country: String) = {
+  def lagosDeparturePortForCountry(implicit country: String) = {
     country.toLowerCase match {
       case "all" => List("Cameroon", "Central African Republic", "Equatorial Guinea", "Nigeria").flatMap(AirportUtil.getPortListForCountry(_))
       case _ => AirportUtil.getPortListForCountry
@@ -152,16 +152,16 @@ object DepartureAirport {
       case (_, "rome") => romeDeparturePortForCountry
       case (_, "warsaw") => warsawDeparturePortForCountry
       case ("asia pacific", _) => beijingDeparturePortForCountry ::: bangkokDeparturePortForCountry
-      case ("africa", _) => africaDeparturePortForCountry
+      case ("africa", _) => lagosDeparturePortForCountry
       case ("euromed north", _) => beneluxDeparturePortForCountry ::: warsawDeparturePortForCountry ::: berlinDeparturePortForCountry ::: parisDeparturePortForCountry
       case ("euromed south", _) => romeDeparturePortForCountry ::: athensDeparturePortsForCountry ::: madridDeparturePortForCountry
-      case ("south & south east asia", _) => newDelhiDeparturePortForCountry
+      case ("south and south east asia", _) => newDelhiDeparturePortForCountry ::: hanoiDeparturePortForCountry
       case ("middle east and pakistan", _) => dubaiDeparturePortForCountry ::: istanbulDeparturePortForCountry ::: dohaDeparturePortForCountry ::: islamabadDeparturePortForCountry
       case ("western balkans", _) => tiranaDeparturePortForCountry
-      case ("all", _) => beneluxDeparturePortForCountry ::: warsawDeparturePortForCountry ::: berlinDeparturePortForCountry :::
-        parisDeparturePortForCountry ::: romeDeparturePortForCountry ::: athensDeparturePortsForCountry :::
+      case ("all", _) => beneluxDeparturePortForCountry ::: warsawDeparturePortForCountry ::: berlinDeparturePortForCountry ::: bangkokDeparturePortForCountry
+        parisDeparturePortForCountry ::: romeDeparturePortForCountry ::: athensDeparturePortsForCountry ::: hanoiDeparturePortForCountry ::: dublinDeparturePortsForCountry
         madridDeparturePortForCountry ::: beijingDeparturePortForCountry ::: newDelhiDeparturePortForCountry ::: dubaiDeparturePortForCountry :::
-        istanbulDeparturePortForCountry ::: dohaDeparturePortForCountry ::: africaDeparturePortForCountry
+        istanbulDeparturePortForCountry ::: dohaDeparturePortForCountry ::: lagosDeparturePortForCountry ::: tiranaDeparturePortForCountry ::: islamabadDeparturePortForCountry
       case _ => List.empty
 
     }
