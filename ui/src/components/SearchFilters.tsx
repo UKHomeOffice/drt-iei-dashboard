@@ -67,6 +67,7 @@ export default class SearchFilters extends React.Component<IProps, IState> {
     componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>, snapshot?: any) {
         console.log("this.state.region " + this.state.region);
         if (this.state !== prevState && this.state.region !== prevState.region) {
+            this.setState({country: 'All'});
             this.setState({timezone: 'UTC'});
             switch (this.state.region) {
                 case 'Africa' :
