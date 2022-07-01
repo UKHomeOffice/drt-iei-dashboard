@@ -23,6 +23,8 @@ function isNotValidEuromedNorthPost(post: string): boolean {
             return false;
         case 'Berlin':
             return false;
+        case 'Bucharest':
+            return false;
         case 'Paris':
             return false;
         case 'Warsaw':

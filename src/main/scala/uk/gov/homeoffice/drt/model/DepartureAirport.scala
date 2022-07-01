@@ -15,14 +15,14 @@ object DepartureAirport {
 
   def tiranaDeparturePortForCountry(implicit country: String): List[Port] = {
     country.toLowerCase match {
-      case "all" => List("Albania", "Serbia", "Macedonia", "Bosnia and Herzegovina", "Kosovo", "Montenegro").flatMap(AirportUtil.getPortListForCountry(_))
+      case "all" => List("Albania", "Bosnia and Herzegovina", "Croatia", "Kosovo", "Macedonia", "Montenegro", "Serbia").flatMap(AirportUtil.getPortListForCountry(_))
       case _ => AirportUtil.getPortListForCountry
     }
   }
 
   def athensDeparturePortsForCountry(implicit country: String): List[Port] = {
     country.toLowerCase match {
-      case "all" => List("Greece", "Cyprus", "Croatia", "Slovenia", "Bulgaria", "Romania", "Moldova").flatMap(AirportUtil.getPortListForCountry(_))
+      case "all" => List("Greece", "Cyprus").flatMap(AirportUtil.getPortListForCountry(_))
       case _ => AirportUtil.getPortListForCountry
     }
   }
@@ -76,6 +76,13 @@ object DepartureAirport {
     }
   }
 
+  def bucharestDeparturePortForCountry(implicit country: String): List[Port] = {
+    country.toLowerCase match {
+      case "all" => List("Bulgaria", "Romania", "Moldova").flatMap(AirportUtil.getPortListForCountry(_))
+      case _ => AirportUtil.getPortListForCountry
+    }
+  }
+
   def hanoiDeparturePortForCountry(implicit country: String) = {
     country.toLowerCase match {
       case "all" => List("Laos", "Vietnam").flatMap(AirportUtil.getPortListForCountry(_))
@@ -120,7 +127,7 @@ object DepartureAirport {
 
   def romeDeparturePortForCountry(implicit country: String): List[Port] = {
     country.toLowerCase match {
-      case "all" => List("Italy", "Malta").flatMap(AirportUtil.getPortListForCountry(_))
+      case "all" => List("Italy", "Malta", "Slovenia").flatMap(AirportUtil.getPortListForCountry(_))
       case _ => AirportUtil.getPortListForCountry
     }
   }
@@ -140,6 +147,7 @@ object DepartureAirport {
       case (_, "bangkok") => bangkokDeparturePortForCountry
       case (_, "berlin") => berlinDeparturePortForCountry
       case (_, "beijing") => beijingDeparturePortForCountry
+      case (_, "bucharest") => bucharestDeparturePortForCountry
       case (_, "doha") => dohaDeparturePortForCountry
       case (_, "dubai") => dubaiDeparturePortForCountry
       case (_, "dublin") => dublinDeparturePortsForCountry
@@ -153,15 +161,15 @@ object DepartureAirport {
       case (_, "warsaw") => warsawDeparturePortForCountry
       case ("asia pacific", _) => beijingDeparturePortForCountry ::: bangkokDeparturePortForCountry
       case ("africa", _) => lagosDeparturePortForCountry
-      case ("euromed north", _) => beneluxDeparturePortForCountry ::: warsawDeparturePortForCountry ::: berlinDeparturePortForCountry ::: parisDeparturePortForCountry
+      case ("euromed north", _) => beneluxDeparturePortForCountry ::: warsawDeparturePortForCountry ::: berlinDeparturePortForCountry ::: parisDeparturePortForCountry ::: bucharestDeparturePortForCountry
       case ("euromed south", _) => romeDeparturePortForCountry ::: athensDeparturePortsForCountry ::: madridDeparturePortForCountry
       case ("south and south east asia", _) => newDelhiDeparturePortForCountry ::: hanoiDeparturePortForCountry
       case ("middle east and pakistan", _) => dubaiDeparturePortForCountry ::: istanbulDeparturePortForCountry ::: dohaDeparturePortForCountry ::: islamabadDeparturePortForCountry
       case ("western balkans", _) => tiranaDeparturePortForCountry
-      case ("all", _) => beneluxDeparturePortForCountry ::: warsawDeparturePortForCountry ::: berlinDeparturePortForCountry ::: bangkokDeparturePortForCountry
+      case ("all", _) => beneluxDeparturePortForCountry ::: warsawDeparturePortForCountry ::: berlinDeparturePortForCountry ::: bangkokDeparturePortForCountry ::: bucharestDeparturePortForCountry
         parisDeparturePortForCountry ::: romeDeparturePortForCountry ::: athensDeparturePortsForCountry ::: hanoiDeparturePortForCountry ::: dublinDeparturePortsForCountry
-        madridDeparturePortForCountry ::: beijingDeparturePortForCountry ::: newDelhiDeparturePortForCountry ::: dubaiDeparturePortForCountry :::
-        istanbulDeparturePortForCountry ::: dohaDeparturePortForCountry ::: lagosDeparturePortForCountry ::: tiranaDeparturePortForCountry ::: islamabadDeparturePortForCountry
+        madridDeparturePortForCountry ::: beijingDeparturePortForCountry ::: newDelhiDeparturePortForCountry ::: dubaiDeparturePortForCountry ::: istanbulDeparturePortForCountry :::
+          dohaDeparturePortForCountry ::: lagosDeparturePortForCountry ::: tiranaDeparturePortForCountry ::: islamabadDeparturePortForCountry
       case _ => List.empty
 
     }

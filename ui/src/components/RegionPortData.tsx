@@ -31,7 +31,8 @@ export const euromedNorthPost = [
     {post: 'Benelux'},
     {post: 'Berlin'},
     {post: 'Paris'},
-    {post: 'Warsaw'}
+    {post: 'Warsaw'},
+    {post: 'Bucharest'}
 ]
 
 export const euromedSouthPost = [
@@ -70,6 +71,7 @@ export const allPosts = [
     {post: 'Benelux'},
     {post: 'Beijing'},
     {post: 'Berlin'},
+    {post: 'Bucharest'},
     {post: 'Doha'},
     {post: 'Dublin'},
     {post: 'Dubai'},
@@ -87,13 +89,15 @@ export const allPosts = [
 
 export const athensCountries = [
     {country: 'All'},
-    {country: 'Bulgaria'},
-    {country: 'Croatia'},
     {country: 'Cyprus'},
-    {country: 'Greece'},
-    {country: 'Moldova'},
-    {country: 'Romania'},
-    {country: 'Slovenia'}
+    {country: 'Greece'}
+]
+
+export const bucharestCountries = [
+      {country: 'All'},
+      {country: 'Bulgaria'},
+      {country: 'Moldova'},
+      {country: 'Romania'}
 ]
 
 export const beneluxCountries = [
@@ -139,7 +143,8 @@ export const parisCountries = [
 export const romeCountries = [
     {country: 'All'},
     {country: 'Italy'},
-    {country: 'Malta'}
+    {country: 'Malta'},
+    {country: 'Slovenia'}
 ]
 
 export const madridCountries = [
@@ -152,6 +157,7 @@ export const tiranaCountries = [
     {country: 'All'},
     {country: 'Albania'},
     {country: 'Bosnia and Herzegovina'},
+    {country: 'Croatia'},
     {country: 'Kosovo'},
     {country: 'Macedonia'},
     {country: 'Montenegro'},

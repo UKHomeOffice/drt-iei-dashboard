@@ -5,35 +5,36 @@ import FlightsTable from './FlightsTable'
 import Grid from '@material-ui/core/Grid';
 import {
     regions,
+    allPosts,
     allTimezones,
-    nonLocalTimezones,
     asiaPacificPost,
     africaPost,
+    nonLocalTimezones,
     euromedNorthPost,
     euromedSouthPost,
     middleEastAndPakistanPost,
     southAndSouthEastAsiaPost,
     westernBalkansPost,
-    allPosts,
+    allCountries,
     athensCountries,
     bangkokCountries,
     beijingCountries,
-    beneluxCountries,
-    hanoiCountries,
-    warsawCountries,
     berlinCountries,
-    parisCountries,
-    romeCountries,
-    madridCountries,
-    tiranaCountries,
-    newDelhiCountries,
-    lagosCountries,
+    beneluxCountries,
+    bucharestCountries,
     dubaiCountries,
     dublinCountries,
+    dohaCountries,
+    hanoiCountries,
     istanbulCountries,
     islamabadCountries,
-    dohaCountries,
-    allCountries
+    lagosCountries,
+    madridCountries,
+    newDelhiCountries,
+    parisCountries,
+    romeCountries,
+    tiranaCountries,
+    warsawCountries,
 } from "./RegionPortData";
 
 interface IState {
@@ -133,6 +134,9 @@ export default class SearchFilters extends React.Component<IProps, IState> {
                     break;
                 case 'Berlin':
                     postCountries = berlinCountries;
+                    break;
+                case 'Bucharest':
+                    postCountries = bucharestCountries;
                     break;
                 case 'Dublin':
                     postCountries = dublinCountries;
