@@ -234,7 +234,7 @@ export const dohaCountries = [
 export const lagosCountries = [
     {country: 'Cameroon'},
     {country: 'Central African Republic'},
-    {country: 'Equatorial Guinea'} ,
+    {country: 'Equatorial Guinea'},
     {country: 'Nigeria'}
 ]
 
@@ -263,7 +263,7 @@ export const allCountries = [
     {country: 'Cyprus'},
     {country: 'Czech Republic'},
     {country: 'Denmark'},
-    {country: 'Equatorial Guinea'} ,
+    {country: 'Equatorial Guinea'},
     {country: 'Estonia'},
     {country: 'Finland'},
     {country: 'Fiji'},
@@ -273,6 +273,7 @@ export const allCountries = [
     {country: 'Greece'},
     {country: 'Hong Kong'},
     {country: 'Iceland'},
+    {country: 'India'},
     {country: 'Ireland'},
     {country: 'Italy'},
     {country: 'Iraq'},
@@ -327,4 +328,4 @@ export const allCountries = [
     {country: 'Uzbekistan'},
     {country: 'Vietnam'},
     {country: 'Yemen'},
-   ]
+]

@@ -11,7 +11,7 @@ import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { isValidRequest } from "./ValidDataCheck";
+import {isValidRequest} from "./ValidDataCheck";
 
 interface FlightData {
     origin: string;
@@ -145,10 +145,10 @@ class FlightsTable extends React.Component<IProps, IState> {
     }
 
     componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>, snapshot?: any) {
-        console.log('FlightsTable componentDidUpdate...' + this.state.inProgress + ' ' +  this.props.country + ' ' + this.props.post + ' ' + this.props.timezone + ' ' + this.state.currentTime)
+        console.log('FlightsTable componentDidUpdate...' + this.state.inProgress + ' ' + this.props.country + ' ' + this.props.post + ' ' + this.props.timezone + ' ' + this.state.currentTime)
         if (this.props.date !== prevProps.date || this.props.country !== prevProps.country || this.props.post !== prevProps.post || this.props.region !== prevProps.region) {
-            if(isValidRequest(this.props.region,this.props.post) && !this.state.inProgress) {
-                 this.clearFilter();
+            if (isValidRequest(this.props.region, this.props.post) && !this.state.inProgress) {
+                this.clearFilter();
             }
         }
 
@@ -178,7 +178,7 @@ class FlightsTable extends React.Component<IProps, IState> {
     }
 
     public reqConfig: AxiosRequestConfig = {
-        headers: {'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json','timeout':180000}
+        headers: {'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json', 'timeout': 180000}
     };
 
     public flightsEndPoint(region: string, post: string, country: string, filterDate: string, timezone: string) {
@@ -190,13 +190,13 @@ class FlightsTable extends React.Component<IProps, IState> {
     }
 
     public getFlightsData(endPoint: string, handleResponse: (r: AxiosResponse) => void) {
-    console.log('getFlightsData ' + endPoint);
+        console.log('getFlightsData ' + endPoint);
         axios
             .get(endPoint, this.reqConfig)
             .then(response => handleResponse(response))
-            .catch ((e) => {
-                console.log('error while response' + e);
-                this.setState(() => ({hasError: true, errorMessage: e}))
+            .catch((e) => {
+                    console.log('error while response' + e);
+                    this.setState(() => ({hasError: true, errorMessage: e}))
                 }
             )
     }
@@ -235,26 +235,25 @@ class FlightsTable extends React.Component<IProps, IState> {
         return Array.from(new Set(a));
     };
 
-    determineDisplay(){
-        if(this.state.inProgress){
-             return <Box style={{ width: '100%' }}>
-                     <div style= {{height: 100}}/>
-                     <CircularProgress/>
-                     <div style= {{height: 600}}/>
-                    </Box>
+    determineDisplay() {
+        if (this.state.inProgress) {
+            return <Box style={{width: '100%'}}>
+                <div style={{height: 100}}/>
+                <CircularProgress/>
+                <div style={{height: 600}}/>
+            </Box>
         } else {
-             return <div style={{height: 800, width: '100%'}} className={this.props.classes.root}>
-                         <DataGrid disableColumnMenu
-                                  components={{Toolbar: GridToolbar}}
-                                  disableSelectionOnClick
-                                  rows={this.state.arrivalRows as GridRowModel[]}
-                                  columns={this.columnsHeaders}
-                                  getRowClassName={(params) => `super-app-theme--${params.getValue(params.id, 'status')}`}
-                                  pageSize={25}/>
-                     </div>
+            return <div style={{height: 800, width: '100%'}} className={this.props.classes.root}>
+                <DataGrid disableColumnMenu
+                          components={{Toolbar: GridToolbar}}
+                          disableSelectionOnClick
+                          rows={this.state.arrivalRows as GridRowModel[]}
+                          columns={this.columnsHeaders}
+                          getRowClassName={(params) => `super-app-theme--${params.getValue(params.id, 'status')}`}
+                          pageSize={25}/>
+            </div>
 
         }
-
 
 
     }
@@ -298,7 +297,7 @@ class FlightsTable extends React.Component<IProps, IState> {
                         </Grid>
                     </div>
                     <br/>
-                      {this.determineDisplay()}
+                    {this.determineDisplay()}
                 </div>
             );
         }

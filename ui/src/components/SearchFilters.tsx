@@ -3,11 +3,38 @@ import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import FlightsTable from './FlightsTable'
 import Grid from '@material-ui/core/Grid';
-import { regions, allTimezones, nonLocalTimezones, asiaPacificPost, africaPost, euromedNorthPost,
-euromedSouthPost,  middleEastAndPakistanPost, southAndSouthEastAsiaPost,westernBalkansPost,  allPosts,
-athensCountries, bangkokCountries, beijingCountries, beneluxCountries, hanoiCountries, warsawCountries, berlinCountries,
-parisCountries, romeCountries, madridCountries, tiranaCountries, newDelhiCountries,lagosCountries,
-dubaiCountries, dublinCountries, istanbulCountries,islamabadCountries, dohaCountries, allCountries } from "./RegionPortData";
+import {
+    regions,
+    allTimezones,
+    nonLocalTimezones,
+    asiaPacificPost,
+    africaPost,
+    euromedNorthPost,
+    euromedSouthPost,
+    middleEastAndPakistanPost,
+    southAndSouthEastAsiaPost,
+    westernBalkansPost,
+    allPosts,
+    athensCountries,
+    bangkokCountries,
+    beijingCountries,
+    beneluxCountries,
+    hanoiCountries,
+    warsawCountries,
+    berlinCountries,
+    parisCountries,
+    romeCountries,
+    madridCountries,
+    tiranaCountries,
+    newDelhiCountries,
+    lagosCountries,
+    dubaiCountries,
+    dublinCountries,
+    istanbulCountries,
+    islamabadCountries,
+    dohaCountries,
+    allCountries
+} from "./RegionPortData";
 
 interface IState {
     date: string;
@@ -85,7 +112,7 @@ export default class SearchFilters extends React.Component<IProps, IState> {
         }
 
         if (this.state !== prevState && this.state.post !== prevState.post) {
-           console.log("this.state.post " + this.state.post);
+            console.log("this.state.post " + this.state.post);
             this.setState({country: 'All'});
             this.setState({timezone: 'UTC'});
             switch (this.state.post) {
