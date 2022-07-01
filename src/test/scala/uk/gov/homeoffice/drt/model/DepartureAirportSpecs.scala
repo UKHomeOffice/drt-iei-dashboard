@@ -16,34 +16,34 @@ class DepartureAirportSpecs extends AsyncFlatSpec with Matchers {
   }
 
   "Departure Airport code" should "give list of all airport for Croatia" in {
-    val greeceList = DepartureAirport.athensDeparturePortsForCountry("Croatia")
+    val greeceList = DepartureAirport.tiranaDeparturePortForCountry("Croatia")
     greeceList must contain allElementsOf Croatia.portList
   }
 
   "Departure Airport code" should "give list of all airport for Slovenia" in {
-    val greeceList = DepartureAirport.athensDeparturePortsForCountry("Slovenia")
+    val greeceList = DepartureAirport.romeDeparturePortForCountry("Slovenia")
     greeceList must contain allElementsOf Slovenia.portList
   }
 
   "Departure Airport code" should "give list of all airport for Bulgaria" in {
-    val greeceList = DepartureAirport.athensDeparturePortsForCountry("Bulgaria")
+    val greeceList = DepartureAirport.bucharestDeparturePortForCountry("Bulgaria")
     greeceList must contain allElementsOf  Bulgaria.portList
   }
 
   "Departure Airport code" should "give list of all airport for Romania" in {
-    val greeceList = DepartureAirport.athensDeparturePortsForCountry("Romania")
+    val greeceList = DepartureAirport.bucharestDeparturePortForCountry("Romania")
     greeceList must contain allElementsOf  Romania.portList
   }
 
   "Departure Airport code" should "give list of all airport for Moldova" in {
-    val greeceList = DepartureAirport.athensDeparturePortsForCountry("Moldova")
+    val greeceList = DepartureAirport.bucharestDeparturePortForCountry("Moldova")
     greeceList must contain allElementsOf  Moldova.portList
   }
 
 
-  "Departure Airpot Code" should "give list of all airport in the post" in {
+  "Departure Airpot Code" should "give list of all airport in the Athen post" in {
     val athensList = DepartureAirport.getDeparturePortForCountry("euromed south","Athens")("All")
-    athensList must contain allElementsOf Greece.portList ::: Cyprus.portList ::: Croatia.portList ::: Slovenia.portList ::: Bulgaria.portList ::: Romania.portList ::: Moldova.portList
+    athensList must contain allElementsOf Greece.portList ::: Cyprus.portList
   }
 
 }
