@@ -35,7 +35,7 @@ object ArrivalRoutes {
                   Logger[F].warn(s"Error while $requestString : ${e.printStackTrace()}") >>
                     Arrivals(data = List.empty).pure[F]
               }
-           _ <- Logger[F].warn(s"Time to get arrivals at route for flightsRequest $requestString is ${System.currentTimeMillis-startTime} milliseconds")
+           _ <- Logger[F].info(s"Time to get arrivals at arrival route for flightsRequest $requestString is ${System.currentTimeMillis-startTime} milliseconds")
             resp <- Ok(arrivals)
           } yield resp
         } else {

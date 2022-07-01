@@ -23,7 +23,7 @@ object ArrivalFlights {
       val arrivals: F[List[ArrivalTableDataIndex]] = arrivalsService.getFlightsDetail(flightsRequest)
       val transformArrival = arrivalsService.transformArrivalsFromArrivalTable(flightsRequest, arrivals).map(Arrivals(_))
       val endTime = System.currentTimeMillis
-      Logger[F].warn(s"Time to get arrivals for flightsRequest $flightsRequest is ${endTime-startTime} milliseconds") >>
+      Logger[F].info(s"Time to get arrivals for flightsRequest $flightsRequest is ${endTime-startTime} milliseconds") >>
       transformArrival
     }
   }

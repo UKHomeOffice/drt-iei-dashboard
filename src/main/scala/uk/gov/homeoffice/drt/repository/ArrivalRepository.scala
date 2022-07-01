@@ -64,7 +64,7 @@ class ArrivalRepository[F[_] : Sync](val sessionPool: Resource[F, Session[F]]) e
   def findArrivalsForOriginAndADate(origins: List[String], queryDate: LocalDateTime): F[List[ArrivalTableData]] =
     sessionPool.use { session =>
       session.prepare(selectArrivalsForOriginsAndADatePreparedQuery(origins.size)).use { ps =>
-        ps.stream(origins ~ queryDate ~ queryDate.plusDays(1), 1024).compile.toList
+        ps.stream(origins ~ queryDate ~ queryDate.plusDays(1), 4112).compile.toList
       }
     }
 
