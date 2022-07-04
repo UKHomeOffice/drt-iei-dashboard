@@ -17,7 +17,7 @@ function App() {
                         </div>
                     </Grid>
                     <Grid item xs={12} sm={4}>
-                        <h3>DRT IEI Dashboard</h3>
+                        <h3>DRT International Operations dashboard</h3>
                     </Grid>
                     <Grid item xs={12} sm={4}>
                         <div className="logout">

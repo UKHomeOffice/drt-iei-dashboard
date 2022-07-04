@@ -3,6 +3,39 @@ import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import FlightsTable from './FlightsTable'
 import Grid from '@material-ui/core/Grid';
+import {
+    regions,
+    allPosts,
+    allTimezones,
+    asiaPacificPost,
+    africaPost,
+    nonLocalTimezones,
+    euromedNorthPost,
+    euromedSouthPost,
+    middleEastAndPakistanPost,
+    southAndSouthEastAsiaPost,
+    westernBalkansPost,
+    allCountries,
+    athensCountries,
+    bangkokCountries,
+    beijingCountries,
+    berlinCountries,
+    beneluxCountries,
+    bucharestCountries,
+    dubaiCountries,
+    dublinCountries,
+    dohaCountries,
+    hanoiCountries,
+    istanbulCountries,
+    islamabadCountries,
+    lagosCountries,
+    madridCountries,
+    newDelhiCountries,
+    parisCountries,
+    romeCountries,
+    tiranaCountries,
+    warsawCountries
+} from "./RegionPortData";
 
 interface IState {
     date: string;
@@ -32,41 +65,106 @@ export default class SearchFilters extends React.Component<IProps, IState> {
     }
 
     componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>, snapshot?: any) {
-        console.log("this.state.region" + this.state.region);
-        if (this.state.region !== prevState.region) {
-            this.setState({post: 'All'});
+        console.log("this.state.region " + this.state.region);
+        if (this.state !== prevState && this.state.region !== prevState.region) {
+            this.setState({country: 'All'});
             this.setState({timezone: 'UTC'});
             switch (this.state.region) {
+                case 'Africa' :
+                    this.setState({post: 'Lagos'});
+                    regionPosts = africaPost;
+                    console.log("It is a africaPost.");
+                    break;
+                case 'Asia Pacific' :
+                    this.setState({post: 'All'});
+                    regionPosts = asiaPacificPost;
+                    console.log("It is a asiaPacificPost.");
+                    break;
                 case 'Euromed North' :
+                    this.setState({post: 'All'});
                     regionPosts = euromedNorthPost;
                     console.log("It is a euromedNorthPost.");
                     break;
                 case 'Euromed South' :
+                    this.setState({post: 'All'});
                     regionPosts = euromedSouthPost;
                     console.log("It is a euromedSouthPost.");
                     break;
+                case 'South and South East Asia' :
+                    this.setState({post: 'All'});
+                    regionPosts = southAndSouthEastAsiaPost;
+                    console.log("It is a South and South East Asia.");
+                    break;
+                case 'Middle East and Pakistan' :
+                    this.setState({post: 'All'});
+                    regionPosts = middleEastAndPakistanPost;
+                    console.log("It is a Middle East and Pakistan.");
+                    break;
+                case 'Western Balkans' :
+                    this.setState({post: 'Tirana'});
+                    regionPosts = westernBalkansPost;
+                    console.log("Western Balkans");
+                    break;
                 case 'All' :
+                    this.setState({post: 'All'});
                     regionPosts = allPosts;
                     console.log("It is a allPosts.");
                     break;
             }
         }
 
-        if (this.state.post !== prevState.post) {
+        if (this.state !== prevState && this.state.post !== prevState.post) {
+            console.log("this.state.post " + this.state.post);
             this.setState({country: 'All'});
             this.setState({timezone: 'UTC'});
             switch (this.state.post) {
+                case 'All':
+                    postCountries = allCountries;
+                    break;
                 case 'Athens' :
                     postCountries = athensCountries;
+                    break;
+                case 'Bangkok':
+                    postCountries = bangkokCountries;
+                    break;
+                case 'Beijing':
+                    postCountries = beijingCountries;
                     break;
                 case 'Benelux':
                     postCountries = beneluxCountries;
                     break;
-                case 'Warsaw':
-                    postCountries = warsawCountries;
-                    break;
                 case 'Berlin':
                     postCountries = berlinCountries;
+                    break;
+                case 'Bucharest':
+                    postCountries = bucharestCountries;
+                    break;
+                case 'Dublin':
+                    postCountries = dublinCountries;
+                    break;
+                case 'Doha':
+                    postCountries = dohaCountries;
+                    break;
+                case 'Dubai':
+                    postCountries = dubaiCountries;
+                    break;
+                case 'Hanoi':
+                    postCountries = hanoiCountries;
+                    break;
+                case 'Istanbul':
+                    postCountries = istanbulCountries;
+                    break;
+                case 'Islamabad':
+                    postCountries = islamabadCountries;
+                    break;
+                case 'Lagos':
+                    postCountries = lagosCountries;
+                    break;
+                case 'Madrid':
+                    postCountries = madridCountries;
+                    break;
+                case 'New Delhi':
+                    postCountries = newDelhiCountries;
                     break;
                 case 'Paris':
                     postCountries = parisCountries;
@@ -74,17 +172,11 @@ export default class SearchFilters extends React.Component<IProps, IState> {
                 case 'Rome':
                     postCountries = romeCountries;
                     break;
-                case 'Madrid':
-                    postCountries = madridCountries;
+                case 'Tirana':
+                    postCountries = tiranaCountries;
                     break;
-                case 'Albania':
-                    postCountries = albaniaCountries;
-                    break;
-                case 'Dublin':
-                    postCountries = dublinCountries;
-                    break;
-                case 'All':
-                    postCountries = allCountries;
+                case 'Warsaw':
+                    postCountries = warsawCountries;
                     break;
                 default:
                     postCountries = allCountries;
@@ -181,180 +273,6 @@ export default class SearchFilters extends React.Component<IProps, IState> {
     }
 
 }
-
-const regions = [
-    {region: 'Euromed North'},
-    {region: 'Euromed South'},
-    {region: 'All'}
-
-]
-
-const allTimezones = [
-    {timezone: 'UK'},
-    {timezone: 'UTC'},
-    {timezone: 'Local'}
-]
-
-const nonLocalTimezones = [
-    {timezone: 'UK'},
-    {timezone: 'UTC'}
-]
-
-const euromedNorthPost = [
-    {post: 'All'},
-    {post: 'Benelux'},
-    {post: 'Berlin'},
-    {post: 'Paris'},
-    {post: 'Warsaw'}
-]
-
-const euromedSouthPost = [
-    {post: 'All'},
-    {post: 'Athens'},
-    {post: 'Albania'},
-    {post: 'Dublin'},
-    {post: 'Madrid'},
-    {post: 'Rome'}
-]
-
-const allPosts = [
-    {post: 'All'},
-    {post: 'Athens'},
-    {post: 'Albania'},
-    {post: 'Benelux'},
-    {post: 'Berlin'},
-    {post: 'Dublin'},
-    {post: 'Madrid'},
-    {post: 'Paris'},
-    {post: 'Rome'},
-    {post: 'Warsaw'}
-]
-
-const athensCountries = [
-    {country: 'All'},
-    {country: 'Bulgaria'},
-    {country: 'Croatia'},
-    {country: 'Cyprus'},
-    {country: 'Greece'},
-    {country: 'Moldova'},
-    {country: 'Romania'},
-    {country: 'Slovenia'}
-]
-
-const beneluxCountries = [
-    {country: 'All'},
-    {country: 'Belgium'},
-    {country: 'Luxembourg'},
-    {country: 'Netherlands'}
-]
-
-const warsawCountries = [
-    {country: 'All'},
-    {country: 'Belarus'},
-    {country: 'Czech Republic'},
-    {country: 'Estonia'},
-    {country: 'Iceland'},
-    {country: 'Latvia'},
-    {country: 'Lithuania'},
-    {country: 'Poland'},
-    {country: 'Russia'},
-    {country: 'Slovakia'},
-    {country: 'Ukraine'}
-]
-
-const berlinCountries = [
-    {country: 'All'},
-    {country: 'Austria'},
-    {country: 'Denmark'},
-    {country: 'Finland'},
-    {country: 'Germany'},
-    {country: 'Liechenstein'},
-    {country: 'Norway'},
-    {country: 'Sweden'},
-    {country: 'Switzerland'}
-]
-
-const parisCountries = [
-    {country: 'All'},
-    {country: 'Algeria'},
-    {country: 'Basel Mulhouse'},
-    {country: 'France'},
-    {country: 'Morocco'},
-    {country: 'Tunisia'}
-]
-
-const romeCountries = [
-    {country: 'All'},
-    {country: 'Italy'},
-    {country: 'Malta'}
-]
-
-const madridCountries = [
-    {country: 'All'},
-    {country: 'Portugual'},
-    {country: 'Spain'}
-]
-
-const albaniaCountries = [
-    {country: 'All'},
-    {country: 'Albania'},
-    {country: 'Bosnia and Herzegovina'},
-    {country: 'Kosovo'},
-    {country: 'Macedonia'},
-    {country: 'Montenegro'},
-    {country: 'Serbia'}
-]
-
-const dublinCountries = [
-    {country: 'Ireland'}
-]
-const allCountries = [
-    {country: 'All'},
-    {country: 'Albania'},
-    {country: 'Algeria'},
-    {country: 'Austria'},
-    {country: 'Basel Mulhouse'},
-    {country: 'Belarus'},
-    {country: 'Belgium'},
-    {country: 'Bosnia'},
-    {country: 'Bulgaria'},
-    {country: 'Croatia'},
-    {country: 'Cyprus'},
-    {country: 'Czech Republic'},
-    {country: 'Denmark'},
-    {country: 'Estonia'},
-    {country: 'Finland'},
-    {country: 'France'},
-    {country: 'Germany'},
-    {country: 'Greece'},
-    {country: 'Iceland'},
-    {country: 'Ireland'},
-    {country: 'Italy'},
-    {country: 'Kosovo'},
-    {country: 'Latvia'},
-    {country: 'Lithuania'},
-    {country: 'Liechenstein'},
-    {country: 'Luxembourg'},
-    {country: 'Malta'},
-    {country: 'Moldova'},
-    {country: 'Montenegro'},
-    {country: 'Morocco'},
-    {country: 'Netherlands'},
-    {country: 'Norway'},
-    {country: 'North Macedonia'},
-    {country: 'Poland'},
-    {country: 'Portugual'},
-    {country: 'Romania'},
-    {country: 'Russia'},
-    {country: 'Serbia'},
-    {country: 'Slovakia'},
-    {country: 'Slovenia'},
-    {country: 'Spain'},
-    {country: 'Switzerland'},
-    {country: 'Sweden'},
-    {country: 'Tunisia'},
-    {country: 'Ukraine'}
-];
 
 let regionPosts = allPosts
 let postCountries = allCountries

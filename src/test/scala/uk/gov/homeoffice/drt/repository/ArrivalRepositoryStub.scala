@@ -245,5 +245,7 @@ class ArrivalRepositoryStub[F[_] : Sync] extends ArrivalRepositoryI[F] {
 
   override def updateDepartureDate(arrivals: List[ArrivalTableData]): F[List[Completion]] = ???
 
-
+  override def findArrivalsForADateAndFilterOrigins(origins: List[String], queryDate: LocalDateTime): F[List[ArrivalTableData]] = {
+    arrivalMap.filter(a => a.scheduled.toLocalDate == queryDate.toLocalDate && origins.contains(a.origin)).pure[F]
+  }
 }

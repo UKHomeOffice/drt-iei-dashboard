@@ -1,10 +1,12 @@
 package uk.gov.homeoffice.drt.applicative
 
+import cats.Monad
+import cats.effect.Sync
 import cats.syntax.all._
-import cats.{Applicative, Monad}
+import io.chrisdavenport.log4cats.Logger
+import io.chrisdavenport.log4cats.slf4j.Slf4jLogger
 import uk.gov.homeoffice.drt.model.{ArrivalTableDataIndex, Arrivals, FlightsRequest}
 import uk.gov.homeoffice.drt.service.FlightScheduledService
-
 
 trait ArrivalFlights[F[_]] {
   def flights(n: FlightsRequest)(implicit monad: Monad[F]): F[Arrivals]
@@ -13,10 +15,16 @@ trait ArrivalFlights[F[_]] {
 object ArrivalFlights {
   implicit def apply[F[_]](implicit ev: ArrivalFlights[F]): ArrivalFlights[F] = ev
 
-  def impl[F[_] : Applicative](arrivalsService: FlightScheduledService[F]): ArrivalFlights[F] = new ArrivalFlights[F] {
+  def impl[F[_] : Sync](arrivalsService: FlightScheduledService[F]): ArrivalFlights[F] = new ArrivalFlights[F] {
+    implicit val logger = Slf4jLogger.getLogger[F]
+
     def flights(flightsRequest: FlightsRequest)(implicit monad: Monad[F]): F[Arrivals] = {
+      val startTime = System.currentTimeMillis
       val arrivals: F[List[ArrivalTableDataIndex]] = arrivalsService.getFlightsDetail(flightsRequest)
-      arrivalsService.transformArrivalsFromArrivalTable(flightsRequest, arrivals).map(Arrivals(_))
+      val transformArrival = arrivalsService.transformArrivalsFromArrivalTable(flightsRequest, arrivals).map(Arrivals(_))
+      val endTime = System.currentTimeMillis
+      Logger[F].info(s"Time to get arrivals for flightsRequest $flightsRequest is ${endTime-startTime} milliseconds") >>
+      transformArrival
     }
   }
 

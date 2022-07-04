@@ -18,9 +18,9 @@ class FlightScheduledService[F[_] : Sync](arrivalsRepository: ArrivalRepositoryI
     val portList: List[Port] = DepartureAirport.getDeparturePortForCountry(requestedDetails.region, requestedDetails.post)(requestedDetails.country)
     val arrivalFlights: F[List[ArrivalTableData]] =
       if (requestedDetails.portList.nonEmpty) {
-        arrivalsRepository.findArrivalsForOriginAndADate(requestedDetails.portList, requestedDate)
+        arrivalsRepository.findArrivalsForADateAndFilterOrigins(requestedDetails.portList, requestedDate)
       } else {
-        arrivalsRepository.findArrivalsForOriginAndADate(portList.map(_.code), requestedDate)
+        arrivalsRepository.findArrivalsForADateAndFilterOrigins(portList.map(_.code), requestedDate)
       }
     arrivalFlights.map(_.zipWithIndex.map(a => ArrivalTableDataIndex(a._1, a._2)))
 

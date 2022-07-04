@@ -53,6 +53,8 @@ object DashboardServer {
       exitCode <- BlazeServerBuilder[F](global)
         .bindHttp(cfg.api.port.value, "0.0.0.0")
         .withHttpApp(httpApp)
+        .withResponseHeaderTimeout(60.seconds)
+        .withIdleTimeout(120.seconds)
         .serve
     } yield exitCode
   }.drain

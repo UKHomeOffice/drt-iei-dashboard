@@ -9,7 +9,9 @@ import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
-
+import Box from '@material-ui/core/Box';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import {isValidRequest} from "./ValidDataCheck";
 
 interface FlightData {
     origin: string;
@@ -41,6 +43,7 @@ interface IState {
     portData: string[];
     portName: string[];
     flightData: FlightData[];
+    inProgress: boolean;
 }
 
 const getBackgroundColor = (color: string, palette: any) => getThemePaletteMode(palette) === 'dark' ? darken(color, 0.6) : lighten(color, 0.6);
@@ -126,7 +129,8 @@ class FlightsTable extends React.Component<IProps, IState> {
             currentTime: new Date().toLocaleString(),
             flightData: [],
             portData: [],
-            portName: []
+            portName: [],
+            inProgress: true
         }
     }
 
@@ -136,13 +140,16 @@ class FlightsTable extends React.Component<IProps, IState> {
                 currentTime: new Date().toLocaleString()
             })
         }, 60000);
+
         this.updateFlights();
     }
 
     componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>, snapshot?: any) {
-        console.log('FlightsTable componentDidUpdate...' + this.props.country + ' ' + this.props.post + ' ' + this.props.timezone + ' ' + this.state.currentTime)
+        console.log('FlightsTable componentDidUpdate...' + this.state.inProgress + ' ' + this.props.country + ' ' + this.props.post + ' ' + this.props.timezone + ' ' + this.state.currentTime)
         if (this.props.date !== prevProps.date || this.props.country !== prevProps.country || this.props.post !== prevProps.post || this.props.region !== prevProps.region) {
-            this.clearFilter();
+            if (isValidRequest(this.props.region, this.props.post) && !this.state.inProgress) {
+                this.clearFilter();
+            }
         }
 
         if (this.props.timezone !== prevProps.timezone) {
@@ -171,7 +178,7 @@ class FlightsTable extends React.Component<IProps, IState> {
     }
 
     public reqConfig: AxiosRequestConfig = {
-        headers: {'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json'}
+        headers: {'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json', 'timeout': 180000}
     };
 
     public flightsEndPoint(region: string, post: string, country: string, filterDate: string, timezone: string) {
@@ -183,10 +190,15 @@ class FlightsTable extends React.Component<IProps, IState> {
     }
 
     public getFlightsData(endPoint: string, handleResponse: (r: AxiosResponse) => void) {
+        console.log('getFlightsData ' + endPoint);
         axios
             .get(endPoint, this.reqConfig)
             .then(response => handleResponse(response))
-            .catch(t => this.setState(() => ({hasError: true, errorMessage: t})))
+            .catch((e) => {
+                    console.log('error while response' + e);
+                    this.setState(() => ({hasError: true, errorMessage: e}))
+                }
+            )
     }
 
     updateFlightsData = (response: AxiosResponse) => {
@@ -197,12 +209,14 @@ class FlightsTable extends React.Component<IProps, IState> {
         this.setState({...this.state, flightData: flightData});
         this.setState({...this.state, portData: uniquePortData});
         this.setState({...this.state, arrivalRows: arrivalRows});
+        this.setState({...this.state, inProgress: false});
     }
 
     updateFlightsDataWithoutPortData = (response: AxiosResponse) => {
         let arrivalsData = response.data as ArrivalsData;
         let arrivalRows = arrivalsData.data as GridRowModel[]
         this.setState({...this.state, arrivalRows: arrivalRows});
+        this.setState({...this.state, inProgress: false});
     }
 
     handleChange = (event: React.ChangeEvent<{}>, value: string[]) => {
@@ -212,6 +226,7 @@ class FlightsTable extends React.Component<IProps, IState> {
     };
 
     clearFilter() {
+        this.setState({inProgress: true});
         this.setState({portName: []});
         this.clearPortFilterFlights();
     }
@@ -219,6 +234,29 @@ class FlightsTable extends React.Component<IProps, IState> {
     uniqueArray(a: string[]) {
         return Array.from(new Set(a));
     };
+
+    determineDisplay() {
+        if (this.state.inProgress) {
+            return <Box style={{width: '100%'}}>
+                <div style={{height: 100}}/>
+                <CircularProgress/>
+                <div style={{height: 600}}/>
+            </Box>
+        } else {
+            return <div style={{height: 800, width: '100%'}} className={this.props.classes.root}>
+                <DataGrid disableColumnMenu
+                          components={{Toolbar: GridToolbar}}
+                          disableSelectionOnClick
+                          rows={this.state.arrivalRows as GridRowModel[]}
+                          columns={this.columnsHeaders}
+                          getRowClassName={(params) => `super-app-theme--${params.getValue(params.id, 'status')}`}
+                          pageSize={25}/>
+            </div>
+
+        }
+
+
+    }
 
     render() {
         if (this.state.hasError) {
@@ -259,15 +297,7 @@ class FlightsTable extends React.Component<IProps, IState> {
                         </Grid>
                     </div>
                     <br/>
-                    <div style={{height: 800, width: '100%'}} className={this.props.classes.root}>
-                        <DataGrid disableColumnMenu
-                                  components={{Toolbar: GridToolbar}}
-                                  disableSelectionOnClick
-                                  rows={this.state.arrivalRows as GridRowModel[]}
-                                  columns={this.columnsHeaders}
-                                  getRowClassName={(params) => `super-app-theme--${params.getValue(params.id, 'status')}`}
-                                  pageSize={25}/>
-                    </div>
+                    {this.determineDisplay()}
                 </div>
             );
         }

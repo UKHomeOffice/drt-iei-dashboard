@@ -43,7 +43,7 @@ export default class MaterialUIPickers extends React.Component<IProps, IState> {
                                 margin="normal"
                                 id="date-picker-dialog"
                                 label="Flight departure date"
-                                format="yyyy-MM-dd"
+                                format="dd-MMM-yyyy"
                                 value={this.state.selectedDate}
                                 onChange={this.handleDateChange}
                                 KeyboardButtonProps={{

@@ -34,6 +34,8 @@ trait ArrivalRepositoryI[F[_]] {
 
   def findArrivalsForOriginAndADate(origins: List[String], queryDate: LocalDateTime): F[List[ArrivalTableData]]
 
+  def findArrivalsForADateAndFilterOrigins(origins: List[String], queryDate: LocalDateTime): F[List[ArrivalTableData]]
+
   def getArrivalForOriginsWithin3Days(origins: List[String]): F[List[ArrivalTableData]]
 
   def updateDepartureDate(arrivals: List[ArrivalTableData]): F[List[Completion]]
@@ -62,9 +64,22 @@ class ArrivalRepository[F[_] : Sync](val sessionPool: Resource[F, Session[F]]) e
   def findArrivalsForOriginAndADate(origins: List[String], queryDate: LocalDateTime): F[List[ArrivalTableData]] =
     sessionPool.use { session =>
       session.prepare(selectArrivalsForOriginsAndADatePreparedQuery(origins.size)).use { ps =>
-        ps.stream(origins ~ queryDate ~ queryDate.plusDays(1), 1024).compile.toList
+        ps.stream(origins ~ queryDate ~ queryDate.plusDays(1), 8192).compile.toList
       }
     }
+
+  private def selectArrivalsForADatePreparedQuery: Query[LocalDateTime ~ LocalDateTime, ArrivalTableData] =
+    sql"""
+        SELECT code, number, destination, origin, terminal, status, totalpassengers, scheduled, estimated , actual , estimatedchox , actualchox , pcp ,scheduled_departure
+        FROM arrival WHERE scheduled > $timestamp and scheduled < $timestamp;
+       """.query(decoder)
+
+  def findArrivalsForADateAndFilterOrigins(origins: List[String], queryDate: LocalDateTime): F[List[ArrivalTableData]] =
+    sessionPool.use { session =>
+      session.prepare(selectArrivalsForADatePreparedQuery).use { ps =>
+        ps.stream(queryDate ~ queryDate.plusDays(1), 1024).compile.toList
+      }
+    }.map(r => r.filter( a => origins.contains(a.origin)))
 
   def getArrivalForOriginsWithin3Days(origins: List[String]): F[List[ArrivalTableData]] = {
     val selectPreparedQuery: Query[List[String] ~ LocalDateTime ~ LocalDateTime, ArrivalTableData] =
