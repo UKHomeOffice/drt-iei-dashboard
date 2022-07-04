@@ -1,80 +1,39 @@
+import {
+    asiaPacificPost,
+    africaPost,
+    euromedNorthPost,
+    euromedSouthPost,
+    middleEastAndPakistanPost,
+    southAndSouthEastAsiaPost,
+    westernBalkansPost
+} from "./RegionPortData";
+
+function isNotValidAfricaPost(post: string): boolean {
+    return africaPost.filter(item => item.post === post).length === 0;
+}
+
 function isNotValidMiddleEastPost(post: string): boolean {
-    switch (post) {
-        case 'All':
-            return false;
-        case 'Doha':
-            return false;
-        case 'Dubai':
-            return false;
-        case 'Istanbul':
-            return false;
-        case 'Islamabad':
-            return false;
-        default:
-            return true;
-    }
+    return middleEastAndPakistanPost.filter(item => item.post === post).length === 0;
 };
 
 function isNotValidEuromedNorthPost(post: string): boolean {
-    switch (post) {
-        case 'All':
-            return false;
-        case 'Benelux':
-            return false;
-        case 'Berlin':
-            return false;
-        case 'Bucharest':
-            return false;
-        case 'Paris':
-            return false;
-        case 'Warsaw':
-            return false;
-        default:
-            return true;
-    }
+    return euromedNorthPost.filter(item => item.post === post).length === 0;
 }
 
 function isNotValidEuromedSouthPost(post: string): boolean {
-    switch (post) {
-        case 'All':
-            return false;
-        case 'Athens':
-            return false;
-        case 'Dublin':
-            return false;
-        case 'Madrid':
-            return false;
-        case 'Rome':
-            return false;
-        default:
-            return true;
-    }
+    return euromedSouthPost.filter(item => item.post === post).length === 0;
 }
 
 function isNotValidAsiaPacificPost(post: string): boolean {
-    switch (post) {
-        case 'All':
-            return false;
-        case 'Beijing':
-            return false;
-        case 'Bangkok':
-            return false;
-        default:
-            return true;
-    }
+    return asiaPacificPost.filter(item => item.post === post).length === 0;
 }
 
 function isNotValidSouthAndSouthEastAsiaPost(post: string): boolean {
-    switch (post) {
-        case 'All':
-            return false;
-        case 'Hanoi':
-            return false;
-        case 'New Delhi':
-            return false;
-        default:
-            return true;
-    }
+    return southAndSouthEastAsiaPost.filter(item => item.post === post).length === 0;
+}
+
+function isNotValidWesternBalkansPost(post: string): boolean {
+    return westernBalkansPost.filter(item => item.post === post).length === 0;
 }
 
 export function isValidRequest(region: string, post: string): boolean {
@@ -82,7 +41,7 @@ export function isValidRequest(region: string, post: string): boolean {
     console.log('isValidRequest region = ' + region + ' post = ' + post);
     if (region === 'Asia Pacific' && isNotValidAsiaPacificPost(post)) {
         return false;
-    } else if (region === 'Africa' && post !== 'Lagos' ) {
+    } else if (region === 'Africa' && isNotValidAfricaPost(post)) {
         return false;
     } else if (region === 'Middle East and Pakistan' && isNotValidMiddleEastPost(post)) {
         return false;
@@ -90,7 +49,7 @@ export function isValidRequest(region: string, post: string): boolean {
         return false;
     } else if (region === 'Euromed South' && isNotValidEuromedSouthPost(post)) {
         return false;
-    } else if (region === 'Western Balkans' && post !== 'Tirana') {
+    } else if (region === 'Western Balkans' && isNotValidWesternBalkansPost(post)) {
         return false;
     } else if (region === 'South and South East Asia' && isNotValidSouthAndSouthEastAsiaPost(post)) {
         return false;

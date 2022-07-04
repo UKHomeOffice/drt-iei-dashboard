@@ -94,10 +94,10 @@ export const athensCountries = [
 ]
 
 export const bucharestCountries = [
-      {country: 'All'},
-      {country: 'Bulgaria'},
-      {country: 'Moldova'},
-      {country: 'Romania'}
+    {country: 'All'},
+    {country: 'Bulgaria'},
+    {country: 'Moldova'},
+    {country: 'Romania'}
 ]
 
 export const beneluxCountries = [
@@ -197,6 +197,7 @@ export const newDelhiCountries = [
 ]
 
 export const dubaiCountries = [
+    {country: 'All'},
     {country: 'Afghanistan'},
     {country: 'Iran'},
     {country: 'Oman'},
@@ -209,11 +210,13 @@ export const dublinCountries = [
 ]
 
 export const hanoiCountries = [
+    {country: 'All'},
     {country: 'Laos'},
     {country: 'Vietnam'}
 ]
 
 export const istanbulCountries = [
+    {country: 'All'},
     {country: 'Armenia'},
     {country: 'Azerbaijan'},
     {country: 'Georgia'},
@@ -231,6 +234,7 @@ export const islamabadCountries = [
     {country: 'Pakistan'}
 ]
 export const dohaCountries = [
+    {country: 'All'},
     {country: 'Bahrain'},
     {country: 'Kuwait'},
     {country: 'Qatar'},
@@ -238,100 +242,40 @@ export const dohaCountries = [
 ]
 
 export const lagosCountries = [
+    {country: 'All'},
     {country: 'Cameroon'},
     {country: 'Central African Republic'},
     {country: 'Equatorial Guinea'},
     {country: 'Nigeria'}
 ]
 
-export const allCountries = [
-    {country: 'All'},
-    {country: 'Albania'},
-    {country: 'Algeria'},
-    {country: 'Afghanistan'},
-    {country: 'Armenia'},
-    {country: 'Austria'},
-    {country: 'Australia'},
-    {country: 'Azerbaijan'},
-    {country: 'Bahrain'},
-    {country: 'Belarus'},
-    {country: 'Belgium'},
-    {country: 'Bhutan'},
-    {country: 'Bosnia'},
-    {country: 'Bulgaria'},
-    {country: 'Brunei'},
-    {country: 'Burma'},
-    {country: 'Cambodia'},
-    {country: 'Cameroon'},
-    {country: 'Central African Republic'},
-    {country: 'China'},
-    {country: 'Croatia'},
-    {country: 'Cyprus'},
-    {country: 'Czech Republic'},
-    {country: 'Denmark'},
-    {country: 'Equatorial Guinea'},
-    {country: 'Estonia'},
-    {country: 'Finland'},
-    {country: 'Fiji'},
-    {country: 'France'},
-    {country: 'Georgia'},
-    {country: 'Germany'},
-    {country: 'Greece'},
-    {country: 'Hong Kong'},
-    {country: 'Iceland'},
-    {country: 'India'},
-    {country: 'Ireland'},
-    {country: 'Italy'},
-    {country: 'Iraq'},
-    {country: 'Iran'},
-    {country: 'Japan'},
-    {country: 'Jordan'},
-    {country: 'Kazakhstan'},
-    {country: 'Kosovo'},
-    {country: 'Kuwait'},
-    {country: 'Laos'},
-    {country: 'Latvia'},
-    {country: 'Lebanon'},
-    {country: 'Lithuania'},
-    {country: 'Luxembourg'},
-    {country: 'Macau'},
-    {country: 'Malta'},
-    {country: 'Moldova'},
-    {country: 'Montenegro'},
-    {country: 'Morocco'},
-    {country: 'Mongolia'},
-    {country: 'Myanmar'},
-    {country: 'Nigeria'},
-    {country: 'New Zealand'},
-    {country: 'Netherlands'},
-    {country: 'North Korea'},
-    {country: 'Norway'},
-    {country: 'North Macedonia'},
-    {country: 'Oman'},
-    {country: 'Pakistan'},
-    {country: 'Philippines'},
-    {country: 'Poland'},
-    {country: 'Portugal'},
-    {country: 'Qatar'},
-    {country: 'Romania'},
-    {country: 'Russia'},
-    {country: 'Serbia'},
-    {country: 'Slovakia'},
-    {country: 'Slovenia'},
-    {country: 'Spain'},
-    {country: 'Switzerland'},
-    {country: 'Sweden'},
-    {country: 'Tunisia'},
-    {country: 'Taiwan'},
-    {country: 'Thailand'},
-    {country: 'Turkey'},
-    {country: 'Turkmenistan'},
-    {country: 'Saudi Arabia'},
-    {country: 'South Korea'},
-    {country: 'Syria'},
-    {country: 'Ukraine'},
-    {country: 'United Arab Emirates'},
-    {country: 'Uzbekistan'},
-    {country: 'Vietnam'},
-    {country: 'Yemen'},
-]
+const allCombineCountries =
+    Array.from(new Set(athensCountries
+        .concat(bangkokCountries)
+        .concat(beijingCountries)
+        .concat(berlinCountries)
+        .concat(bucharestCountries)
+        .concat(beneluxCountries)
+        .concat(dohaCountries)
+        .concat(dubaiCountries)
+        .concat(dublinCountries)
+        .concat(islamabadCountries)
+        .concat(istanbulCountries)
+        .concat(lagosCountries)
+        .concat(parisCountries)
+        .concat(madridCountries)
+        .concat(newDelhiCountries)
+        .concat(romeCountries)
+        .concat(tiranaCountries)
+        .concat(warsawCountries)))
+
+const sortedAllCountries = allCombineCountries.sort((a, b) => (a.country > b.country) ? 1 : -1)
+
+const hasCountriesDuplicated = () => {
+    const duplicatedDeleteCountries = sortedAllCountries.filter((value, index) =>
+        sortedAllCountries.findIndex(item => item.country === value.country) === index
+    );
+    return duplicatedDeleteCountries;
+};
+
+export const allCountries = hasCountriesDuplicated()

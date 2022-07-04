@@ -34,7 +34,7 @@ import {
     parisCountries,
     romeCountries,
     tiranaCountries,
-    warsawCountries,
+    warsawCountries
 } from "./RegionPortData";
 
 interface IState {

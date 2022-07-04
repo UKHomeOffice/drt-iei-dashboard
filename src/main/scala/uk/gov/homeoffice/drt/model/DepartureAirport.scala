@@ -139,7 +139,6 @@ object DepartureAirport {
     }
   }
 
-
   def getDeparturePortForCountry(region: String, post: String)(implicit country: String): List[Port] = {
     (region.toLowerCase, post.toLowerCase) match {
       case (_, "athens") => athensDeparturePortsForCountry
@@ -166,10 +165,10 @@ object DepartureAirport {
       case ("south and south east asia", _) => newDelhiDeparturePortForCountry ::: hanoiDeparturePortForCountry
       case ("middle east and pakistan", _) => dubaiDeparturePortForCountry ::: istanbulDeparturePortForCountry ::: dohaDeparturePortForCountry ::: islamabadDeparturePortForCountry
       case ("western balkans", _) => tiranaDeparturePortForCountry
-      case ("all", _) => beneluxDeparturePortForCountry ::: warsawDeparturePortForCountry ::: berlinDeparturePortForCountry ::: bangkokDeparturePortForCountry ::: bucharestDeparturePortForCountry
-        parisDeparturePortForCountry ::: romeDeparturePortForCountry ::: athensDeparturePortsForCountry ::: hanoiDeparturePortForCountry ::: dublinDeparturePortsForCountry
-        madridDeparturePortForCountry ::: beijingDeparturePortForCountry ::: newDelhiDeparturePortForCountry ::: dubaiDeparturePortForCountry ::: istanbulDeparturePortForCountry :::
-          dohaDeparturePortForCountry ::: lagosDeparturePortForCountry ::: tiranaDeparturePortForCountry ::: islamabadDeparturePortForCountry
+      case ("all", "all") => beneluxDeparturePortForCountry ::: warsawDeparturePortForCountry ::: berlinDeparturePortForCountry ::: bangkokDeparturePortForCountry :::
+        bucharestDeparturePortForCountry ::: parisDeparturePortForCountry ::: romeDeparturePortForCountry ::: athensDeparturePortsForCountry ::: hanoiDeparturePortForCountry :::
+        dublinDeparturePortsForCountry ::: madridDeparturePortForCountry ::: beijingDeparturePortForCountry ::: newDelhiDeparturePortForCountry ::: dubaiDeparturePortForCountry :::
+        istanbulDeparturePortForCountry ::: dohaDeparturePortForCountry ::: lagosDeparturePortForCountry ::: tiranaDeparturePortForCountry ::: islamabadDeparturePortForCountry
       case _ => List.empty
 
     }
