@@ -165,7 +165,7 @@ object DepartureAirport {
       case ("south and south east asia", _) => newDelhiDeparturePortForCountry ::: hanoiDeparturePortForCountry
       case ("middle east and pakistan", _) => dubaiDeparturePortForCountry ::: istanbulDeparturePortForCountry ::: dohaDeparturePortForCountry ::: islamabadDeparturePortForCountry
       case ("western balkans", _) => tiranaDeparturePortForCountry
-      case ("all", "all") => beneluxDeparturePortForCountry ::: warsawDeparturePortForCountry ::: berlinDeparturePortForCountry ::: bangkokDeparturePortForCountry :::
+      case ("all", _) => beneluxDeparturePortForCountry ::: warsawDeparturePortForCountry ::: berlinDeparturePortForCountry ::: bangkokDeparturePortForCountry :::
         bucharestDeparturePortForCountry ::: parisDeparturePortForCountry ::: romeDeparturePortForCountry ::: athensDeparturePortsForCountry ::: hanoiDeparturePortForCountry :::
         dublinDeparturePortsForCountry ::: madridDeparturePortForCountry ::: beijingDeparturePortForCountry ::: newDelhiDeparturePortForCountry ::: dubaiDeparturePortForCountry :::
         istanbulDeparturePortForCountry ::: dohaDeparturePortForCountry ::: lagosDeparturePortForCountry ::: tiranaDeparturePortForCountry ::: islamabadDeparturePortForCountry
