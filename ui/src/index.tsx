@@ -2,7 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
+import ReactGA from 'react-ga4';
 
+ReactGA.initialize('G-VX7BE8WD4L');
+ReactGA.send("pageview");
 ReactDOM.render(
     <React.StrictMode>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"/>

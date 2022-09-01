@@ -12,6 +12,7 @@ import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import {isValidRequest} from "./ValidDataCheck";
+import ReactGA from 'react-ga4';
 
 interface FlightData {
     origin: string;
@@ -194,6 +195,18 @@ class FlightsTable extends React.Component<IProps, IState> {
         axios
             .get(endPoint, this.reqConfig)
             .then(response => handleResponse(response))
+            .then(response => ReactGA.event({
+                category: "endPoint",
+                action: "request",
+                label: endPoint,
+                value: 99,
+            }))
+            .then(response => ReactGA.event({
+                category: "user",
+                action: "email",
+                label: this.reqConfig.headers['X-Auth-Email'],
+                value: 97,
+            }))
             .catch((e) => {
                     console.log('error while response' + e);
                     this.setState(() => ({hasError: true, errorMessage: e}))

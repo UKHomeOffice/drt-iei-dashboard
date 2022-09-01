@@ -1,6 +1,7 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import axios, {AxiosRequestConfig, AxiosResponse} from "axios";
+import ReactGA from 'react-ga4';
 
 
 interface Props {
@@ -40,9 +41,17 @@ class AccessPermission extends React.Component<Props, State> {
         axios
             .get("/email/permission", this.reqConfig)
             .then(response => handleResponse(response))
-            .catch(t => this.setState(() => ({hasError: true, errorMessage: t})))
+            .then(response =>
+                ReactGA.event({
+                    category: "user",
+                    action: "permission",
+                    label: this.reqConfig.headers,
+                    value: 98,
+                }))
+            .catch(t =>
+                this.setState(() => ({hasError: true, errorMessage: t}))
+            )
     }
-
 
     render() {
         if (this.state.checked) {
