@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import ReactGA from 'react-ga4';
 
-ReactGA.initialize('G-VX7BE8WD4L');
+ReactGA.initialize(process.env.REACT_APP_GA_MEASURE_ID || '');
 ReactGA.send("pageview");
 ReactDOM.render(
     <React.StrictMode>

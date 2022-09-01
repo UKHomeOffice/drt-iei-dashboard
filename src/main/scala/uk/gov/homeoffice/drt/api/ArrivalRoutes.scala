@@ -13,6 +13,21 @@ import uk.gov.homeoffice.drt.model.{Arrivals, FlightsRequest}
 
 
 object ArrivalRoutes {
+  def userDetails[F[_] : Sync](): HttpRoutes[F] = {
+    implicit val logger = Slf4jLogger.getLogger[F]
+    val dsl = new Http4sDsl[F] {}
+    import dsl._
+    HttpRoutes.of[F] {
+      case req@GET -> Root / "user" / "api"  =>
+        val xAuthEmail: List[String] = req.headers.get(CaseInsensitiveString("X-Auth-Email")).map(_.value.split(",").toList).getOrElse(List.empty)
+        val requestString = s"get user details $xAuthEmail"
+        val email = xAuthEmail.headOption.getOrElse("")
+        for {
+          _ <- Logger[F].info(requestString)
+          resp <- Ok(s"""{"email": "$email"}""")
+        } yield resp
+    }
+  }
 
   def arrivalFlightsRoutes[F[_] : Sync](H: ArrivalFlights[F], permissions: List[String]): HttpRoutes[F] = {
     implicit val logger = Slf4jLogger.getLogger[F]
@@ -26,7 +41,7 @@ object ArrivalRoutes {
         val requiredPermissions: Boolean = xAuthRoles.exists(p => permissions.contains(p))
         val portList = params.getOrElse("portList", Seq.empty[String]).toList.filter(_.nonEmpty).flatMap(_.split(","))
         val requestString = s"user with email ${xAuthEmail.mkString} request details $region $post $departureCountry ${portList.nonEmpty} $filterDate $timezone"
-        if (requiredPermissions)  {
+        if (requiredPermissions) {
           for {
             _ <- Logger[F].info(requestString)
             arrivals <- H.flights(FlightsRequest(region, post, departureCountry, portList, filterDate, timezone))
@@ -35,7 +50,7 @@ object ArrivalRoutes {
                   Logger[F].warn(s"Error while $requestString : ${e.printStackTrace()}") >>
                     Arrivals(data = List.empty).pure[F]
               }
-           _ <- Logger[F].info(s"Time to get arrivals at arrival route for flightsRequest $requestString is ${System.currentTimeMillis-startTime} milliseconds")
+            _ <- Logger[F].info(s"Time to get arrivals at arrival route for flightsRequest $requestString is ${System.currentTimeMillis - startTime} milliseconds")
             resp <- Ok(arrivals)
           } yield resp
         } else {

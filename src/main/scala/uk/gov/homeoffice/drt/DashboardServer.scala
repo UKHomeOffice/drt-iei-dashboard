@@ -47,6 +47,7 @@ object DashboardServer {
       httpApp = middleware(
         PublicRoutes.dashboardRoutes[F]() <+>
           ArrivalRoutes.arrivalFlightsRoutes[F](arrivalFlightsAlg, cfg.api.permissions) <+>
+          ArrivalRoutes.userDetails[F]() <+>
           EmailRoutes.requestPermission[F](govNotifyEmail, cfg.govNotify)
       ).orNotFound
 

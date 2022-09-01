@@ -13,6 +13,7 @@ import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import {isValidRequest} from "./ValidDataCheck";
 import ReactGA from 'react-ga4';
+import {Md5} from 'ts-md5';
 
 interface FlightData {
     origin: string;
@@ -22,6 +23,10 @@ interface FlightData {
     status: string;
     scheduledArrivalDate: string;
     scheduledDepartureTime: string;
+}
+
+interface UserData {
+    email: string;
 }
 
 interface ArrivalsData {
@@ -118,7 +123,6 @@ class FlightsTable extends React.Component<IProps, IState> {
         {field: 'arrivalAirport', headerName: 'Arrival Airport', width: 150},
         {field: 'scheduledArrivalDate', headerName: 'Scheduled Arrival', width: 200},
         {field: 'status', headerName: 'Status', width: 100}
-
     ]
 
     constructor(props: IProps) {
@@ -182,6 +186,18 @@ class FlightsTable extends React.Component<IProps, IState> {
         headers: {'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json', 'timeout': 180000}
     };
 
+    public getEmail(endPoint: string, handleResponse: (r: AxiosResponse) => void) {
+        console.log('getEmail ' + endPoint);
+        axios
+            .get(endPoint, this.reqConfig)
+            .then(response => handleResponse(response))
+            .catch((e) => {
+                    console.log('error while response' + e);
+                    this.setState(() => ({hasError: true, errorMessage: e}))
+                }
+            )
+    }
+
     public flightsEndPoint(region: string, post: string, country: string, filterDate: string, timezone: string) {
         return "/flights/" + region + "/" + post + "/" + country + "/" + filterDate + "/" + timezone;
     }
@@ -192,6 +208,7 @@ class FlightsTable extends React.Component<IProps, IState> {
 
     public getFlightsData(endPoint: string, handleResponse: (r: AxiosResponse) => void) {
         console.log('getFlightsData ' + endPoint);
+        this.getEmail("/user/api", this.sendMD5EmailAddressToGA)
         axios
             .get(endPoint, this.reqConfig)
             .then(response => handleResponse(response))
@@ -201,17 +218,21 @@ class FlightsTable extends React.Component<IProps, IState> {
                 label: endPoint,
                 value: 99,
             }))
-            .then(response => ReactGA.event({
-                category: "user",
-                action: "email",
-                label: this.reqConfig.headers['X-Auth-Email'],
-                value: 97,
-            }))
             .catch((e) => {
                     console.log('error while response' + e);
                     this.setState(() => ({hasError: true, errorMessage: e}))
                 }
             )
+    }
+
+    sendMD5EmailAddressToGA = (response: AxiosResponse) => {
+        let userData = response.data as UserData;
+        ReactGA.event({
+            category: "user",
+            action: "email",
+            label: Md5.hashStr(userData.email),
+            value: 97,
+        })
     }
 
     updateFlightsData = (response: AxiosResponse) => {
@@ -265,10 +286,7 @@ class FlightsTable extends React.Component<IProps, IState> {
                           getRowClassName={(params) => `super-app-theme--${params.getValue(params.id, 'status')}`}
                           pageSize={25}/>
             </div>
-
         }
-
-
     }
 
     render() {
