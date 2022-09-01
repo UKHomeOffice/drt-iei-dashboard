@@ -4,8 +4,10 @@ import './index.css';
 import App from './App';
 import ReactGA from 'react-ga4';
 
-ReactGA.initialize(process.env.REACT_APP_GA_MEASURE_ID || '');
-ReactGA.send("pageview");
+if (process.env.REACT_APP_GA_MEASURE_ID) {
+    ReactGA.initialize(process.env.REACT_APP_GA_MEASURE_ID || '');
+    ReactGA.send("pageview");
+}
 ReactDOM.render(
     <React.StrictMode>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"/>
