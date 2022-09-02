@@ -2,7 +2,6 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import axios, {AxiosRequestConfig, AxiosResponse} from "axios";
 
-
 interface Props {
 }
 
@@ -40,9 +39,10 @@ class AccessPermission extends React.Component<Props, State> {
         axios
             .get("/email/permission", this.reqConfig)
             .then(response => handleResponse(response))
-            .catch(t => this.setState(() => ({hasError: true, errorMessage: t})))
+            .catch(t =>
+                this.setState(() => ({hasError: true, errorMessage: t}))
+            )
     }
-
 
     render() {
         if (this.state.checked) {
