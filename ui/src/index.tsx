@@ -6,10 +6,11 @@ import ReactGA from 'react-ga4';
 
 console.log('process.env.NODE_ENV ' + process.env.NODE_ENV)
 
-if (process.env.REACT_APP_GA_MEASURE_ID) {
-    ReactGA.initialize(process.env.REACT_APP_GA_MEASURE_ID || '');
+if (process.env.NODE_ENV === 'production') {
+    ReactGA.initialize('G-VX7BE8WD4L');
     ReactGA.send("pageview");
 }
+
 ReactDOM.render(
     <React.StrictMode>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"/>
