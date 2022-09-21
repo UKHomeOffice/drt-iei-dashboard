@@ -21,18 +21,16 @@ export const nonLocalTimezones = [
 ]
 
 export const asiaPacificPost = [
-    {post: 'All'},
-    {post: 'Beijing'},
-    {post: 'Bangkok'},
+    {post: 'Beijing'}
 ]
 
 export const euromedNorthPost = [
     {post: 'All'},
     {post: 'Benelux'},
     {post: 'Berlin'},
+    {post: 'Bucharest'},
     {post: 'Paris'},
     {post: 'Warsaw'},
-    {post: 'Bucharest'}
 ]
 
 export const euromedSouthPost = [
@@ -57,7 +55,10 @@ export const middleEastAndPakistanPost = [
 
 export const southAndSouthEastAsiaPost = [
     {post: 'All'},
+    {post: 'Bangkok'},
     {post: 'Hanoi'},
+    {post: 'Colombo'},
+    {post: 'Dhaka'},
     {post: 'New Delhi'}
 ]
 export const africaPost = [
@@ -72,6 +73,8 @@ export const allPosts = [
     {post: 'Beijing'},
     {post: 'Berlin'},
     {post: 'Bucharest'},
+    {post: 'Colombo'},
+    {post: 'Dhaka'},
     {post: 'Doha'},
     {post: 'Dublin'},
     {post: 'Dubai'},
@@ -96,8 +99,10 @@ export const athensCountries = [
 export const bucharestCountries = [
     {country: 'All'},
     {country: 'Bulgaria'},
+    {country: 'Hungary'},
     {country: 'Moldova'},
-    {country: 'Romania'}
+    {country: 'Romania'},
+    {country: 'Slovakia'}
 ]
 
 export const beneluxCountries = [
@@ -117,7 +122,6 @@ export const warsawCountries = [
     {country: 'Lithuania'},
     {country: 'Poland'},
     {country: 'Russia'},
-    {country: 'Slovakia'},
     {country: 'Ukraine'}
 ]
 
@@ -132,6 +136,13 @@ export const berlinCountries = [
     {country: 'Switzerland'}
 ]
 
+export const colomboCountries = [
+    {country: 'Sri Lanka'},
+]
+
+export const dhakaCountries = [
+    {country: 'Bangladesh'}
+]
 export const parisCountries = [
     {country: 'All'},
     {country: 'Algeria'},
@@ -193,7 +204,8 @@ export const newDelhiCountries = [
     {country: 'Afghanistan'},
     {country: 'Bhutan'},
     {country: 'Burma'},
-    {country: 'India'}
+    {country: 'India'},
+    {country: 'Nepal'}
 ]
 
 export const dubaiCountries = [
@@ -256,6 +268,8 @@ const allCombineCountries =
         .concat(berlinCountries)
         .concat(bucharestCountries)
         .concat(beneluxCountries)
+        .concat(colomboCountries)
+        .concat(dhakaCountries)
         .concat(dohaCountries)
         .concat(dubaiCountries)
         .concat(dublinCountries)
@@ -278,4 +292,4 @@ const hasCountriesDuplicated = () => {
     return duplicatedDeleteCountries;
 };
 
-export const allCountries = hasCountriesDuplicated()
+export const allCountries = hasCountriesDuplicated();

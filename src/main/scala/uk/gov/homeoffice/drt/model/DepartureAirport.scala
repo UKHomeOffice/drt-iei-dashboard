@@ -78,7 +78,21 @@ object DepartureAirport {
 
   def bucharestDeparturePortForCountry(implicit country: String): List[Port] = {
     country.toLowerCase match {
-      case "all" => List("Bulgaria", "Romania", "Moldova").flatMap(AirportUtil.getPortListForCountry(_))
+      case "all" => List("Bulgaria", "Hungary", "Moldova", "Romania", "Slovakia").flatMap(AirportUtil.getPortListForCountry(_))
+      case _ => AirportUtil.getPortListForCountry
+    }
+  }
+
+  def colomboDeparturePortForCountry(implicit country: String): List[Port] = {
+    country.toLowerCase match {
+      case "all" => List("Sri Lanka").flatMap(AirportUtil.getPortListForCountry(_))
+      case _ => AirportUtil.getPortListForCountry
+    }
+  }
+
+  def dhakaDeparturePortForCountry(implicit country: String): List[Port] = {
+    country.toLowerCase match {
+      case "all" => List("Bangladesh").flatMap(AirportUtil.getPortListForCountry(_))
       case _ => AirportUtil.getPortListForCountry
     }
   }
@@ -113,7 +127,7 @@ object DepartureAirport {
 
   def newDelhiDeparturePortForCountry(implicit country: String) = {
     country.toLowerCase match {
-      case "all" => List("India", "Afghanistan", "Bhutan", "Burma").flatMap(AirportUtil.getPortListForCountry(_))
+      case "all" => List("Afghanistan", "Bhutan", "Burma", "India", "Nepal").flatMap(AirportUtil.getPortListForCountry(_))
       case _ => AirportUtil.getPortListForCountry
     }
   }
@@ -150,6 +164,8 @@ object DepartureAirport {
       case (_, "doha") => dohaDeparturePortForCountry
       case (_, "dubai") => dubaiDeparturePortForCountry
       case (_, "dublin") => dublinDeparturePortsForCountry
+      case (_, "colombo") => colomboDeparturePortForCountry
+      case (_, "dhaka") => dhakaDeparturePortForCountry
       case (_, "hanoi") => hanoiDeparturePortForCountry
       case (_, "istanbul") => istanbulDeparturePortForCountry
       case (_, "islamabad") => islamabadDeparturePortForCountry
@@ -158,11 +174,11 @@ object DepartureAirport {
       case (_, "paris") => parisDeparturePortForCountry
       case (_, "rome") => romeDeparturePortForCountry
       case (_, "warsaw") => warsawDeparturePortForCountry
-      case ("asia pacific", _) => beijingDeparturePortForCountry ::: bangkokDeparturePortForCountry
+      case ("asia pacific", _) => beijingDeparturePortForCountry
       case ("africa", _) => lagosDeparturePortForCountry
       case ("euromed north", _) => beneluxDeparturePortForCountry ::: warsawDeparturePortForCountry ::: berlinDeparturePortForCountry ::: parisDeparturePortForCountry ::: bucharestDeparturePortForCountry
       case ("euromed south", _) => romeDeparturePortForCountry ::: athensDeparturePortsForCountry ::: madridDeparturePortForCountry
-      case ("south and south east asia", _) => newDelhiDeparturePortForCountry ::: hanoiDeparturePortForCountry
+      case ("south and south east asia", _) => bangkokDeparturePortForCountry ::: colomboDeparturePortForCountry ::: dhakaDeparturePortForCountry ::: hanoiDeparturePortForCountry ::: newDelhiDeparturePortForCountry
       case ("middle east and pakistan", _) => dubaiDeparturePortForCountry ::: istanbulDeparturePortForCountry ::: dohaDeparturePortForCountry ::: islamabadDeparturePortForCountry
       case ("western balkans", _) => tiranaDeparturePortForCountry
       case ("all", _) => beneluxDeparturePortForCountry ::: warsawDeparturePortForCountry ::: berlinDeparturePortForCountry ::: bangkokDeparturePortForCountry :::
