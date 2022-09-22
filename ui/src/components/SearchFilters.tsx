@@ -13,7 +13,7 @@ import {
     euromedNorthPost,
     euromedSouthPost,
     middleEastAndPakistanPost,
-    southAndSouthEastAsiaPost,
+    southAndSoutheastAsiaPost,
     westernBalkansPost,
     allCountries,
     athensCountries,
@@ -22,6 +22,8 @@ import {
     berlinCountries,
     beneluxCountries,
     bucharestCountries,
+    colomboCountries,
+    dhakaCountries,
     dubaiCountries,
     dublinCountries,
     dohaCountries,
@@ -76,7 +78,7 @@ export default class SearchFilters extends React.Component<IProps, IState> {
                     console.log("It is a africaPost.");
                     break;
                 case 'Asia Pacific' :
-                    this.setState({post: 'All'});
+                    this.setState({post: 'Beijing'});
                     regionPosts = asiaPacificPost;
                     console.log("It is a asiaPacificPost.");
                     break;
@@ -92,7 +94,7 @@ export default class SearchFilters extends React.Component<IProps, IState> {
                     break;
                 case 'South and South East Asia' :
                     this.setState({post: 'All'});
-                    regionPosts = southAndSouthEastAsiaPost;
+                    regionPosts = southAndSoutheastAsiaPost;
                     console.log("It is a South and South East Asia.");
                     break;
                 case 'Middle East and Pakistan' :
@@ -118,9 +120,6 @@ export default class SearchFilters extends React.Component<IProps, IState> {
             this.setState({country: 'All'});
             this.setState({timezone: 'UTC'});
             switch (this.state.post) {
-                case 'All':
-                    postCountries = allCountries;
-                    break;
                 case 'Athens' :
                     postCountries = athensCountries;
                     break;
@@ -138,6 +137,12 @@ export default class SearchFilters extends React.Component<IProps, IState> {
                     break;
                 case 'Bucharest':
                     postCountries = bucharestCountries;
+                    break;
+                case 'Colombo':
+                    postCountries = colomboCountries;
+                    break;
+                case 'Dhaka':
+                    postCountries = dhakaCountries;
                     break;
                 case 'Dublin':
                     postCountries = dublinCountries;

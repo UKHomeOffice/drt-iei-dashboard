@@ -4,7 +4,7 @@ import {
     euromedNorthPost,
     euromedSouthPost,
     middleEastAndPakistanPost,
-    southAndSouthEastAsiaPost,
+    southAndSoutheastAsiaPost,
     westernBalkansPost
 } from "./RegionPortData";
 
@@ -28,8 +28,8 @@ function isNotValidAsiaPacificPost(post: string): boolean {
     return asiaPacificPost.filter(item => item.post === post).length === 0;
 }
 
-function isNotValidSouthAndSouthEastAsiaPost(post: string): boolean {
-    return southAndSouthEastAsiaPost.filter(item => item.post === post).length === 0;
+function isNotValidSouthAndSoutheastAsiaPost(post: string): boolean {
+    return southAndSoutheastAsiaPost.filter(item => item.post === post).length === 0;
 }
 
 function isNotValidWesternBalkansPost(post: string): boolean {
@@ -51,7 +51,7 @@ export function isValidRequest(region: string, post: string): boolean {
         return false;
     } else if (region === 'Western Balkans' && isNotValidWesternBalkansPost(post)) {
         return false;
-    } else if (region === 'South and South East Asia' && isNotValidSouthAndSouthEastAsiaPost(post)) {
+    } else if (region === 'South and South East Asia' && isNotValidSouthAndSoutheastAsiaPost(post)) {
         return false;
     } else {
         return true;
