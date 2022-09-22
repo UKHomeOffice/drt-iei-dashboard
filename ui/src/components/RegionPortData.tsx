@@ -49,11 +49,11 @@ export const middleEastAndPakistanPost = [
     {post: 'All'},
     {post: 'Doha'},
     {post: 'Dubai'},
-    {post: 'Istanbul'},
-    {post: 'Islamabad'}
+    {post: 'Islamabad'},
+    {post: 'Istanbul'}
 ]
 
-export const southAndSouthEastAsiaPost = [
+export const southAndSoutheastAsiaPost = [
     {post: 'All'},
     {post: 'Bangkok'},
     {post: 'Hanoi'},

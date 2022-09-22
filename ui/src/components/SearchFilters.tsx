@@ -13,7 +13,7 @@ import {
     euromedNorthPost,
     euromedSouthPost,
     middleEastAndPakistanPost,
-    southAndSouthEastAsiaPost,
+    southAndSoutheastAsiaPost,
     westernBalkansPost,
     allCountries,
     athensCountries,
@@ -94,7 +94,7 @@ export default class SearchFilters extends React.Component<IProps, IState> {
                     break;
                 case 'South and South East Asia' :
                     this.setState({post: 'All'});
-                    regionPosts = southAndSouthEastAsiaPost;
+                    regionPosts = southAndSoutheastAsiaPost;
                     console.log("It is a South and South East Asia.");
                     break;
                 case 'Middle East and Pakistan' :
